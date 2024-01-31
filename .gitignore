@@ -3,7 +3,7 @@
 .project
 build
 /src/main/java/properties/
-
+.idea/
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,eclipse,intellij,java
 
