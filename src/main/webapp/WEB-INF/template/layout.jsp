@@ -13,24 +13,18 @@
 <body>
 <div>
 
-    <form name="template">
-        <table>
-            <tr colspan="2">
-                <td>
-                    <aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
-
-
-                        <tiles:insertAttribute name="header"/>
-                    </aside>
-                </td>
-                <td>
-                    <tiles:insertAttribute name="content"/>
-
-
-                </td>
-            </tr>
-        </table>
-    </form>
+    <table>
+        <tr colspan="2">
+            <td>
+                <aside class="column is-2 is-narrow-mobile is-fullheight section is-hidden-mobile">
+                    <tiles:insertAttribute name="header"/>
+                </aside>
+            </td>
+            <td>
+                <tiles:insertAttribute name="content"/>
+            </td>
+        </tr>
+    </table>
 
 </div>
 </body>
