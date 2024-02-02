@@ -17,6 +17,8 @@ public class Pagination {
     public Pagination(Integer totalRecordCount, PaginationParam paginationParam) {
         if (totalRecordCount > 0) {
             this.totalRecordCount = totalRecordCount;
+            this.keyword = paginationParam.getKeyword();
+            this.searchType = paginationParam.getSearchType();
             calculatePagination(paginationParam);
         }
     }

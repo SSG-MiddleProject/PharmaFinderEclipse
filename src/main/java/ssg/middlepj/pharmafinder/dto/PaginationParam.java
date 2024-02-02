@@ -62,7 +62,27 @@ public class PaginationParam {
         this.keyword = keyword;
     }
 
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+
+    @Override
+    public String toString() {
+        return "PaginationParam{" +
+                "page=" + page +
+                ", recordSize=" + recordSize +
+                ", pageSize=" + pageSize +
+                ", offset=" + offset +
+                ", keyword='" + keyword + '\'' +
+                ", searchType='" + searchType + '\'' +
+                '}';
     }
 }
