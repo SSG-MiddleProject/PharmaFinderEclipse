@@ -11,10 +11,9 @@
 <div id="nav">
     <ul class="menu-list is-centered">
             <li class="has-text-centered">
-
-                <button onclick="">
-                    <span id="logo"><img src="/resources/P.svg" alt="PharmaFinder Logo"/></span>
-                </button>
+                <a href="#">
+                    <img src="/resources/P.svg" alt="PharmaFinder Logo" style="width: 100px; height: 100px;"/>
+                </a>
             </li> <li class="has-text-centered">
 
                 <a>
