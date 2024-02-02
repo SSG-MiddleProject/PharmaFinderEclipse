@@ -16,6 +16,6 @@ public class HelloController {
 	public String hello(Model model) {
 		System.out.println("HelloController hello");
 		model.addAttribute("hello", helloService.selectHello());
-		return "hello";
+		return "hello.tiles";
 	}
 }
