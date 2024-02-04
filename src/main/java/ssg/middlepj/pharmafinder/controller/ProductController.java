@@ -19,19 +19,4 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-
-    @GetMapping("/search.do")
-    public String getProductByEfcy(Model model, PaginationParam paginationParam) {
-        model.addAttribute("products", productService.selectProducts(paginationParam));
-        model.addAttribute("pagination", new Pagination(productService.selectProductsCnt(paginationParam), paginationParam));
-        return "product/list";
-    }
-
-    @GetMapping("/search2.do")
-    public String getProductByEfcy2(Model model, PaginationParam paginationParam) {
-        model.addAttribute("test", "test");
-        model.addAttribute("products", productService.selectProducts(paginationParam));
-        model.addAttribute("pagination", new Pagination(productService.selectProductsCnt(paginationParam), paginationParam));
-        return "product/list";
-    }
 }
