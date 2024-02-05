@@ -1,8 +1,6 @@
 package ssg.middlepj.pharmafinder.dto;
 
 public class Pagination {
-    private String keyword = "";
-    private String searchType = "efcyQes";
     private Integer totalRecordCount;
     private Integer totalPageCount;
     private Integer startPage;
@@ -10,15 +8,12 @@ public class Pagination {
     private Integer limitStart;
     private Boolean existPrev;
     private Boolean existNext;
-
-    public Pagination() {
-    }
+    private PaginationParam paginationParam;
 
     public Pagination(Integer totalRecordCount, PaginationParam paginationParam) {
         if (totalRecordCount > 0) {
             this.totalRecordCount = totalRecordCount;
-            this.keyword = paginationParam.getKeyword();
-            this.searchType = paginationParam.getSearchType();
+            this.paginationParam = paginationParam;
             calculatePagination(paginationParam);
         }
     }
@@ -47,7 +42,10 @@ public class Pagination {
     }
 
     public void setTotalRecordCount(Integer totalRecordCount) {
-        this.totalRecordCount = totalRecordCount;
+        if (totalRecordCount > 0) {
+            this.totalRecordCount = totalRecordCount;
+            calculatePagination(this.paginationParam);
+        }
     }
 
     public Integer getTotalPageCount() {
@@ -90,14 +88,6 @@ public class Pagination {
         this.existPrev = existPrev;
     }
 
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
     public Boolean getExistNext() {
         return existNext;
     }
@@ -106,11 +96,25 @@ public class Pagination {
         this.existNext = existNext;
     }
 
-    public String getSearchType() {
-        return searchType;
+    public PaginationParam getPaginationParam() {
+        return paginationParam;
     }
 
-    public void setSearchType(String searchType) {
-        this.searchType = searchType;
+    public void setPaginationParam(PaginationParam paginationParam) {
+        this.paginationParam = paginationParam;
+        calculatePagination(paginationParam);
+    }
+
+    @Override
+    public String toString() {
+        return "Pagination{" +
+                "totalRecordCount=" + totalRecordCount +
+                ", totalPageCount=" + totalPageCount +
+                ", startPage=" + startPage +
+                ", endPage=" + endPage +
+                ", limitStart=" + limitStart +
+                ", existPrev=" + existPrev +
+                ", existNext=" + existNext +
+                '}';
     }
 }
