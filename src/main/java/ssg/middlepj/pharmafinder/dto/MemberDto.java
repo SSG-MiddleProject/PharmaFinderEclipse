@@ -6,30 +6,16 @@ import java.util.Date;
 public class MemberDto implements Serializable {
 	
 	private int id;
-	private int store_id;
+	private int storeId;
 	private String username;
 	private String email;
 	private String password;
-	private int state;
-	private int roll;
-	private Date created_at;
-	private Date modified_at;
+	private short state;
+	private short roll;
+	private Date createdAt;
+	private Date modifiedAt;
 	
 	public MemberDto() {
-	}
-	
-	public MemberDto(int id, int store_id, String username, String email, String password, int state, int roll,
-			Date created_at, Date modified_at) {
-		super();
-		this.id = id;
-		this.store_id = store_id;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.state = state;
-		this.roll = roll;
-		this.created_at = created_at;
-		this.modified_at = modified_at;
 	}
 
 	public int getId() {
@@ -40,12 +26,12 @@ public class MemberDto implements Serializable {
 		this.id = id;
 	}
 
-	public int getStore_id() {
-		return store_id;
+	public int getStoreId() {
+		return storeId;
 	}
 
-	public void setStore_id(int store_id) {
-		this.store_id = store_id;
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
 	}
 
 	public String getUsername() {
@@ -72,44 +58,43 @@ public class MemberDto implements Serializable {
 		this.password = password;
 	}
 
-	public int getState() {
+	public short getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(short state) {
 		this.state = state;
 	}
 
-	public int getRoll() {
+	public short getRoll() {
 		return roll;
 	}
 
-	public void setRoll(int roll) {
+	public void setRoll(short roll) {
 		this.roll = roll;
 	}
 
-	public Date getCreated_at() {
-		return created_at;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Date created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Date getModified_at() {
-		return modified_at;
+	public Date getModifiedAt() {
+		return modifiedAt;
 	}
 
-	public void setModified_at(Date modified_at) {
-		this.modified_at = modified_at;
+	public void setModifiedAt(Date modifiedAt) {
+		this.modifiedAt = modifiedAt;
 	}
 
 	@Override
 	public String toString() {
-		return "MemberDto [id=" + id + ", store_id=" + store_id + ", username=" + username + ", email=" + email
-				+ ", password=" + password + ", state=" + state + ", roll=" + roll + ", created_at=" + created_at
-				+ ", modified_at=" + modified_at + "]";
+		return "MemberDto [id=" + id + ", storeId=" + storeId + ", username=" + username + ", email=" + email
+				+ ", password=" + password + ", state=" + state + ", roll=" + roll + ", createdAt=" + createdAt
+				+ ", modifiedAt=" + modifiedAt + "]";
 	}
-	
 	
 }

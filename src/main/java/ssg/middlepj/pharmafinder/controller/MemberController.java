@@ -6,15 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import ssg.middlepj.pharmafinder.service.MemberService;
+
 @Controller
 public class MemberController {
 	
 	@Autowired
 	MemberService service;
 	
-	@GetMapping("regi.do")
+	@GetMapping("/regi.do")
 	public String regi() {
 		System.out.println("MemberController regi " + new Date());		
-		return "member/regi";
+		return "regi";
 	}
 }

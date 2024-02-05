@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="ssg.middlepj.pharmafinder.dao.MemberDao">
+    <resultMap id="BaseResultMap" type="ssg.middlepj.pharmafinder.dto.MemberDto">
+    	<id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="storeId" column="store_id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="state" column="state" jdbcType="TINYINT"/>
+        <result property="roll" column="roll" jdbcType="TINYINT"/>
+        <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>   
+    </resultMap>
+    
+    <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
+    insert into user(id, storeId, username, email, password, state, roll, createAt, modifiedAt)
+    values(#{id}, #{storeId}, #{username}, #{email}, #{password}, ${state}, ${roll}, #{createAt}, #{modifiedAt})
+    </insert>
+</mapper>
