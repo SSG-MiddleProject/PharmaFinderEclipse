@@ -38,34 +38,23 @@ public class MemberController {
 		return b?"YES":"NO";
 	}
 	
-	/* 회원가입
-	@GetMapping("/regi.do") // 메서드가 처리할 요청 경로 지정
-	public String regi() {
-		System.out.println("MemberController regi " + new Date());		
-		return "regi"; // 컨트롤러 처리 결과를 보여줄 뷰 이름
-	}
-	*/
 	
-	@PostMapping("/regi.do")
-    public ModelAndView register(MemberDto memberDto, StoreDto storeDto, @RequestParam("role") short role) {
-        ModelAndView mav = new ModelAndView();
-        
-        boolean memberAdded = service.addmember(memberDto);
-        if (role == 0 || role == 1) { // 약국 관리자 또는 직원일 경우
-            boolean storeAdded = service.addstore(storeDto);
+	@PostMapping("/regi.do") // 메서드가 처리할 요청 경로 지정
+	public String regi(MemberDto mem, StoreDto store) {
+
+		boolean memberAdded = service.addmember(mem);
+        if (mem.getRoll() == 0 || mem.getRoll() == 1) { // 약국 관리자 또는 직원일 경우
+			boolean storeAdded = service.addstore(store);
             if (memberAdded && storeAdded) {
-                mav.setViewName("login");
-            } else {
-                mav.setViewName("regi");
-            }
-        } else if (role == 2) { // 고객일 경우
+                return "redirect:/login";
+        } else if (mem.getRoll() == 2) { // 고객일 경우
             if (memberAdded) {
-                mav.setViewName("login");
-            } else {
-                mav.setViewName("regi");
+            	return "redirect:/login";
             }
         }
+        }
+        System.out.println("MemberController regi " + new Date());		
+		return "regi"; // 컨트롤러 처리 결과를 보여줄 뷰 이름
 
-        return mav;
     }
 }
