@@ -5,6 +5,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ssg.middlepj.pharmafinder.service.MemberService;
 
@@ -13,6 +17,15 @@ public class MemberController {
 	
 	@Autowired
 	MemberService service;
+	
+	@ResponseBody
+	@RequestMapping(value = "usernameCheck.do",
+						method = RequestMethod.GET,
+							produces = "application/String; charset=utf-8")
+	public String idcheck(String id) {
+		System.out.println("MemberController idcheck " + new Date());
+		System.out.println(");
+	}
 	
 	@GetMapping("/regi.do")
 	public String regi() {

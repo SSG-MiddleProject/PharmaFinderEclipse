@@ -16,6 +16,12 @@
         <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>   
     </resultMap>
     
+    <select id="idcheck" parameterType="String" resultType="Integer">
+    	select count(*)
+		from user
+		where username=#{username}
+    </select>
+    
     <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
     insert into user(id, storeId, username, email, password, state, roll, createAt, modifiedAt)
     values(#{id}, #{storeId}, #{username}, #{email}, #{password}, ${state}, ${roll}, #{createAt}, #{modifiedAt})

@@ -16,6 +16,11 @@ public class MemberDaoImpl implements MemberDao {
 	String ns = "Member.";
 
 	@Override
+	public int idcheck(String id) {		
+		return session.selectOne(ns + "idcheck", id);
+	}
+	
+	@Override
 	public int addmember(MemberDto mem) {
 		return session.insert(ns + "addmember", mem);
 	}

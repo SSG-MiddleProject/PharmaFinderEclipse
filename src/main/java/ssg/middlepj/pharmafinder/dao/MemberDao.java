@@ -6,5 +6,6 @@ import ssg.middlepj.pharmafinder.dto.MemberDto;
 
 public interface MemberDao {
 	
+	int idcheck(String id);
 	int addmember(MemberDto mem);
 }

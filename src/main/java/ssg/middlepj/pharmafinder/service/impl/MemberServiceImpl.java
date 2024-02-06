@@ -14,6 +14,12 @@ public class MemberServiceImpl implements MemberService {
 	MemberDao dao;
 	
 	@Override
+	public boolean idcheck(String id) {
+		int count = dao.idcheck(id);
+		return count>0?true:false;
+	}
+	
+	@Override
 	public boolean addmember(MemberDto mem) {
 		int count = dao.addmember(mem);
 		return count>0?true:false;
