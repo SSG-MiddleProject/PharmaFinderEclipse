@@ -5,25 +5,16 @@ public class PaginationParam {
     private Integer recordSize;
     private Integer pageSize;
     private Integer offset;
-    private String keyword = "";
-    private String searchType = "efcyQes";
+    private String keyword;
+    private String searchType;
 
     public PaginationParam() {
         this.page = 1;
-        this.recordSize = 10;
-        this.pageSize = 10;
+        this.recordSize = 20;
+        this.pageSize = 5;
         this.offset = 0;
         this.keyword = "";
         this.searchType = "efcyQes";
-    }
-
-    public PaginationParam(Integer page, Integer recordSize, Integer pageSize, String keyword, String searchType) {
-        this.page = page;
-        this.recordSize = recordSize;
-        this.pageSize = pageSize;
-        this.offset = (page - 1) * pageSize;
-        this.keyword = keyword;
-        this.searchType = searchType;
     }
 
     public Integer getPage() {
@@ -32,6 +23,7 @@ public class PaginationParam {
 
     public void setPage(Integer page) {
         this.page = page;
+        this.offset = (page - 1) * recordSize;
     }
 
     public Integer getRecordSize() {
