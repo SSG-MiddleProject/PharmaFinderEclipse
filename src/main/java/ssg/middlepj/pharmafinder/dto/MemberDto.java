@@ -1,6 +1,7 @@
 package ssg.middlepj.pharmafinder.dto;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class MemberDto implements Serializable {
@@ -11,9 +12,9 @@ public class MemberDto implements Serializable {
 	private String email;
 	private String password;
 	private short state;
-	private short roll;
-	private Date createdAt;
-	private Date modifiedAt;
+	private short roll; // 0:약국관리자 1:약국일반 2:고객일반
+	private LocalDateTime createdAt;
+	private LocalDateTime modifiedAt;
 	
 	public MemberDto() {
 	}
@@ -74,19 +75,19 @@ public class MemberDto implements Serializable {
 		this.roll = roll;
 	}
 
-	public Date getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Date getModifiedAt() {
+	public LocalDateTime getModifiedAt() {
 		return modifiedAt;
 	}
 
-	public void setModifiedAt(Date modifiedAt) {
+	public void setModifiedAt(LocalDateTime modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
 
