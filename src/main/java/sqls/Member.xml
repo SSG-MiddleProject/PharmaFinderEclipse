@@ -16,7 +16,7 @@
         <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>   
     </resultMap>
     
-    <select id="idcheck" parameterType="String" resultType="Integer">
+    <select id="usernamecheck" parameterType="String" resultType="Integer">
     	select count(*)
 		from user
 		where username=#{username}

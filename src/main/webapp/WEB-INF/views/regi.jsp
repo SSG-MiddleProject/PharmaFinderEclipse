@@ -1,3 +1,5 @@
+<%@page import="ssg.middlepj.pharmafinder.dto.MemberDto"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -9,23 +11,26 @@
 </head>
 <body>
 
+<%
+	List<MemberDto> list = (List<MemberDto>)request.getAttribute("list");
+%>
+
 <h1>회원가입</h1>
 
-<form action="regiAf.do" id="frm" method="post">
+<!-- <form action="regiAf.do" id="frm" method="post"> -->
 
 <table>
 <tr>
 	<th>아이디</th>
 	<td>
 		<input type="text" name="username" id="username" size="30">
-		<p id="idcheck" style="font-size: 10px"></p>
-		<input type="button" class="btn btn-primary" id="id_chk_btn" value="id확인">	
+		<p id="usernamecheckResult" style="font-size: 10px"></p>	
 	</td>
 </tr>
 <tr>
 	<th>패스워드</th>
 	<td>
-		<input type="text" name="password" size="30">
+		<input type="password" name="password" size="30">
 	</td>
 </tr>
 <tr>
@@ -72,96 +77,42 @@
 
 <button type="button" onclick="submitOperatingHours()">등록하기</button>
 
-<!-- id 유효성 검사 -->
+<!-- id 유효성 검사(실시간 중복 체크) -->
 <script type="text/javascript">
 $(document).ready(function () {
 	
-	$("#id_chk_btn").click(function () {
-		var inputId = $("#username").val().trim();
+	$("#username").keyup(function () { // 입력 필드에서 키보드 입력이 이루어질 때마다 이벤트 처리
+		var username = $(this).val().trim();
 		
-		if($("#username").val().trim() === "") {
-	        alert("아이디를 입력해주세요.");
-	        return;
-		}
-		
-		$.ajax({
-			url:"idcheck.do",
-			type:"post",
-			data:{ "id":$("#username").val() },
-			success:function(msg){
-				// alert('success');
-				if(msg.trim() === "YES"){
-					$("#idcheck").css("color", "#0000ff");
-					$("#idcheck").text("사용할 수 있는 아이디입니다");
-				}else{
-					$("#idcheck").css("color", "#ff0000");
-					$("#idcheck").text("사용중인 아이디입니다");
-					$("#username").val("");
+		// username 이 비어있지 않은 경우 서버에 요청
+		if(username != "") {
+	        $.ajax({
+				url:"./usernamecheck.do",
+				type:"GET",
+				data:{ "username":username },
+				success:function(msg){
+					// alert('success');
+					if(msg.trim() === "YES"){
+						$("#usernamecheckResult").css("color", "#0000ff");
+						$("#usernamecheckResult").text("사용가능한 아이디입니다");
+					}else{
+						$("#usernamecheckResult").css("color", "#ff0000");
+						$("#usernamecheckResult").text("이미 사용중인 아이디입니다");
+						}
+				},
+				error: function(){
+					$("#usernamecheckResult").text('아이디 확인 중 오류가 발생했습니다');
 				}
-			},
-			error:function(){
-				alert('아이디 확인 중 오류가 발생했습니다');
-			}
-		});				
-	});		
+			});
+		} else {
+			$("#usernamecheckResult").text(""); // 입력값이 없을 때 메세지 제거
+		}
+		});
 	
-	$("#regibtn").click(function () {
-		
-		// 빈칸 검사(id, password)
-		if($("#username").val().trim() === "") {
-		    alert("아이디를 입력해주세요.");
-		    return;
-		}
-		
-		if($("#password").val().trim() === "") {
-		    alert("비밀번호를 입력해주세요.");
-		    return;
-		}
-				
 		$("#frm").submit();
 	});
-	
-});
+;
 </script>
-
-<!-- 운영시간 정보 -->
-<script type="text/javascript">
-function submitOperatingHours() {
-    var form = document.getElementById('operatingHoursForm');
-    var operatingHours = {};
-    
-    <% for(String day : days) { %>
-    operatingHours["<%= day %>"] = {
-        start: form["<%= day %>Start"].value,
-        end: form["<%= day %>End"].value
-    };
-    <% } %>
-    
-    // JSON 형식으로 변환
-    var jsonOperatingHours = JSON.stringify(operatingHours);
-    
-    // fetch API를 사용하여 서버에 POST 요청 전송
-    fetch('/path/to/your/server/endpoint', {
-        method: 'POST', // HTTP 메소드 지정
-        headers: {
-            'Content-Type': 'application/json' // 컨텐츠 타입 지정
-        },
-        body: jsonOperatingHours // 전송할 데이터
-    })
-    .then(response => {
-        if(response.ok) {
-            return response.json(); // 응답을 JSON 형태로 파싱
-        }
-        throw new Error('Network response was not ok.');
-    })
-    .then(data => {
-        console.log(data); // 서버로부터 반환된 데이터 처리
-    })
-    .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-    });
-}
-</script>
-
+ 
 </body>
 </html>

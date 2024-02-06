@@ -14,8 +14,8 @@ public class MemberServiceImpl implements MemberService {
 	MemberDao dao;
 	
 	@Override
-	public boolean idcheck(String id) {
-		int count = dao.idcheck(id);
+	public boolean usernamecheck(String username) {
+		int count = dao.usernamecheck(username);
 		return count>0?true:false;
 	}
 	

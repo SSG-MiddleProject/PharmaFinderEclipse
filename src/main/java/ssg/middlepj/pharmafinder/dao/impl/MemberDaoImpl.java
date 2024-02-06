@@ -12,12 +12,14 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Autowired
 	SqlSession session;
+	private static final String namespace = "ssg.middlepj.pharmafinder.dao.MemberDao";
 	
 	String ns = "Member.";
 
 	@Override
-	public int idcheck(String id) {		
-		return session.selectOne(ns + "idcheck", id);
+	public int usernamecheck(String username) {
+	    Integer count = session.selectOne(namespace + ".usernamecheck", username);
+	    return (count != null) ? count : 0; // Returns the count, with a null check
 	}
 	
 	@Override
