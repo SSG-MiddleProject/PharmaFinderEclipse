@@ -15,14 +15,16 @@
         throw new Exception("properties file not found");
     }
 
-    String NHN_CLIENT_KEY = properties.getProperty("NHN_CLIENT_KEY");
+    String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 %>
-<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>"></script>
+<script type="text/javascript"
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>"></script>
 <%
     String searchType = "";
     String keyword = "";
     Pagination pagination = (Pagination) request.getAttribute("pagination");
     Integer currentPage = pagination.getPaginationParam().getPage();
+    Integer lastPage = pagination.getTotalPageCount();
     List<ProductDto> productList = (List<ProductDto>) request.getAttribute("products");
     searchType = pagination.getPaginationParam().getSearchType();
     keyword = pagination.getPaginationParam().getKeyword();
@@ -30,18 +32,24 @@
 
 <style>
     #full {
-        display: flex;
+        /*display: flex;*/
         justify-content: space-between;
         width: 100vw;
         height: 100vh;
+        z-index: 0;
     }
 
     #container-left {
-        flex-shrink: 0;
-        width: 20rem;
+        /*flex-shrink: 0;*/
+        position: absolute;
+        left: 104px;
+        top: 0;
+        width: 28rem;
         height: 100%;
 
         #search-bar {
+            align-items: center;
+            align-content: center;
             height: 2.8rem;
             margin-top: 0.3rem;
         }
@@ -58,11 +66,13 @@
             text-decoration: none;
             transition: background-color .3s;
             border-radius: 50%;
+
             #pagination-list {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100%;
+
                 li {
                     margin: 0 0.2rem;
                     cursor: pointer;
@@ -73,24 +83,31 @@
     }
 
     #container-collapse {
+        position: absolute;
         display: none;
-        width: 20rem;
-        z-index: 99;
+        left: 104px;
+        top: 0;
+        background-color: white;
+        width: 28rem;
+        height: 100%;
+        z-index: 1;
         overflow-x: hidden;
-        transition: 0.5s;
     }
 
     #container-right {
-        flex-shrink: 0;
-        width: calc(100% - 20rem);
-        transition: all 0.1s ease-in-out;
+        /*flex-shrink: 0;*/
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: calc(100% - 28rem - 104px);
+        height: 100%;
     }
 </style>
 
 <div id="full">
     <div id="container-left">
         <div id="search-bar">
-            <div class="field has-addons">
+            <div class="field has-addons has-addons-centered">
                 <div class="control">
                     <div class="select">
                         <label for="searchType">
@@ -114,7 +131,6 @@
                 </div>
             </div>
         </div>
-        <%--    search result    --%>
         <ul id="search-result">
             <% for (ProductDto product : productList) { %>
             <li class="p-2" style="border-top: solid 1px">
@@ -154,6 +170,7 @@
     const existPrev = "<%=pagination.getExistPrev()%>";
     const existNext = "<%=pagination.getExistNext()%>";
     const currentPage = parseInt("<%=currentPage%>");
+    const lastPage = parseInt("<%=lastPage%>");
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");
     choice.value = "<%=searchType %>";
@@ -168,24 +185,33 @@
         location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + page);
     }
     const handlePrev = () => {
-        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         if (existPrev === "true") {
+            location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
+        }
+        if (currentPage !== 1) {
+            location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         }
     }
     const handleNext = () => {
-        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
+        if (existNext === "true") {
+            location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
+        }
+        if (currentPage !== lastPage) {
+            location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
+        }
     }
     const handleDetail = (e) => {
         handleProduct(e.getAttribute("value"))
         openNav();
     }
     const openNav = () => {
+        document.getElementById("container-collapse").style.left = "calc(104px + 28rem)";
         document.getElementById("container-collapse").style.display = "block";
-        document.getElementById("container-right").style.width = "calc(100% - 40rem)";
+
     }
     const closeNav = () => {
+        document.getElementById("container-collapse").style.left = "104px";
         document.getElementById("container-collapse").style.display = "none";
-        document.getElementById("container-right").style.width = "calc(100% - 20rem)";
     }
 
     const mapOptions = {
