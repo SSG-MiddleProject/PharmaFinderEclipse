@@ -76,7 +76,7 @@
             </a>
         </li>
         <li class="has-text-centered">
-            <a href="<%="test.do"%>" class="" style="flex-direction: column; align-items: center;">
+            <a href="<%="pharmacy.do"%>" class="" style="flex-direction: column; align-items: center;">
                 <span class="icon pb-1"><i class="fas fa-hospital"></i></span>
                 약국 검색
             </a>
