@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PharmaProductManagement">
+	<select id="select-duplication-products-count" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam" resultType="Integer">
+		select count(*)
+		from store_product
+		where product_id = #{productId} and store_id = #{storeId}
+	</select>
+	
+    <insert id="insert-product" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto">
+		insert into store_product(store_id, product_id, input_price, output_price, created_at)
+		values(#{storeId},#{productId},#{inputPrice},#{outputPrice}, now())
+    </insert>
+    
+	<select id="select-pharma-products"
+		parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam"
+		resultType="ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto">
+		select sp.id as id, sp.store_id as storeId, sp.product_id as productId, 
+			sp.input_price as inputPrice, sp.output_price as outputPrice, sp.created_at as createdAt, p.item_name as itemName
+		from store_product sp inner join product p
+			on sp.product_id = p.id
+		<choose>
+			<when test="storeId != null">
+				where sp.store_id like CONCAT('%', #{storeId}, '%')
+			</when>
+			<when test="productId != null">
+				where p.id like CONCAT('%', #{productId}, '%')
+			</when>
+			<when test="itemName != null">
+				where item_name like CONCAT('%', #{itemName}, '%')
+			</when>
+		</choose>
+		order by sp.id
+	</select>
+	
+	<delete id="delete-pharma-product"
+		parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto">
+		delete from store_product where id = #{id}
+	</delete>
+	
+</mapper>

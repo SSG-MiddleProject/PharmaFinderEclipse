@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PharmaProductCommon">
+    <resultMap id="BaseResultMap" type="ssg.middlepj.pharmafinder.dto.ProductDto">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="entpName" column="entp_name" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="efcyQes" column="efcy_qes" jdbcType="VARCHAR"/>
+        <result property="useMethodQes" column="use_method_qes" jdbcType="VARCHAR"/>
+        <result property="atpnWarnQes" column="atpn_warn_qes" jdbcType="VARCHAR"/>
+        <result property="atpnQes" column="atpn_qes" jdbcType="VARCHAR"/>
+        <result property="intrcQes" column="intrc_qes" jdbcType="VARCHAR"/>
+        <result property="seQes" column="se_qes" jdbcType="VARCHAR"/>
+        <result property="depositMethodQes" column="deposit_method_qes" jdbcType="VARCHAR"/>
+        <result property="itemImage" column="item_image" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <select id="select-products" resultMap="BaseResultMap" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductSearchParam">
+        select *
+        from product
+        <choose>
+            <when test="searchType == 'id'">
+               where id like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'itemName'">
+               where item_name like CONCAT('%', #{keyword}, '%')
+            </when>
+        </choose>
+        order by id
+    </select>
+</mapper>
