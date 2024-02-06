@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class StoreMemberDto implements Serializable {
+public class StoreDto implements Serializable {
 	
 	private int id;
 	private String dutyName;	// 기관명
@@ -32,10 +32,10 @@ public class StoreMemberDto implements Serializable {
 	private float wgs84Lon;		// 병원경도
 	private float wgs84Lat;		// 병원위도
 	
-	public StoreMemberDto() {
+	public StoreDto() {
 	}
 
-	public StoreMemberDto(int id, String dutyName, String dutyAddr, String dutyTel1, String dutyEt, int bn_reg_num,
+	public StoreDto(int id, String dutyName, String dutyAddr, String dutyTel1, String dutyEt, int bn_reg_num,
 			int dutyTime1s, int dutyTime1c, int dutyTime2s, int dutyTime2c, int dutyTime3s, int dutyTime3c,
 			int dutyTime4s, int dutyTime4c, int dutyTime5s, int dutyTime5c, int dutyTime6s, int dutyTime6c,
 			int dutyTime7s, int dutyTime7c, int dutyTime8s, int dutyTime8c, String hpid, float wgs84Lon,

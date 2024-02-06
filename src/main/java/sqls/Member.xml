@@ -22,8 +22,15 @@
 		where username=#{username}
     </select>
     
+    <!-- user 테이블 추가 -->
     <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
     insert into user(id, storeId, username, email, password, state, roll, createAt, modifiedAt)
     values(#{id}, #{storeId}, #{username}, #{email}, #{password}, ${state}, ${roll}, #{createAt}, #{modifiedAt})
+    </insert>
+    
+    <!-- store 테이블 추가 -->
+    <insert id="addStore" parameterType="ssg.middlepj.pharmafinder.dto.StoreDto">
+        INSERT INTO store (id, dutyName, dutyAddr, dutyTel1, dutyEt, bnRegNum, dutyTime1s, dutyTime1c, dutyTime2s, dutyTime2c, dutyTime3s, dutyTime3c, dutyTime4s, dutyTime4c, dutyTime5s, dutyTime5c, dutyTime6s, dutyTime6c, dutyTime7s, dutyTime7c, dutyTime8s, dutyTime8c, hpid, wgs84Lon, wgs84Lat)
+        VALUES (#{id}, #{dutyName}, #{dutyAddr}, #{dutyTel1}, #{dutyEt}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c}, #{dutyTime2s}, #{dutyTime2c}, #{dutyTime3s}, #{dutyTime3c}, #{dutyTime4s}, #{dutyTime4c}, #{dutyTime5s}, #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c}, #{hpid}, #{wgs84Lon}, #{wgs84Lat})
     </insert>
 </mapper>

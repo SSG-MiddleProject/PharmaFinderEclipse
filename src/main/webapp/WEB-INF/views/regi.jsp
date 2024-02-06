@@ -44,7 +44,6 @@ List<MemberDto> list = (List<MemberDto>) request.getAttribute("list");
 		<th>이메일</th>
 		<td><input type="text" name="email" size="30"></td>
 	</tr>
-	
 </table>
 <br>
 </div>

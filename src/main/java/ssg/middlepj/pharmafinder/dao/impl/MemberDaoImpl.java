@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import ssg.middlepj.pharmafinder.dao.MemberDao;
 import ssg.middlepj.pharmafinder.dto.MemberDto;
+import ssg.middlepj.pharmafinder.dto.StoreDto;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
@@ -27,4 +28,8 @@ public class MemberDaoImpl implements MemberDao {
 		return session.insert(ns + "addmember", mem);
 	}
 	
+	@Override
+	public int addstore(StoreDto store) {
+		return session.insert(ns + "addstore", store);
+	}
 }
