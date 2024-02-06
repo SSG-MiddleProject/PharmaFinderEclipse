@@ -9,6 +9,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <style>
+
     .menu-list {
         display: flex;
         flex-direction: column;
@@ -16,16 +17,23 @@
     }
 
     .menu-list li a span.icon {
-        font-size: 2rem;
+        font-size: 1.2rem;
+    }
+
+    .menu-list li {
+        padding: 0;
     }
 
     .menu-list li a {
-        width: 6rem;
-        height: 6rem;
+        width: 4rem;
+        height: 4rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        font-size: 11px;
+        font-family: "Noto Sans KR", sans-serif;
+        padding: 0;
     }
 
 
@@ -33,11 +41,12 @@
         position: absolute;
         bottom: 0;
 
+        a {
+            padding-top: 5px;
+        }
+
     }
 
-    #logo:hover {
-        background-color: #f5f5f5;
-    }
 
     #nav-bottom a {
         width: auto;
@@ -49,46 +58,48 @@
 
     }
 
+
 </style>
 
-<div id="nav" class="px-1">
-    <ul class="menu-list is-centered" id="nav-item">
+<div id="nav">
+    <ul class="menu-list is-centered " id="nav-item">
         <li class="has-text-centered " id="logo">
             <a href="<%="main.do"%>" class="is-unselectable">
-                <img src="/resources/P.svg" alt="PharmaFinder Logo" style="width: 70%; height: 70%;"/>
+                <img src="${pageContext.request.contextPath}/resources/P.svg" alt="PharmaFinder Logo"
+                     style="width: 40%; height: 40%;"/>
             </a>
         </li>
         <li class="has-text-centered">
             <a href="<%="main.do"%>">
-                <span class="icon pb-3"><i class="fas fa-pills"></i></span>
+                <span class="icon pb-1"><i class="fas fa-pills"></i></span>
                 제품 검색
             </a>
         </li>
         <li class="has-text-centered">
-            <a href="<%="pharmacy.do"%>" class="" style="flex-direction: column; align-items: center;">
-                <span class="icon pb-3"><i class="fas fa-hospital"></i></span>
+            <a href="<%="test.do"%>" class="" style="flex-direction: column; align-items: center;">
+                <span class="icon pb-1"><i class="fas fa-hospital"></i></span>
                 약국 검색
             </a>
         </li>
         <li class="has-text-centered">
             <a href="#" class="">
-                <span class="icon pb-3"><i class="fas fa-list"></i></span>
+                <span class="icon pb-1"><i class="fas fa-list"></i></span>
                 <br>재고 조회
             </a>
         </li>
         <li class="has-text-centered">
             <a href="#" class="">
-                <span class="icon pb-3"><i class="fas fa-calendar"></i></span>
+                <span class="icon pb-1"><i class="fas fa-calendar"></i></span>
                 입출고<br>내역
             </a>
         </li>
         <li class="has-text-centered">
             <a href="#" class="">
-                <span class="icon pb-3"><i class="fas fa-cubes"></i></span>
+                <span class="icon pb-1"><i class="fas fa-cubes"></i></span>
                 <br>제품 관리
             </a>
         </li>
-        <li id="nav-bottom" class="has-text-centered">
+        <li id="nav-bottom" class="has-text-centered py-2">
             <a>
                 즐겨찾기
             </a>
@@ -107,5 +118,6 @@
     </ul>
 
 </div>
+
 
 
