@@ -171,9 +171,6 @@ public class XMLParser {
             pharmacyItemList.add(pharmacyDto);
         }
 
-        for (PharmacyDto pharmacyDto : pharmacyItemList) {
-            System.out.println(pharmacyDto);
-        }
         return pharmacyItemList;
     }
 }
