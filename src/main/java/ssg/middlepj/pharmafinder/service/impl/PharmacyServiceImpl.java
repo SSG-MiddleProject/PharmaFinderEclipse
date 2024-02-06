@@ -38,7 +38,7 @@ public class PharmacyServiceImpl implements PharmacyService {
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + SERVICE_KEY); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("Q0", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.Q0, "UTF-8")); /*주소(시도)*/
         urlBuilder.append("&" + URLEncoder.encode("Q1", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.Q1, "UTF-8")); /*주소(시군구)*/
-        urlBuilder.append("&" + URLEncoder.encode("QT", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.QT), "UTF-8")); /*월~일요일, 공휴일: 1~8*/
+//        urlBuilder.append("&" + URLEncoder.encode("QT", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.QT), "UTF-8")); /*월~일요일, 공휴일: 1~8*/
         urlBuilder.append("&" + URLEncoder.encode("QN", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.QN, "UTF-8")); /*기관명*/
         urlBuilder.append("&" + URLEncoder.encode("ORD", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.ORD, "UTF-8")); /*순서*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.pageNo), "UTF-8")); /*페이지 번호*/
