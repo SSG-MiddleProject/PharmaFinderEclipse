@@ -98,7 +98,11 @@
             <a>
                 설정
             </a>
+
             <a href="login.do">
+
+            <a href="regi.do">
+
                 로그아웃
             </a>
 

@@ -1,6 +1,8 @@
 package ssg.middlepj.pharmafinder.dto;
 
 import com.google.protobuf.Timestamp;
+import java.io.Serializable;
+import java.util.Date;
 
 public class MemberDto {
 	
@@ -112,6 +114,8 @@ public class MemberDto {
 				+ ", modified_at=" + modified_at + "]";
 	}
 	
-	
+
+
+
 	
 }
