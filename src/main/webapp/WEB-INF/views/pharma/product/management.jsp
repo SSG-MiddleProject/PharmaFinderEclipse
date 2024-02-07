@@ -27,12 +27,16 @@
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index:1;
         }
 
-        .modal-content {
+        .modal-contents {
             background: #fff;
             padding: 20px;
             border-radius: 5px;
+            max-width:80%;
+            max-height:60%;
+            overflow:auto;
         }
 
         .close {
@@ -41,16 +45,16 @@
         }
 
         .pharma-products-container {
-            margin: auto;
+            margin: 0 auto;
             overflow: auto;
-            height: 1000px
+            height: 300px
         }
     </style>
 </head>
 
 <body>
     <!-- 리스트 구역 START -->
-    <div class="pharma-product-container">
+    <div class="pharma-products-container">
         <table class="table" id="pharma-products">
             <thead>
                 <tr>
@@ -84,7 +88,7 @@
                             <%=item.getOutputPrice()%>
                         </td>
                         <td>
-                            <%=item.getCreatedAt()%>
+                            <%=item.getCreatedAt().substring(0, 10)%>
                         </td>
                         <td><button type="button"
                                 onclick="deletePharmaProduct(<%=item.getId()%>)">삭제</button></td>
@@ -96,9 +100,10 @@
     <hr />
     <!-- 리스트 구역 END -->
 
-    <!-- 검색 모달창 -->
+    <!-- 검색 모달창 START-->
     <div id="searchModal">
-        <div class="modal-content">
+    <!-- 실제창 -->
+        <div class="modal-contents">
             <span class="close" onclick="closeSearchModal()">&times;</span>
             <h2>검색</h2>
             <input type="text" id="keyword" placeholder="검색어를 입력하세요"> <select id="searchType"
@@ -109,26 +114,39 @@
             <button onclick="performSearch()">검색</button>
             <div id="result"></div>
         </div>
+        <!-- 실제창 END -->
     </div>
+    <!-- 검색 모달창 -->
 
     <!-- 제품 추가창 -->
-    <form action="">
-        <legend>제품추가</legend>
-        <lable for="insertId">제품코드</lable>
-        <input type="text" id="insertId" name="id" readonly />
-        <!-- 검색 버튼 클릭 시 검색 모달창 띄우기 -->
-        <button type="button" onclick="openSearchModal()">검색창 열기</button>
-        <br />
-        <!-- 검색 버튼 클릭 시 검색 모달창 띄우기 -->
-        <label for="insertItemName">제품명</label> <input type="text" id="insertItemName"
-            name="itemName" readonly /> <br /> <label for="insertInputPrice">입고단가</label> <input
-            type="text" id="insertInputPrice" name="inputPrice" /> <br /> <label
-            for="insertOutputPrice">출고단가</label> <input type="text" oninput="calVAT()"
-            id="insertOutputPrice" name="outputPrice" /> <label for="insertVAT" id="">부가세</label>
-        <input type="text" id="insertVAT" />
-        <br />
-        <button type="button" id="registerProduct" onclick="registerPharmaProduct()">제품등록</button>
-        </fieldset>
+    <form>
+    	<div class="field is-grouped">
+    		<label for="insertId" class="label" style="width:20%;margin-right:2%">제품코드</label>
+    		<label for="insertItemName" class="label" style="width:20%">제품명</label>
+    	</div>
+    	<div class="field is-grouped">
+    		<input type="text"  name="id" readonly id="insertId" class="input" style="width:20%;margin-right:2%" />
+    		<input type="text"  name="itemName" readonly id="insertItemName" class="input" style="width:20%;margin-right:2%"/>
+    		<!-- 검색 버튼 클릭 시 검색 모달창 띄우기 -->
+    		<button type="button"  class="button is-dark" onclick="openSearchModal()">검색창 열기</button>
+    	</div>
+        <div class="field is-grouped">
+        	<label for="insertInputPrice" class="label">입고단가</label>
+        </div>
+        <div class="field is-grouped">
+        	<input type="text" name="inputPrice" id="insertInputPrice" class="input" style="width:20%" />
+        </div>
+        <div class="field is-grouped">
+        	<label for="insertOutputPrice" class="label" style="width:20%;margin-right:2%">출고단가</label>
+        	<label for="insertVAT" class="label" style="width:20%">부가세</label>
+        </div>
+        <div class="field is-grouped">
+        	<input type="text" name="outputPrice" id="insertOutputPrice" class="input" oninput="calVAT()" style="width:20%;margin-right:2%" />
+        	<input type="text" id="insertVAT" class="input" style="width:20%" />
+        </div>
+        <div class="control">
+        	<button type="button" class="button is-link" id="registerProduct" onclick="registerPharmaProduct()">제품등록</button>
+        </div>
     </form>
     <!--  -->
 
@@ -277,7 +295,7 @@
                 let itemName = $("<td>" + item.itemName + "</td>");
                 let inputPrice = $("<td>" + item.inputPrice + "</td>");
                 let outputPrice = $("<td>" + item.outputPrice + "</td>");
-                let createdAt = $("<td>" + item.createdAt + "</td>");
+                let createdAt = $("<td>" + item.createdAt.substring(0, 10) + "</td>");
                 let btnDelete = $("<td><button type='button' onclick='deletePharmaProduct(" + item.id + ")' >삭제</button></td>");
                 row.append(id);
                 row.append(productId);
