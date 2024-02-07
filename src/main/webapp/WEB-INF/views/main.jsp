@@ -32,7 +32,6 @@
 
 <style>
     #full {
-        /*display: flex;*/
         justify-content: space-between;
         width: 100vw;
         height: 100vh;
@@ -40,18 +39,19 @@
     }
 
     #container-left {
-        /*flex-shrink: 0;*/
         position: absolute;
-        left: 104px;
+        left: calc(4rem + 1px);
         top: 0;
-        width: 28rem;
+        width: 24rem;
         height: 100%;
+        border: solid 1px #dbdbdb;
 
         #search-bar {
             align-items: center;
             align-content: center;
             height: 2.8rem;
             margin-top: 0.3rem;
+            padding: 0 0.5rem;
         }
 
         #search-result {
@@ -83,23 +83,67 @@
     }
 
     #container-collapse {
+        padding: 0.5rem 0.5rem;
         position: absolute;
-        display: none;
-        left: 104px;
+        left: calc(1px + 28rem);
         top: 0;
         background-color: white;
-        width: 28rem;
+        width: 24rem;
         height: 100%;
         z-index: 1;
         overflow-x: hidden;
+        visibility: hidden;
+        transition: visibility 0.3s ease-in-out;
+
+        #detail {
+            visibility: inherit;
+            transition: inherit;
+
+            #entpName #itemName {
+                text-align: center;
+            }
+
+            #itemName {
+                margin-top: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            #entpName {
+                color: #4a4a4a;
+            }
+        }
+
+        #detail-collapse {
+            display: none;
+            transition: visibility 0.3s ease-in-out;
+
+            #detail-extra {
+                display: inherit;
+                transition: inherit;
+            }
+        }
+
+        #collapse-extend {
+            cursor: pointer;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #img-collapse-reduce {
+            display: none;
+        }
+
+        #pharmacy-list {
+            width: 100%;
+            background-color: #f5f5f5;
+        }
     }
 
     #container-right {
-        /*flex-shrink: 0;*/
         position: absolute;
         right: 0;
         top: 0;
-        width: calc(100% - 28rem - 104px);
+        width: calc(100% - (28rem + 1px));
         height: 100%;
     }
 </style>
@@ -156,10 +200,25 @@
         </div>
     </div>
     <div id="container-collapse">
-        <div id="detail"></div>
-        <button onclick="closeNav()">
+        <button onclick="closeNav()"
+                style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
             X
         </button>
+        <div id="detail" class="content has-text-black"></div>
+        <div id="detail-collapse">
+            <div id="detail-extra" class="content has-text-black"></div>
+        </div>
+        <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5" onclick="handleDetailExtand()">
+            <img id="img-collapse-extend" src="${pageContext.request.contextPath}/resources/CollapseExtend.svg"
+                 alt="Collapse Extend"
+                 style="width: 1.3rem; height: 1.3rem;"/>
+            <img id="img-collapse-reduce" src="${pageContext.request.contextPath}/resources/CollapseReduce.svg"
+                 alt="Collapse Reduce"
+                 style="width: 1.3rem; height: 1.3rem;"/>
+        </div>
+        <div id="pharmacy-list">
+            약국
+        </div>
     </div>
     <div id="container-right">
         <div id="map" style="width: 100%; height: 100%"></div>
@@ -205,40 +264,115 @@
         openNav();
     }
     const openNav = () => {
-        document.getElementById("container-collapse").style.left = "calc(104px + 28rem)";
-        document.getElementById("container-collapse").style.display = "block";
-
+        document.getElementById("container-collapse").style.visibility = "visible";
     }
     const closeNav = () => {
-        document.getElementById("container-collapse").style.left = "104px";
-        document.getElementById("container-collapse").style.display = "none";
+        document.getElementById("container-collapse").style.visibility = "hidden";
+    }
+
+    const handleProduct = async (id) => {
+        const detailDiv = document.getElementById('detail')
+        detailDiv.innerHTML = ""
+
+        const centerDiv = document.createElement('div')
+        centerDiv.style.textAlign = "center"
+        centerDiv.style.paddingTop = "2rem"
+
+        const detailExtraDiv = document.getElementById('detail-extra')
+        detailExtraDiv.innerHTML = ""
+
+        detailDiv.append(centerDiv)
+        await fetch(`/product/detail.do?productId=` + id)
+            .then(res => res.json())
+            .then(data => {
+                Object.keys(data)
+                    .forEach((key) => {
+                        if (key === "entpName") {
+                            const span = document.createElement('span')
+                            span.id = "entpName"
+                            span.innerText = data[key]
+                            centerDiv.append(span)
+                        }
+                        if (key === "itemName") {
+                            const h2 = document.createElement('h2')
+                            h2.id = "itemName"
+                            h2.innerText = data[key]
+                            centerDiv.append(h2)
+                        }
+                        if (key === "efcyQes") {
+                            detailDiv.append(creatDetailH4("효능", data[key]))
+                        }
+                        if (key === "useMethodQes") {
+                            detailDiv.append(creatDetailH4("용법", data[key]))
+                        }
+                        if (key === "atpnWarnQes") {
+                            detailExtraDiv.append(creatDetailH4("주의사항", data[key]))
+                        }
+                        if (key === "intrcQes") {
+                            detailExtraDiv.append(creatDetailH4("복용시 주의사항", data[key]))
+                        }
+                        if (key === "seQes") {
+                            detailExtraDiv.append(creatDetailH4("부작용", data[key]))
+                        }
+                        if (key === "depositMethodQes") {
+                            detailExtraDiv.append(creatDetailH4("보관방법", data[key]))
+                        }
+                        if (key === "itemImage") {
+                            if (data[key] === null) {
+                                return
+                            }
+                            const img = document.createElement('img')
+                            img.src = data[key]
+                            img.style.width = "50%"
+                            img.style.paddingBottom = "2rem"
+                            centerDiv.append(img)
+                        }
+                    })
+            })
+            .catch(err => console.error(err))
+    }
+
+    const creatDetailH4 = (title, content) => {
+        if (content === null) {
+            return ""
+        }
+
+        const rootP = document.createElement('p')
+
+        const h4 = document.createElement('h4')
+        h4.className = "detail-title"
+        h4.innerText = "[" + title + "]"
+        rootP.append(h4)
+
+        const p = document.createElement('p')
+        p.className
+        p.innerText = content.replaceAll("<br>", " ").replaceAll("\n", " ")
+        rootP.append(p)
+
+        return rootP
+    }
+
+    const handleDetailExtand = () => {
+        const detailCollapse = document.getElementById('detail-collapse')
+        const imgCollapseExtend = document.getElementById('img-collapse-extend')
+        const imgCollapseReduce = document.getElementById('img-collapse-reduce')
+        if (detailCollapse.style.display === "none") {
+            detailCollapse.style.display = "block"
+            imgCollapseExtend.style.display = "none"
+            imgCollapseReduce.style.display = "inline-block"
+        } else {
+            detailCollapse.style.display = "none"
+            imgCollapseExtend.style.display = "inline-block"
+            imgCollapseReduce.style.display = "none"
+        }
     }
 
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
     };
+
     const map = new naver.maps.Map('map', mapOptions);
 
-    const handleProduct = async (id) => {
-        const detailDiv = document.getElementById('detail')
-        detailDiv.innerHTML = ""
-        await fetch(`/product/detail.do?productId=` + id)
-            .then(res => res.json())
-            .then(data => {
-                Object.entries(data).forEach(([key, value]) => {
-                    if (key === 'itemImage') {
-                        const img = document.createElement('img')
-                        img.src = value
-                        detailDiv.appendChild(img)
-                        return
-                    }
-                    const div = document.createElement('div')
-                    div.innerHTML = key + " : " + value + "<br>"
-                    detailDiv.appendChild(div)
-                })
-            })
-            .catch(err => console.error(err))
-    }
 </script>
 
