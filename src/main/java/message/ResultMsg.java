@@ -13,10 +13,6 @@ public class ResultMsg {
 		
 	}
 	
-	public ResultMsg(boolean isSuccess) {
-		setIsSuccess(isSuccess);
-	}
-	
 	public ResultMsg(boolean isSuccess, String errorMsg) {
 		setIsSuccess(isSuccess);
 		this.errorMsg = errorMsg;

@@ -54,11 +54,6 @@
     </div>
 </div>
 
-<!-- 테스트 -->
-<a href="/pharma-inout-calendar.do">인아웃</a><br/>
-<a href="/pharma-product-management.do">제품등록</a>
-<!-- 테스트 -->
-
 <script>
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");

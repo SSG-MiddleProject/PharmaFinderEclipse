@@ -22,13 +22,13 @@
 		from store_product sp inner join product p
 			on sp.product_id = p.id
 		<choose>
-			<when test="storeId > 0">
+			<when test="storeId != null">
 				where sp.store_id like CONCAT('%', #{storeId}, '%')
 			</when>
-			<when test="productId > 0">
+			<when test="productId != null">
 				where p.id like CONCAT('%', #{productId}, '%')
 			</when>
-			<when test="itemName != null and item != ''">
+			<when test="itemName != null">
 				where item_name like CONCAT('%', #{itemName}, '%')
 			</when>
 		</choose>

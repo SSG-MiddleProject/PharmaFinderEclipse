@@ -49,9 +49,19 @@ body {
 </style>
 </head>
 <body>
+
+
 	<!-- 리스트 구역 START -->
 	<div class="pharma-product-container">
 		<table class="table" id="pharma-products">
+			<!--          <colgroup>
+            <col style="width: 100px" />
+            <col style="width: 300px" />
+            <col style="width: 300px" />
+            <col style="width: 300px" />
+            <col style="width: 300px" />
+            <col style="width: 300px" />
+          </colgroup> -->
 			<thead>
 				<tr>
 					<td>id</td>
@@ -156,10 +166,13 @@ function calVAT() {
   function performSearch() {
 	  
 	  $.ajax({
-			url: "./pharma-product-common-search.do",
+			url: "./pharmaProductSearch.do",
 			type: "get",
 			data: {searchType: $("#searchType").val(), keyword:$("#keyword").val()},
 			success:function(data){
+				 // alert("success");
+				// alert(JSON.stringify(data));
+				 
 				if(data != null){
 					$("#result").html("");
 					
@@ -174,16 +187,10 @@ function calVAT() {
 					
 					for(let i = 0; i < data.length; i++){
 		                let newElement = $(
-		                			"<tr>" +
-		                				"<td>" + data[i].id +"</td>" +
-		                				"<td>" + data[i].itemName + "</td>" +
-		                				`<td>
-		                					<button onclick="selectionProduct(this)" type='button' 
-		                						data-object='{"id":"`+ data[i].id + `", "itemName":"`+ data[i].itemName+ `", "itemImage":"` + data[i].itemImage + `"}'>
-		                						선택
-		                					</button>
-		                				</td>
-		                			</tr>`);
+		                		"	<tr>" +
+		                			"<td>" + data[i].id +"</td>" +
+		                			"<td>" + data[i].itemName + "</td>" +
+		                			`<td><button onclick="selectionProduct(this)" type='button' data-object='{"id":"`+ data[i].id + `", "itemName":"`+ data[i].itemName+ `"}'>선택</button></td></tr>`);
 		                $("#result>table").append(newElement)
 		            }
 				}
@@ -219,10 +226,10 @@ function calVAT() {
 
 	  // ajax 송신
       $.ajax({
-          url: "./pharma-product-register.do",
+          url: "./pharmaProductInsert.do",
           type: "get",
           data: {
-            "storeId": <%=request.getSession().getAttribute("storeId")%>,
+            "storeId": 9999,
             "productId":$("#insertId").val() ,
             "inputPrice": $("#insertInputPrice").val(),
             "outputPrice": $("#insertOutputPrice").val(),
@@ -256,8 +263,11 @@ function calVAT() {
   
   function refreshPharmaProduct(isSelectLast){
       $.ajax({
-          url: "./select-pharma-products.do",
+          url: "./refreshPharmaProduct.do",
           type: "get",
+          data: {
+            "storeId": 9999
+          },
           success: function (data) {
 				refreshTable(data, isSelectLast);
           },
@@ -313,7 +323,7 @@ function calVAT() {
   
   function deletePharmaProduct(id){
 	  $.ajax({
-          url: "./delete-pharma-product.do",
+          url: "./deletePharmaProduct.do",
           type: "get",
           data: {
             "pharmaProductId": id

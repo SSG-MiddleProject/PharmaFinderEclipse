@@ -2,8 +2,6 @@ package ssg.middlepj.pharmafinder.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import message.ResultMsg;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam;
+import ssg.middlepj.pharmafinder.dto.PharmaProductSearchParam;
 import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
 import ssg.middlepj.pharmafinder.service.PharmaProductManagementService;
 
@@ -22,12 +21,11 @@ public class PharmaProductManagementController {
 	@Autowired
 	private PharmaProductManagementService service;
 	
-	@GetMapping(value = "/pharma-product-management.do")
-	public String productManagement(Model model, HttpServletRequest request) {
-		System.out.println("PharmaProductManagementController productManagement()");
-		
-		int storeId = (int)request.getSession().getAttribute("storeId");
-		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
+	@GetMapping(value = "/productManagement.do")
+	public String list(String storeId, Model model) {
+		System.out.println("PharmaProductManagementController list()");
+		// 등록된 리스트를 forward 시킨다.
+		List<PharmaProductWithProductDto> list = getPharmaProducts(storeId);
 		
 		model.addAttribute("list", list);
 		
@@ -35,23 +33,29 @@ public class PharmaProductManagementController {
 	}
 	
 	@ResponseBody
-	@GetMapping(value = "/select-pharma-products.do")
-	public List<PharmaProductWithProductDto> selectPharmaProducts(HttpServletRequest request) {
-		System.out.println("PharmaProductManagementController selectPharmaProducts()");
-		
-		int storeId = (int)request.getSession().getAttribute("storeId");
-		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
+	@GetMapping(value = "/refreshPharmaProduct.do")
+	public List<PharmaProductWithProductDto> refreshPharmaProduct(String storeId) {
+		System.out.println("PharmaProductManagementController refreshPharmaProduct()");
+		// 등록된 리스트를 forward 시킨다.
+		List<PharmaProductWithProductDto> list = getPharmaProducts(storeId);
 		
 		return list; 
 	}
 	
-	@ResponseBody
-	@GetMapping(value = "/pharma-product-register.do")
-	public ResultMsg pharmaProductRegister(PharmaProductManagementDto dto, HttpServletRequest request) {
-		System.out.println("PharmaProductManagementController pharmaProductRegister()");
+	private List<PharmaProductWithProductDto> getPharmaProducts(String storeId) {
+		PharmaProductManagementParam emptyParam = new PharmaProductManagementParam(9999,null,null);
 		
-		int storeId = (int)request.getSession().getAttribute("storeId");
-		PharmaProductManagementParam param = new PharmaProductManagementParam(storeId, dto.getProductId(), null);
+		List<PharmaProductWithProductDto> list = service.searchPharmaProducts(emptyParam);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/pharmaProductInsert.do")
+	public ResultMsg insertPharmaProduct(PharmaProductManagementDto dto) {
+		System.out.println("PharmaProductManagementController insertPharmaProduct()");
+		
+		PharmaProductManagementParam param = new PharmaProductManagementParam(dto.getStoreId(), dto.getProductId(), null);
 		
 		boolean isDuplication = service.isDuplicationPharmaProduct(param);
 				
@@ -59,10 +63,10 @@ public class PharmaProductManagementController {
 			return new ResultMsg(!isDuplication, "제품이 중복되었습니다.");
 		}
 		
-		boolean isS = service.registerPharmaProduct(dto);
+		boolean isS = service.insertPharmaProduct(dto);
 		
 		if(isS) {
-			return new ResultMsg(isS);
+			return new ResultMsg(isS, null);
 		} else {
 			return new ResultMsg(false, null);
 		}
@@ -70,9 +74,11 @@ public class PharmaProductManagementController {
 	
 	//pharmaProductId
 	@ResponseBody
-	@GetMapping(value = "/delete-pharma-product.do")
+	@GetMapping(value = "/deletePharmaProduct.do")
 	public ResultMsg deletePharmaProduct(int pharmaProductId) {
 		System.out.println("PharmaProductManagementController deletePharmaProduct()");
+		
+		ResultMsg resultMsg = new ResultMsg();
 		
 		PharmaProductManagementDto dto = new PharmaProductManagementDto();
 		dto.setId(pharmaProductId);
@@ -80,7 +86,7 @@ public class PharmaProductManagementController {
 		int deletedRows = service.deletePharmaProduct(dto);
 		
 		if(deletedRows > 0) {
-			return new ResultMsg(true);
+			return new ResultMsg(true, null);
 		} else {
 			return new ResultMsg(false, "삭제된 행이 0개 입니다.");
 		}

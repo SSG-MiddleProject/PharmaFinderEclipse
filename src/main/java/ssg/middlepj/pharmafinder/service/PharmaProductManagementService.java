@@ -9,11 +9,11 @@ import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
 
 public interface PharmaProductManagementService {
 	
-	boolean registerPharmaProduct(PharmaProductManagementDto dto);
+	boolean insertPharmaProduct(PharmaProductManagementDto dto);
 	
 	boolean isDuplicationPharmaProduct(PharmaProductManagementParam param);
 	
-	List<PharmaProductWithProductDto> selectPharmaProducts(PharmaProductManagementParam param);
+	List<PharmaProductWithProductDto> searchPharmaProducts(PharmaProductManagementParam param);
 
 	int deletePharmaProduct(PharmaProductManagementDto dto);
 }

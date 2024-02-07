@@ -5,18 +5,14 @@ import java.io.Serializable;
 public class PharmaProductManagementParam implements Serializable {
 
 	private int storeId;
-	private int productId;
+	private Integer productId;
 	private String itemName;
 	
 	public PharmaProductManagementParam() {
 		
 	}
 	
-	public PharmaProductManagementParam(int storeId) {
-		this.storeId = storeId;
-	}
-	
-	public PharmaProductManagementParam(int storeId, int productId, String itemName) {
+	public PharmaProductManagementParam(int storeId, Integer productId, String itemName) {
 		this.itemName = itemName;
 		this.storeId = storeId;
 		this.productId = productId;
@@ -40,11 +36,11 @@ public class PharmaProductManagementParam implements Serializable {
 		this.storeId = storeId;
 	}
 
-	public int getProductId() {
+	public Integer getProductId() {
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(Integer productId) {
 		this.productId = productId;
 	}
 	
