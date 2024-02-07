@@ -1,7 +1,11 @@
+<%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyExtDto" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyDto" %>
+<%@ page import="ssg.middlepj.pharmafinder.service.PharmacyService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
+<%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -16,7 +20,14 @@
 
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 
-    List<PharmacyDto> pharmacyList = (List<PharmacyDto>) request.getAttribute("pharmacies");
+    List<PharmacyExtDto> pharmacyList = (List<PharmacyExtDto>) request.getAttribute("pharmacies");
+    List<PharmacyDto> list = pharmacyList.get(0).getItems();
+    int allCount = pharmacyList.get(0).getAllCount();
+    String keyword = "";
+    keyword = request.getParameter("QN") == null ? "" : request.getParameter("QN");
+    int pageNo = 1;
+    pageNo = request.getParameter("pageNo") == null ? 1 : Integer.parseInt(request.getParameter("pageNo"));
+    Pagination pagination = (Pagination) request.getAttribute("pagination");
 
 %>
 <script type="text/javascript"
@@ -44,6 +55,7 @@
             align-content: center;
             height: 2.8rem;
             margin-top: 0.3rem;
+
         }
 
         #search-result {
@@ -102,7 +114,7 @@
             <div class="field has-addons has-addons-centered">
                 <div class="control">
                     <label>
-                        <input class="input" type="text" name="keyword" placeholder="검색할 단어 입력" value="">
+                        <input class="input" type="text" name="keyword" placeholder="주변 약국 검색" value="<%=keyword%>">
                     </label>
                 </div>
                 <div class="control">
@@ -113,11 +125,10 @@
             </div>
         </div>
         <ul id="search-result">
-            <% for (PharmacyDto pharmacy : pharmacyList) { %>
+            <% for (PharmacyDto pharmacy : list) { %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black" id="test">
                     <a value="<%=pharmacy.getHpid()%>" onclick="handleDetail(this)">
-                        <%-- 이름이 15자 이상이면 자르기 --%>
                         <%=pharmacy.getDutyName().length() > 15 ? pharmacy.getDutyName().substring(0, 15) + "..." : pharmacy.getDutyName()%>
                     </a>
                     <p><%=pharmacy.getDutyAddr()%></p>
@@ -128,7 +139,7 @@
         <div id="search-pagination">
             <ul id="pagination-list">
                 <li onclick="handlePrev()"><</li>
-<%--                <%=PaginationUtil.CreatePaginationList(currentPage, pagination)%>--%>
+                <%=pageNo%>
                 <li onclick="handleNext()">></li>
             </ul>
         </div>
@@ -147,35 +158,35 @@
 <script>
     <%--const currentPage = parseInt("<%=currentPage%>");--%>
     <%--const lastPage = parseInt("<%=lastPage%>");--%>
-    <%--let keyword = "<%=keyword%>"--%>
+    let keyword = "<%=keyword%>"
     <%--let choice = document.getElementById("searchType");--%>
     <%--choice.value = "<%=searchType %>";--%>
     <%--choice.selected = true;--%>
 
     const handleSearch = () => {
-        const searchType = document.querySelector('select').value;
         const keyword = document.querySelector('input[name="keyword"]').value;
-        location.href = encodeURI("main.do?searchType=" + searchType + "&keyword=" + keyword);
+        location.href = encodeURI("pharmacy.do?QN=" + keyword);
     }
-    <%--const handlePagination = (page) => {--%>
-    <%--    location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + page);--%>
-    <%--}--%>
-    <%--const handlePrev = () => {--%>
-    <%--    if (existPrev === "true") {--%>
-    <%--        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));--%>
-    <%--    }--%>
-    <%--    if (currentPage !== 1) {--%>
-    <%--        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));--%>
-    <%--    }--%>
-    <%--}--%>
-    <%--const handleNext = () => {--%>
-    <%--    if (existNext === "true") {--%>
-    <%--        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));--%>
-    <%--    }--%>
-    <%--    if (currentPage !== lastPage) {--%>
-    <%--        location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));--%>
-    <%--    }--%>
-    <%--}--%>
+
+    const handlePagination = (pageNo) => {
+        location.href = encodeURI("main.do?keyword=" + "<%=keyword%>" + "&pageNo=" + pageNo);
+    }
+    const handlePrev = () => {
+        if (existPrev === "true") {
+            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+        }
+        if (currentPage !== 1) {
+            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+        }
+    }
+    const handleNext = () => {
+        if (existNext === "true") {
+            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+        }
+        if (currentPage !== lastPage) {
+            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+        }
+    }
     const handleDetail = (e) => {
         handleProduct(e.getAttribute("value"))
         openNav();
@@ -196,25 +207,6 @@
     };
     const map = new naver.maps.Map('map', mapOptions);
 
-    const handleProduct = async (id) => {
-        const detailDiv = document.getElementById('detail')
-        detailDiv.innerHTML = ""
-        await fetch(`/product/detail.do?productId=` + id)
-            .then(res => res.json())
-            .then(data => {
-                Object.entries(data).forEach(([key, value]) => {
-                    if (key === 'itemImage') {
-                        const img = document.createElement('img')
-                        img.src = value
-                        detailDiv.appendChild(img)
-                        return
-                    }
-                    const div = document.createElement('div')
-                    div.innerHTML = key + " : " + value + "<br>"
-                    detailDiv.appendChild(div)
-                })
-            })
-            .catch(err => console.error(err))
-    }
+
 </script>
 

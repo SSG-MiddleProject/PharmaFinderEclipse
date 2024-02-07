@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
+import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XMLParser {
-    public static List<PharmacyDto> xmlParser(String xml) throws ParserConfigurationException, IOException, SAXException {
+    public static List<PharmacyExtDto> xmlParser(String xml) throws ParserConfigurationException, IOException, SAXException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
         Document doc = builder.parse(new InputSource(new StringReader(xml.trim())));
+        Node total = doc.getElementsByTagName("totalCount").item(0);
         NodeList nodeList = doc.getElementsByTagName("item");
         List<PharmacyDto> pharmacyItemList = new ArrayList<>();
 
@@ -149,7 +151,6 @@ public class XMLParser {
             }
 
 
-
             NodeList hpidList = ((Element) itemNode).getElementsByTagName("hpid");
             if (hpidList.getLength() > 0) {
                 Node hpidNode = hpidList.item(0);
@@ -171,6 +172,13 @@ public class XMLParser {
             pharmacyItemList.add(pharmacyDto);
         }
 
-        return pharmacyItemList;
+        List<PharmacyExtDto> pharmacyExtDtoList = new ArrayList<>();
+        PharmacyExtDto pharmacyExtDto = new PharmacyExtDto();
+        pharmacyExtDto.setItems(pharmacyItemList);
+        pharmacyExtDto.setAllCount(Integer.parseInt(total.getTextContent().trim()));
+
+        pharmacyExtDtoList.add(pharmacyExtDto);
+
+        return pharmacyExtDtoList;
     }
 }

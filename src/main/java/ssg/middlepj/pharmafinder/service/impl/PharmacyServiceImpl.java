@@ -4,7 +4,7 @@ import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
-import ssg.middlepj.pharmafinder.dto.PharmacyDto;
+import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
 import ssg.middlepj.pharmafinder.service.PharmacyService;
 
@@ -27,8 +27,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     private String SERVICE_KEY;
 
     @Override
-    public List<PharmacyDto> selectPharmacies(PharmacyParam pharmacyParam ) throws IOException, JDOMException, ParserConfigurationException, SAXException {
-        /*URL*/
+    public List<PharmacyExtDto> selectPharmacies(PharmacyParam pharmacyParam) throws IOException, JDOMException, ParserConfigurationException, SAXException {
         String urlBuilder = "http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire" + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + SERVICE_KEY + /*Service Key*/
                 "&" + URLEncoder.encode("Q0", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ0(), StandardCharsets.UTF_8) + /*주소(시도)*/
                 "&" + URLEncoder.encode("Q1", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ1(), StandardCharsets.UTF_8) + /*주소(시군구)*/
@@ -36,6 +35,7 @@ public class PharmacyServiceImpl implements PharmacyService {
                 "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8) + /*순서*/
                 "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getPageNo()), StandardCharsets.UTF_8) + /*페이지 번호*/
                 "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getNumOfRows()), StandardCharsets.UTF_8); /*목록 건수*/
+
         URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -53,7 +53,16 @@ public class PharmacyServiceImpl implements PharmacyService {
         }
         rd.close();
         conn.disconnect();
-        return xmlParser(sb.toString());
+//        PharmacyExtDto dtos = xmlParser(sb.toString());
+//        System.out.println(dtos.getAllCount());
+//        System.out.println(dtos.getItems());
+
+        List<PharmacyExtDto> pharmacies = xmlParser(sb.toString());
+//        list.get(0).getAllCount();
+//        list.get(0).getItems();
+//        System.out.println(list.get(0).getAllCount());
+//        System.out.println(list.get(0).getItems());
+        return pharmacies;
     }
 
 }
