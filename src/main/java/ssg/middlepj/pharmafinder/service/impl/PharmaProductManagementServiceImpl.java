@@ -20,7 +20,7 @@ public class PharmaProductManagementServiceImpl implements PharmaProductManageme
 	PharmaProductManagementDao dao;
 
 	@Override
-	public boolean insertPharmaProduct(PharmaProductManagementDto dto) {
+	public boolean registerPharmaProduct(PharmaProductManagementDto dto) {
 		return dao.insertPharmaProduct(dto) > 0;
 	}
 
@@ -31,7 +31,7 @@ public class PharmaProductManagementServiceImpl implements PharmaProductManageme
 	}
 
 	@Override
-	public List<PharmaProductWithProductDto> searchPharmaProducts(PharmaProductManagementParam param) {
+	public List<PharmaProductWithProductDto> selectPharmaProducts(PharmaProductManagementParam param) {
 		return dao.selectPharmaProducts(param);
 	}
 
