@@ -12,13 +12,14 @@ public class PharmaProductWithProductDto {
 	// productId
     // private Integer id;
     private String itemName;
+    private String itemImage;
     
     public PharmaProductWithProductDto() {
     	
     }
     
 	public PharmaProductWithProductDto(int id, int storeId, int productId, int inputPrice, int outputPrice,
-			String createdAt, String itemName) {
+			String createdAt, String itemName, String itemImage) {
 		this.id = id;
 		this.storeId = storeId;
 		this.productId = productId;
@@ -26,6 +27,7 @@ public class PharmaProductWithProductDto {
 		this.outputPrice = outputPrice;
 		this.createdAt = createdAt;
 		this.itemName = itemName;
+		this.itemImage = itemImage;
 	}
 
 
@@ -86,4 +88,11 @@ public class PharmaProductWithProductDto {
 		this.itemName = itemName;
 	}
     
+	public String getItemImage() {
+		return this.itemImage;
+	}
+	
+	public void setItemImage(String itemImage) {
+		this.itemImage = itemImage;
+	}
 }

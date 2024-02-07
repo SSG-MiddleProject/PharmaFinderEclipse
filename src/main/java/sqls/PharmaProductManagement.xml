@@ -18,7 +18,7 @@
 		parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam"
 		resultType="ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto">
 		select sp.id as id, sp.store_id as storeId, sp.product_id as productId, 
-			sp.input_price as inputPrice, sp.output_price as outputPrice, sp.created_at as createdAt, p.item_name as itemName
+			sp.input_price as inputPrice, sp.output_price as outputPrice, sp.created_at as createdAt, p.item_name as itemName, p.item_image as itemImage
 		from store_product sp inner join product p
 			on sp.product_id = p.id
 		<choose>
