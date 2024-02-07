@@ -1,3 +1,4 @@
+
 package message;
 
 public class ResultMsg {
@@ -11,6 +12,10 @@ public class ResultMsg {
 	
 	public ResultMsg() {
 		
+	}
+	
+	public ResultMsg(boolean isSuccess) {
+		setIsSuccess(isSuccess);
 	}
 	
 	public ResultMsg(boolean isSuccess, String errorMsg) {

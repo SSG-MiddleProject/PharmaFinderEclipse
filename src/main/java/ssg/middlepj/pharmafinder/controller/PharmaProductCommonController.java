@@ -1,3 +1,4 @@
+
 package ssg.middlepj.pharmafinder.controller;
 
 import java.util.List;
@@ -19,14 +20,11 @@ public class PharmaProductCommonController {
 	private PharmaProductCommonService service;
 	
 	@ResponseBody
-	@GetMapping(value = "/pharmaProductSearch.do")
-	public List<ProductDto> searchProducts(PharmaProductSearchParam param) {
-		System.out.println("PharmaProductCommonService searchProducts()");
-		List<ProductDto> list = null;
+	@GetMapping(value = "/pharma-product-common-search.do")
+	public List<ProductDto> pharmaProductCommonSearch(PharmaProductSearchParam param) {
+		System.out.println("PharmaProductCommonService pharmaProductCommonSearch()");
 		
-		list = service.selectProducts(param);
-		
-		return list;
+		return service.selectProducts(param);
 	}
 	
 }

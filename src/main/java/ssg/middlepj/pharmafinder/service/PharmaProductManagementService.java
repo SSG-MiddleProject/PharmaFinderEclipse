@@ -1,3 +1,4 @@
+
 package ssg.middlepj.pharmafinder.service;
 
 import java.util.List;
@@ -9,11 +10,11 @@ import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
 
 public interface PharmaProductManagementService {
 	
-	boolean insertPharmaProduct(PharmaProductManagementDto dto);
+	boolean registerPharmaProduct(PharmaProductManagementDto dto);
 	
 	boolean isDuplicationPharmaProduct(PharmaProductManagementParam param);
 	
-	List<PharmaProductWithProductDto> searchPharmaProducts(PharmaProductManagementParam param);
+	List<PharmaProductWithProductDto> selectPharmaProducts(PharmaProductManagementParam param);
 
 	int deletePharmaProduct(PharmaProductManagementDto dto);
 }
