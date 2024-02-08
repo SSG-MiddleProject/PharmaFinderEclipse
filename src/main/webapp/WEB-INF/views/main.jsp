@@ -127,7 +127,6 @@
 
         #pharmacy-list {
             width: 100%;
-            background-color: #f5f5f5;
         }
     }
 
@@ -228,9 +227,8 @@
                  alt="Collapse Reduce"
                  style="width: 1.3rem; height: 1.3rem;"/>
         </div>
-        <div id="pharmacy-list">
-            약국
-        </div>
+        <ul id="pharmacy-list">
+        </ul>
     </div>
     <div id="container-right">
         <div id="map" style="width: 100%; height: 100%"></div>
@@ -300,6 +298,10 @@
         detailExtraDiv.innerHTML = ""
 
         detailDiv.append(centerDiv)
+
+        const pharmacyList = document.getElementById('pharmacy-list')
+        pharmacyList.innerHTML = ""
+
         await fetch(`/product/detail.do?productId=` + id)
             .then(res => res.json())
             .then(data => {
@@ -346,7 +348,21 @@
                     }
                 })
                 Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
-                    console.log(key, value)
+                    const li = document.createElement('li')
+                    li.className = "p-2"
+                    li.style.borderBottom = "solid 1px"
+                    const div = document.createElement('div')
+                    div.className = "has-text-black"
+                    const a = document.createElement('a')
+                    a.value = value["hpid"]
+                    a.onclick = () => handlePharmacyDetail(a)
+                    a.innerText = value["dutyName"].length > 15 ? value["dutyName"].substring(0, 15) + "..." : value["dutyName"]
+                    const p = document.createElement('p')
+                    p.innerText = value["dutyAddr"]
+                    div.append(a)
+                    div.append(p)
+                    li.append(div)
+                    pharmacyList.append(li)
                 })
             })
             .catch(err => console.error(err))
