@@ -11,6 +11,7 @@ import ssg.middlepj.pharmafinder.service.ProductService;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/product")
@@ -24,8 +25,8 @@ public class ProductController {
 
     @ResponseBody
     @GetMapping("/detail.do")
-    public HashMap<String, Object> detail(Integer productId) {
-        HashMap<String, Object> map = new HashMap<>();
+    public Map<String, Object> detail(Integer productId) {
+        Map<String, Object> map = new HashMap<>();
         ProductDto product = productService.selectProductById(productId);
         List<PharmacyProductQtyDto> pharmaciesWithQty = productService.selectPharmacyProductQtyByProductId(productId);
 
