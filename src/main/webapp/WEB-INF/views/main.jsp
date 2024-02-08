@@ -177,7 +177,7 @@
         </div>
         <ul id="search-result">
             <%
-                if (productList.size() == 0) {
+                if (productList.isEmpty()) {
             %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black mt-4" style="text-align: center">
