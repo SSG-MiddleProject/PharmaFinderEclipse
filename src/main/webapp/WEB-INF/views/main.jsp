@@ -193,9 +193,17 @@
         </ul>
         <div id="search-pagination">
             <ul id="pagination-list">
+                <%
+                    if (currentPage > 1) {
+                %>
                 <li onclick="handlePrev()"><</li>
+                <% } %>
                 <%=PaginationUtil.CreatePaginationList(currentPage, pagination)%>
+                <%
+                    if (currentPage < lastPage) {
+                %>
                 <li onclick="handleNext()">></li>
+                <% } %>
             </ul>
         </div>
     </div>
@@ -208,7 +216,8 @@
         <div id="detail-collapse">
             <div id="detail-extra" class="content has-text-black"></div>
         </div>
-        <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5" onclick="handleDetailExtand()">
+        <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5"
+             onclick="handleDetailExtand()">
             <img id="img-collapse-extend" src="${pageContext.request.contextPath}/resources/CollapseExtend.svg"
                  alt="Collapse Extend"
                  style="width: 1.3rem; height: 1.3rem;"/>
@@ -240,9 +249,11 @@
         const keyword = document.querySelector('input[name="keyword"]').value;
         location.href = encodeURI("main.do?searchType=" + searchType + "&keyword=" + keyword);
     }
+
     const handlePagination = (page) => {
         location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + page);
     }
+
     const handlePrev = () => {
         if (existPrev === "true") {
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
@@ -251,6 +262,7 @@
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         }
     }
+
     const handleNext = () => {
         if (existNext === "true") {
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
@@ -259,13 +271,16 @@
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
         }
     }
+
     const handleDetail = (e) => {
         handleProduct(e.getAttribute("value"))
         openNav();
     }
+
     const openNav = () => {
         document.getElementById("container-collapse").style.visibility = "visible";
     }
+
     const closeNav = () => {
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
@@ -367,6 +382,15 @@
         }
     }
 
+    const handleCurrentPageNum = () => {
+        const paginationList = document.getElementById('pagination-list')
+        paginationList.childNodes.forEach((node) => {
+            if (parseInt(node.innerText) === currentPage) {
+                node.style.color = "steelblue"
+            }
+        })
+    }
+
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
@@ -374,5 +398,6 @@
 
     const map = new naver.maps.Map('map', mapOptions);
 
+    handleCurrentPageNum()
 </script>
 
