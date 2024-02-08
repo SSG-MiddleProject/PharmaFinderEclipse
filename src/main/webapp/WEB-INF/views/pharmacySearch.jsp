@@ -77,16 +77,18 @@
     #container-left {
         /*flex-shrink: 0;*/
         position: absolute;
-        left: 104px;
+        left: calc(4rem + 1px);
         top: 0;
-        width: 28rem;
+        width: 24rem;
         height: 100%;
+        border: solid 1px #dbdbdb;
 
         #search-bar {
             align-items: center;
             align-content: center;
             height: 2.8rem;
             margin-top: 0.3rem;
+            padding: 0 0.5rem;
 
         }
 
@@ -119,23 +121,68 @@
     }
 
     #container-collapse {
+        padding: 0.5rem 0.5rem;
         position: absolute;
-        display: none;
-        left: 104px;
+        left: calc(1px + 28rem);
         top: 0;
         background-color: white;
-        width: 28rem;
+        width: 24rem;
         height: 100%;
         z-index: 1;
         overflow-x: hidden;
+        visibility: hidden;
+        transition: visibility 0.3s ease-in-out;
     }
 
+    #detail {
+        visibility: inherit;
+        transition: inherit;
+
+        #entpName #itemName {
+            text-align: center;
+        }
+
+        #itemName {
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        #entpName {
+            color: #4a4a4a;
+        }
+    }
+
+    #detail-collapse {
+        display: none;
+        transition: visibility 0.3s ease-in-out;
+
+        #detail-extra {
+            display: inherit;
+            transition: inherit;
+        }
+    }
+
+    #collapse-extend {
+        cursor: pointer;
+        padding: 0.5rem 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #img-collapse-reduce {
+        display: none;
+    }
+
+    #pharmacy-list {
+        width: 100%;
+        background-color: #f5f5f5;
+    }
+
+
     #container-right {
-        /*flex-shrink: 0;*/
         position: absolute;
         right: 0;
         top: 0;
-        width: calc(100% - 28rem - 104px);
+        width: calc(100% - (28rem + 1px));
         height: 100%;
     }
 </style>
