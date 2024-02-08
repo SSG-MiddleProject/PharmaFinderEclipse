@@ -64,7 +64,6 @@
             height: 2rem;
             font-size: large;
             text-decoration: none;
-            transition: background-color .3s;
             border-radius: 50%;
 
             #pagination-list {
@@ -93,12 +92,8 @@
         z-index: 1;
         overflow-x: hidden;
         visibility: hidden;
-        transition: visibility 0.3s ease-in-out;
 
         #detail {
-            visibility: inherit;
-            transition: inherit;
-
             #entpName #itemName {
                 text-align: center;
             }
@@ -115,18 +110,15 @@
 
         #detail-collapse {
             display: none;
-            transition: visibility 0.3s ease-in-out;
 
             #detail-extra {
                 display: inherit;
-                transition: inherit;
             }
         }
 
         #collapse-extend {
             cursor: pointer;
             padding: 0.5rem 0;
-            transition: all 0.3s ease-in-out;
         }
 
         #img-collapse-reduce {
@@ -219,7 +211,7 @@
         </div>
     </div>
     <div id="container-collapse">
-        <button onclick="closeNav()"
+        <button onclick="closeCollapse()"
                 style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
             X
         </button>
@@ -285,14 +277,14 @@
 
     const handleDetail = (e) => {
         handleProduct(e.getAttribute("value"))
-        openNav();
+        openCollapse();
     }
 
-    const openNav = () => {
+    const openCollapse = () => {
         document.getElementById("container-collapse").style.visibility = "visible";
     }
 
-    const closeNav = () => {
+    const closeCollapse = () => {
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
