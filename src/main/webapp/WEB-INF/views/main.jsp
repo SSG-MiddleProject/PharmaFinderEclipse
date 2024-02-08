@@ -216,7 +216,7 @@
             X
         </button>
         <div id="detail" class="content has-text-black"></div>
-        <div id="detail-collapse">
+        <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
         </div>
         <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5"
