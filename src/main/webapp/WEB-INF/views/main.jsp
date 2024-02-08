@@ -64,7 +64,6 @@
             height: 2rem;
             font-size: large;
             text-decoration: none;
-            transition: background-color .3s;
             border-radius: 50%;
 
             #pagination-list {
@@ -93,12 +92,8 @@
         z-index: 1;
         overflow-x: hidden;
         visibility: hidden;
-        transition: visibility 0.3s ease-in-out;
 
         #detail {
-            visibility: inherit;
-            transition: inherit;
-
             #entpName #itemName {
                 text-align: center;
             }
@@ -115,18 +110,15 @@
 
         #detail-collapse {
             display: none;
-            transition: visibility 0.3s ease-in-out;
 
             #detail-extra {
                 display: inherit;
-                transition: inherit;
             }
         }
 
         #collapse-extend {
             cursor: pointer;
             padding: 0.5rem 0;
-            transition: all 0.3s ease-in-out;
         }
 
         #img-collapse-reduce {
@@ -176,7 +168,18 @@
             </div>
         </div>
         <ul id="search-result">
-            <% for (ProductDto product : productList) { %>
+            <%
+                if (productList.isEmpty()) {
+            %>
+            <li class="p-2" style="border-top: solid 1px">
+                <div class="has-text-black mt-4" style="text-align: center">
+                    검색 결과가 없습니다.
+                </div>
+            </li>
+            <%
+                }
+                for (ProductDto product : productList) {
+            %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black">
                     <a value="<%=product.getId()%>" onclick="handleDetail(this)">
@@ -193,22 +196,31 @@
         </ul>
         <div id="search-pagination">
             <ul id="pagination-list">
+                <%
+                    if (currentPage > 1) {
+                %>
                 <li onclick="handlePrev()"><</li>
+                <% } %>
                 <%=PaginationUtil.CreatePaginationList(currentPage, pagination)%>
+                <%
+                    if (currentPage < lastPage) {
+                %>
                 <li onclick="handleNext()">></li>
+                <% } %>
             </ul>
         </div>
     </div>
     <div id="container-collapse">
-        <button onclick="closeNav()"
+        <button onclick="closeCollapse()"
                 style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
             X
         </button>
         <div id="detail" class="content has-text-black"></div>
-        <div id="detail-collapse">
+        <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
         </div>
-        <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5" onclick="handleDetailExtand()">
+        <div id="collapse-extend" style="text-align: center; border-bottom: solid 1px #e5e5e5"
+             onclick="handleDetailExtand()">
             <img id="img-collapse-extend" src="${pageContext.request.contextPath}/resources/CollapseExtend.svg"
                  alt="Collapse Extend"
                  style="width: 1.3rem; height: 1.3rem;"/>
@@ -240,9 +252,11 @@
         const keyword = document.querySelector('input[name="keyword"]').value;
         location.href = encodeURI("main.do?searchType=" + searchType + "&keyword=" + keyword);
     }
+
     const handlePagination = (page) => {
         location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + page);
     }
+
     const handlePrev = () => {
         if (existPrev === "true") {
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
@@ -251,6 +265,7 @@
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         }
     }
+
     const handleNext = () => {
         if (existNext === "true") {
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
@@ -259,14 +274,17 @@
             location.href = encodeURI("main.do?searchType=" + "<%=searchType%>" + "&keyword=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
         }
     }
+
     const handleDetail = (e) => {
         handleProduct(e.getAttribute("value"))
-        openNav();
+        openCollapse();
     }
-    const openNav = () => {
+
+    const openCollapse = () => {
         document.getElementById("container-collapse").style.visibility = "visible";
     }
-    const closeNav = () => {
+
+    const closeCollapse = () => {
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
@@ -367,6 +385,15 @@
         }
     }
 
+    const handleCurrentPageNum = () => {
+        const paginationList = document.getElementById('pagination-list')
+        paginationList.childNodes.forEach((node) => {
+            if (parseInt(node.innerText) === currentPage) {
+                node.style.color = "steelblue"
+            }
+        })
+    }
+
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
@@ -374,5 +401,6 @@
 
     const map = new naver.maps.Map('map', mapOptions);
 
+    handleCurrentPageNum()
 </script>
 
