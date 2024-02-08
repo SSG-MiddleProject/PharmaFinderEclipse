@@ -47,6 +47,21 @@ public class PharmaProductManagementController {
 	}
 	
 	@ResponseBody
+	@GetMapping(value = "/select-specific-pharma-products.do")
+	public List<PharmaProductWithProductDto> selectSpecificPharmaProducts(PharmaProductManagementParam param ,HttpServletRequest request) {
+		System.out.println("PharmaProductManagementController selectSpecificPharmaProducts()");
+		
+		int storeId = (int)request.getSession().getAttribute("storeId");
+		
+		param.setStoreId(storeId);
+		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(param);
+		
+		return list;
+	}
+	
+	
+	
+	@ResponseBody
 	@GetMapping(value = "/pharma-product-register.do")
 	public ResultMsg pharmaProductRegister(PharmaProductManagementDto dto, HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController pharmaProductRegister()");
