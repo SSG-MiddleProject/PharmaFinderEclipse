@@ -130,6 +130,9 @@
     		<!-- 검색 버튼 클릭 시 검색 모달창 띄우기 -->
     		<button type="button"  class="button is-dark" onclick="openSearchModal()">검색창 열기</button>
     	</div>
+    	<div class="field is-grouped">
+    		<img src="" id="productImage">
+    	</div>
         <div class="field is-grouped">
         	<label for="insertInputPrice" class="label">입고단가</label>
         </div>
@@ -138,7 +141,7 @@
         </div>
         <div class="field is-grouped">
         	<label for="insertOutputPrice" class="label" style="width:20%;margin-right:2%">출고단가</label>
-        	<label for="insertVAT" class="label" style="width:20%">부가세</label>
+        	<label for="insertVAT" class="label" style="width:20%" readonly>부가세</label>
         </div>
         <div class="field is-grouped">
         	<input type="text" name="outputPrice" id="insertOutputPrice" class="input" oninput="calVAT()" style="width:20%;margin-right:2%" />
@@ -151,7 +154,8 @@
     <!--  -->
 
     <script>
-
+	const noImageUrl = "https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png";
+	
           function calVAT() {
               let outputPrice = $("#insertOutputPrice").val();
 
@@ -259,8 +263,20 @@
             let jsonObj = JSON.parse(target.getAttribute("data-object"));
             let id = jsonObj.id;
             let itemName = jsonObj.itemName;
+            let itemImage = jsonObj.itemImage;
+            
             $("#insertId").val(id);
             $("#insertItemName").val(itemName);
+			
+            // null or undefined
+			if(itemImage === "null"){
+	            $("#productImage").attr("src", noImageUrl);
+			}else{
+				$("#productImage").attr("src", itemImage);
+				$("#productImage").attr("width", "200px");
+				$("#productImage").attr("height", "200px");
+			}
+            
             closeSearchModal();
         }
         function refreshPharmaProduct(isSelectLast) {
@@ -313,6 +329,9 @@
             $("#insertInputPrice").val("");
             $("#insertOutputPrice").val("");
             $("#insertVAT").val("");
+            $("#productImage").attr("src","");
+            $("#productImage").removeAttr("width");
+            $("#productImage").removeAttr("height");
         }
         function deletePharmaProduct(id) {
             $.ajax({
