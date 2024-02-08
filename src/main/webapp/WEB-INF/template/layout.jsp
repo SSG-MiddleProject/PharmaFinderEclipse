@@ -13,7 +13,7 @@
 <div>
     <table>
         <tr>
-            <td  style="border-right: solid 1px #e5e5e5">
+            <td>
                 <aside>
                     <tiles:insertAttribute name="header"/>
                 </aside>
