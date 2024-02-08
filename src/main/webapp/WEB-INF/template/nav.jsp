@@ -37,7 +37,6 @@
     }
 
 
-
     #nav-bottom {
         position: absolute;
         bottom: 0;
@@ -66,7 +65,8 @@
     <ul class="menu-list is-centered " id="nav-item">
         <li class="has-text-centered " id="logo">
             <a href="<%="main.do"%>" class="is-unselectable">
-                <img src="${pageContext.request.contextPath}/resources/P.svg" alt="PharmaFinder Logo" style="width: 40%; height: 40%;"/>
+                <img src="${pageContext.request.contextPath}/resources/P.svg" alt="PharmaFinder Logo"
+                     style="width: 40%; height: 40%;"/>
             </a>
         </li>
         <li class="has-text-centered">
