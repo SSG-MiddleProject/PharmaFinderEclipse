@@ -22,7 +22,7 @@
         from product
         <choose>
             <when test="searchType == 'id'">
-               where id like CONCAT('%', #{keyword}, '%')
+               where id like = #{keyword}
             </when>
             <when test="searchType == 'itemName'">
                where item_name like CONCAT('%', #{keyword}, '%')
