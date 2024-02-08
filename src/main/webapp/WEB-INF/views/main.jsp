@@ -176,7 +176,18 @@
             </div>
         </div>
         <ul id="search-result">
-            <% for (ProductDto product : productList) { %>
+            <%
+                if (productList.size() == 0) {
+            %>
+            <li class="p-2" style="border-top: solid 1px">
+                <div class="has-text-black mt-4" style="text-align: center">
+                    검색 결과가 없습니다.
+                </div>
+            </li>
+            <%
+                }
+                for (ProductDto product : productList) {
+            %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black">
                     <a value="<%=product.getId()%>" onclick="handleDetail(this)">
