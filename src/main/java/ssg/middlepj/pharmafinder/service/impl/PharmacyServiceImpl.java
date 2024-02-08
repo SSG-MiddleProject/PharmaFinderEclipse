@@ -23,6 +23,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import static util.XMLParser.xmlParser;
@@ -34,16 +35,16 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public List<PharmacyDto> selectPharmacies(PharmacyParam pharmacyParam) throws IOException, JDOMException, ParserConfigurationException, SAXException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + SERVICE_KEY); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("Q0", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.Q0, "UTF-8")); /*주소(시도)*/
-        urlBuilder.append("&" + URLEncoder.encode("Q1", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.Q1, "UTF-8")); /*주소(시군구)*/
-        urlBuilder.append("&" + URLEncoder.encode("QT", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.QT), "UTF-8")); /*월~일요일, 공휴일: 1~8*/
-        urlBuilder.append("&" + URLEncoder.encode("QN", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.QN, "UTF-8")); /*기관명*/
-        urlBuilder.append("&" + URLEncoder.encode("ORD", "UTF-8") + "=" + URLEncoder.encode(pharmacyParam.ORD, "UTF-8")); /*순서*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.pageNo), "UTF-8")); /*페이지 번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.numOfRows), "UTF-8")); /*목록 건수*/
-        URL url = new URL(urlBuilder.toString());
+        /*URL*/
+        String urlBuilder = "http://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire" + "?" + URLEncoder.encode("serviceKey", StandardCharsets.UTF_8) + SERVICE_KEY + /*Service Key*/
+                "&" + URLEncoder.encode("Q0", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.Q0, StandardCharsets.UTF_8) + /*주소(시도)*/
+                "&" + URLEncoder.encode("Q1", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.Q1, StandardCharsets.UTF_8) + /*주소(시군구)*/
+                "&" + URLEncoder.encode("QT", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.QT), StandardCharsets.UTF_8) + /*월~일요일, 공휴일: 1~8*/
+                "&" + URLEncoder.encode("QN", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.QN, StandardCharsets.UTF_8) + /*기관명*/
+                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.ORD, StandardCharsets.UTF_8) + /*순서*/
+                "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.pageNo), StandardCharsets.UTF_8) + /*페이지 번호*/
+                "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.numOfRows), StandardCharsets.UTF_8); /*목록 건수*/
+        URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");

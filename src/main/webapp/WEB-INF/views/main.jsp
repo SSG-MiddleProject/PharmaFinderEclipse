@@ -303,49 +303,51 @@
         await fetch(`/product/detail.do?productId=` + id)
             .then(res => res.json())
             .then(data => {
-                Object.keys(data)
-                    .forEach((key) => {
-                        if (key === "entpName") {
-                            const span = document.createElement('span')
-                            span.id = "entpName"
-                            span.innerText = data[key]
-                            centerDiv.append(span)
+                Object.entries(data["product"]).forEach(([key, value]) => {
+                    if (key === "entpName") {
+                        const span = document.createElement('span')
+                        span.id = "entpName"
+                        span.innerText = value
+                        centerDiv.append(span)
+                    }
+                    if (key === "itemName") {
+                        const h2 = document.createElement('h2')
+                        h2.id = "itemName"
+                        h2.innerText = value
+                        centerDiv.append(h2)
+                    }
+                    if (key === "efcyQes") {
+                        detailDiv.append(creatDetailH4("효능", value))
+                    }
+                    if (key === "useMethodQes") {
+                        detailDiv.append(creatDetailH4("용법", value))
+                    }
+                    if (key === "atpnWarnQes") {
+                        detailExtraDiv.append(creatDetailH4("주의사항", value))
+                    }
+                    if (key === "intrcQes") {
+                        detailExtraDiv.append(creatDetailH4("복용시 주의사항", value))
+                    }
+                    if (key === "seQes") {
+                        detailExtraDiv.append(creatDetailH4("부작용", value))
+                    }
+                    if (key === "depositMethodQes") {
+                        detailExtraDiv.append(creatDetailH4("보관방법", value))
+                    }
+                    if (key === "itemImage") {
+                        if (value === null) {
+                            return
                         }
-                        if (key === "itemName") {
-                            const h2 = document.createElement('h2')
-                            h2.id = "itemName"
-                            h2.innerText = data[key]
-                            centerDiv.append(h2)
-                        }
-                        if (key === "efcyQes") {
-                            detailDiv.append(creatDetailH4("효능", data[key]))
-                        }
-                        if (key === "useMethodQes") {
-                            detailDiv.append(creatDetailH4("용법", data[key]))
-                        }
-                        if (key === "atpnWarnQes") {
-                            detailExtraDiv.append(creatDetailH4("주의사항", data[key]))
-                        }
-                        if (key === "intrcQes") {
-                            detailExtraDiv.append(creatDetailH4("복용시 주의사항", data[key]))
-                        }
-                        if (key === "seQes") {
-                            detailExtraDiv.append(creatDetailH4("부작용", data[key]))
-                        }
-                        if (key === "depositMethodQes") {
-                            detailExtraDiv.append(creatDetailH4("보관방법", data[key]))
-                        }
-                        if (key === "itemImage") {
-                            if (data[key] === null) {
-                                return
-                            }
-                            const img = document.createElement('img')
-                            img.src = data[key]
-                            img.style.width = "50%"
-                            img.style.paddingBottom = "2rem"
-                            centerDiv.append(img)
-                        }
-                    })
+                        const img = document.createElement('img')
+                        img.src = value
+                        img.style.width = "50%"
+                        img.style.paddingBottom = "2rem"
+                        centerDiv.append(img)
+                    }
+                })
+                Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
+                    console.log(key, value)
+                })
             })
             .catch(err => console.error(err))
     }

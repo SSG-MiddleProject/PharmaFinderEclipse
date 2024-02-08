@@ -1,6 +1,7 @@
 package ssg.middlepj.pharmafinder.service;
 
 import ssg.middlepj.pharmafinder.dto.PaginationParam;
+import ssg.middlepj.pharmafinder.dto.PharmacyProductQtyDto;
 import ssg.middlepj.pharmafinder.dto.ProductDto;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface ProductService {
     Integer selectProductsCnt(PaginationParam paginationParam);
 
     List<ProductDto> selectProducts(PaginationParam paginationParam);
+
+    List<PharmacyProductQtyDto> selectPharmacyProductQtyByProductId(Integer productId);
 }
