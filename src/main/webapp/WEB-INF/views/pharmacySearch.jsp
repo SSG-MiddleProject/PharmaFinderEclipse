@@ -1,11 +1,8 @@
 <%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyExtDto" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyDto" %>
-<%@ page import="ssg.middlepj.pharmafinder.service.PharmacyService" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
-<%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
-<%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -22,12 +19,47 @@
 
     List<PharmacyExtDto> pharmacyList = (List<PharmacyExtDto>) request.getAttribute("pharmacies");
     List<PharmacyDto> list = pharmacyList.get(0).getItems();
-    int allCount = pharmacyList.get(0).getAllCount();
     String keyword = "";
     keyword = request.getParameter("QN") == null ? "" : request.getParameter("QN");
     int pageNo = 1;
     pageNo = request.getParameter("pageNo") == null ? 1 : Integer.parseInt(request.getParameter("pageNo"));
-    Pagination pagination = (Pagination) request.getAttribute("pagination");
+
+    int pageSize=10;
+    int recordSize=5;
+    int allCount = pharmacyList.get(0).getAllCount();
+    int startPage = 1;
+    int endPage = allCount / pageSize + 1;
+    int currentPage = pageNo;
+    boolean existPrev = false;
+    boolean existNext = false;
+
+    if (currentPage > recordSize) {
+        startPage = currentPage - recordSize / 2;
+        endPage = currentPage + recordSize / 2;
+    }
+    if (currentPage <= recordSize) {
+        startPage = 1;
+        endPage = recordSize;
+    }
+    if (startPage < 1) {
+        startPage = 1;
+    }
+    if (endPage > allCount / pageSize + 1) {
+        endPage = allCount / pageSize + 1;
+    }
+    if (startPage > 1) {
+        existPrev = true;
+    }
+    if (endPage < allCount / pageSize + 1) {
+        existNext = true;
+    }
+    if(allCount>recordSize) {
+
+    }
+    startPage=endPage-recordSize+1;
+    if(currentPage<recordSize) {
+        startPage=1;
+    }
 
 %>
 <script type="text/javascript"
@@ -138,11 +170,25 @@
         </ul>
         <div id="search-pagination">
             <ul id="pagination-list">
-                <li onclick="handlePrev()"><</li>
-                <%=pageNo%>
-                <li onclick="handleNext()">></li>
+                <% if (existPrev) { %>
+                <li onclick="handlePagination(<%= currentPage - 1 %>)"><</li>
+                <% } %>
+                <%
+                    for (int i = startPage; i <= endPage; i++) {
+                %>
+                <% if (i == currentPage) { %>
+                <li style="color: steelblue" onclick="handlePagination(<%= i %>)"><%= i %></li>
+                <% } else { %>
+                <li onclick="handlePagination(<%= i %>)"><%= i %></li>
+                <% } %>
+                <% } %>
+                <% if (existNext) { %>
+                <li onclick="handlePagination(<%= currentPage + 1 %>)">></li>
+                <% } %>
             </ul>
         </div>
+
+
     </div>
     <div id="container-collapse">
         <div id="detail"></div>
@@ -156,12 +202,9 @@
 </div>
 
 <script>
-    <%--const currentPage = parseInt("<%=currentPage%>");--%>
-    <%--const lastPage = parseInt("<%=lastPage%>");--%>
+    const currentPage = parseInt("<%=currentPage%>");
+    const lastPage = parseInt("<%=endPage%>");
     let keyword = "<%=keyword%>"
-    <%--let choice = document.getElementById("searchType");--%>
-    <%--choice.value = "<%=searchType %>";--%>
-    <%--choice.selected = true;--%>
 
     const handleSearch = () => {
         const keyword = document.querySelector('input[name="keyword"]').value;
@@ -169,22 +212,22 @@
     }
 
     const handlePagination = (pageNo) => {
-        location.href = encodeURI("main.do?keyword=" + "<%=keyword%>" + "&pageNo=" + pageNo);
+        location.href = encodeURI("pharmacy.do?QN=" + "<%=keyword%>" + "&pageNo=" + pageNo);
     }
     const handlePrev = () => {
         if (existPrev === "true") {
-            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
         }
         if (currentPage !== 1) {
-            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
         }
     }
     const handleNext = () => {
         if (existNext === "true") {
-            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
         }
         if (currentPage !== lastPage) {
-            location.href = encodeURI("main.do?" + "keyword=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
         }
     }
     const handleDetail = (e) => {

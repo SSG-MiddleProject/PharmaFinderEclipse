@@ -15,7 +15,7 @@ public class PharmacyParam {
     public PharmacyParam() {
         this.Q0 = "부산광역시";
         this.Q1 = "해운대구";
-        this.QN = "층";
+        this.QN = "";
         this.ORD = "NAME";
         this.pageNo = 1;
         this.numOfRows = 10;

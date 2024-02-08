@@ -44,6 +44,7 @@ public class MainController {
     @RequestMapping(value = "/pharmacy.do", method = RequestMethod.GET)
     public String pharmacy(Model model, PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
         model.addAttribute("pharmacies", pharmacyService.selectPharmacies(pharmacyParam));
+//        model.addAttribute("pagination", pharmacyService.selectPharmacies(pharmacyParam));
         return "pharmacySearch.tiles";
     }
 
