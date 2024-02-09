@@ -146,7 +146,7 @@ public class PharmacyDto implements Serializable {
         this.dutyTime6s = dutyTime6s;
     }
 
-    public int getDutyTime7c() {
+    public Integer getDutyTime7c() {
         return dutyTime7c;
     }
 
@@ -154,7 +154,7 @@ public class PharmacyDto implements Serializable {
         this.dutyTime7c = dutyTime7c;
     }
 
-    public int getDutyTime7s() {
+    public Integer getDutyTime7s() {
         return dutyTime7s;
     }
 
@@ -162,7 +162,7 @@ public class PharmacyDto implements Serializable {
         this.dutyTime7s = dutyTime7s;
     }
 
-    public int getDutyTime8c() {
+    public Integer getDutyTime8c() {
         return dutyTime8c;
     }
 
@@ -170,7 +170,7 @@ public class PharmacyDto implements Serializable {
         this.dutyTime8c = dutyTime8c;
     }
 
-    public int getDutyTime8s() {
+    public Integer getDutyTime8s() {
         return dutyTime8s;
     }
 
