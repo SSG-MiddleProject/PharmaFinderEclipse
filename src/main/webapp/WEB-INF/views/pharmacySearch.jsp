@@ -18,14 +18,17 @@
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 
     List<PharmacyExtDto> pharmacyList = (List<PharmacyExtDto>) request.getAttribute("pharmacies");
+    System.out.println(pharmacyList);
+
     List<PharmacyDto> list = pharmacyList.get(0).getItems();
+
     String keyword = "";
     keyword = request.getParameter("QN") == null ? "" : request.getParameter("QN");
     int pageNo = 1;
     pageNo = request.getParameter("pageNo") == null ? 1 : Integer.parseInt(request.getParameter("pageNo"));
 
-    int pageSize=10;
-    int recordSize=5;
+    int pageSize = 10;
+    int recordSize = 5;
     int allCount = pharmacyList.get(0).getAllCount();
     int startPage = 1;
     int endPage = allCount / pageSize + 1;
@@ -53,13 +56,17 @@
     if (endPage < allCount / pageSize + 1) {
         existNext = true;
     }
-    if(allCount>recordSize) {
+    if (allCount > recordSize) {
 
     }
-    startPage=endPage-recordSize+1;
-    if(currentPage<recordSize) {
-        startPage=1;
+    startPage = endPage - recordSize + 1;
+    if (currentPage < recordSize) {
+        startPage = 1;
     }
+
+%>
+
+<%
 
 %>
 <script type="text/javascript"
@@ -102,7 +109,6 @@
             height: 2rem;
             font-size: large;
             text-decoration: none;
-            transition: background-color .3s;
             border-radius: 50%;
 
             #pagination-list {
@@ -131,12 +137,10 @@
         z-index: 1;
         overflow-x: hidden;
         visibility: hidden;
-        transition: visibility 0.3s ease-in-out;
     }
 
     #detail {
         visibility: inherit;
-        transition: inherit;
 
         #entpName #itemName {
             text-align: center;
@@ -154,18 +158,15 @@
 
     #detail-collapse {
         display: none;
-        transition: visibility 0.3s ease-in-out;
 
         #detail-extra {
             display: inherit;
-            transition: inherit;
         }
     }
 
     #collapse-extend {
         cursor: pointer;
         padding: 0.5rem 0;
-        transition: all 0.3s ease-in-out;
     }
 
     #img-collapse-reduce {
@@ -207,10 +208,11 @@
             <% for (PharmacyDto pharmacy : list) { %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black" id="test">
-                    <a value="<%=pharmacy.getHpid()%>" onclick="handleDetail(this)">
+                    <a value="<%=pharmacy.getDutyName()%>" onclick="handleDetail(this)">
                         <%=pharmacy.getDutyName().length() > 15 ? pharmacy.getDutyName().substring(0, 15) + "..." : pharmacy.getDutyName()%>
                     </a>
-                    <p><%=pharmacy.getDutyAddr()%></p>
+                    <p><%=pharmacy.getDutyAddr()%>
+                    </p>
                 </div>
             </li>
             <% } %>
@@ -224,9 +226,11 @@
                     for (int i = startPage; i <= endPage; i++) {
                 %>
                 <% if (i == currentPage) { %>
-                <li style="color: steelblue" onclick="handlePagination(<%= i %>)"><%= i %></li>
+                <li style="color: steelblue" onclick="handlePagination(<%= i %>)"><%= i %>
+                </li>
                 <% } else { %>
-                <li onclick="handlePagination(<%= i %>)"><%= i %></li>
+                <li onclick="handlePagination(<%= i %>)"><%= i %>
+                </li>
                 <% } %>
                 <% } %>
                 <% if (existNext) { %>
@@ -234,14 +238,19 @@
                 <% } %>
             </ul>
         </div>
-
-
     </div>
+
     <div id="container-collapse">
-        <div id="detail"></div>
-        <button onclick="closeNav()">
+        <button onclick="closeCollapse()"
+                style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
             X
         </button>
+        <div id="detail" class="content has-text-black" style="background-color: lightgray">
+
+        </div>
+        <div id="stock-list">
+            재고
+        </div>
     </div>
     <div id="container-right">
         <div id="map" style="width: 100%; height: 100%"></div>
@@ -257,7 +266,6 @@
         const keyword = document.querySelector('input[name="keyword"]').value;
         location.href = encodeURI("pharmacy.do?QN=" + keyword);
     }
-
     const handlePagination = (pageNo) => {
         location.href = encodeURI("pharmacy.do?QN=" + "<%=keyword%>" + "&pageNo=" + pageNo);
     }
@@ -278,18 +286,83 @@
         }
     }
     const handleDetail = (e) => {
-        handleProduct(e.getAttribute("value"))
-        openNav();
+        handlePharmacy(e.getAttribute('value'));
+        // console.log(e.getAttribute('value'));
+        openCollapse();
     }
-    const openNav = () => {
-        document.getElementById("container-collapse").style.left = "calc(104px + 28rem)";
-        document.getElementById("container-collapse").style.display = "block";
+    const openCollapse = () => {
+        document.getElementById("container-collapse").style.visibility = "visible";
+    }
+    const closeCollapse = () => {
+        document.getElementById("container-collapse").style.visibility = "hidden";
+    }
 
+    const handlePharmacy = async (name) => {
+        console.log(name)
+        const detailDiv = document.getElementById('detail')
+        detailDiv.innerHTML = "dmdkdkdmdkd";
+
+        const centerDiv = document.createElement('div')
+        centerDiv.style.textAlign = "center";
+        centerDiv.style.paddingTop = "1rem";
+        detailDiv.append(centerDiv)
+
+        await fetch(`/pharmacydetail.do?QN=`+name)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                const pharmacyName = data.dutyName;
+                const pharmacyAddr = data.dutyAddr;
+                const pharmacyTel = data.dutyTel1;
+                const dutyTime1s = data.dutyTime1s;
+                const dutyTime1c = data.dutyTime1c;
+                const dutyTime2s = data.dutyTime2s;
+                const dutyTime2c = data.dutyTime2c;
+                const dutyTime3s = data.dutyTime3s;
+                const dutyTime3c = data.dutyTime3c;
+                const dutyTime4s = data.dutyTime4s;
+                const dutyTime4c = data.dutyTime4c;
+                const dutyTime5s = data.dutyTime5s;
+                const dutyTime5c = data.dutyTime5c;
+                const dutyTime6s = data.dutyTime6s;
+                const dutyTime6c = data.dutyTime6c;
+                const dutyTime7s = data.dutyTime7s;
+                const dutyTime7c = data.dutyTime7c;
+                const dutyTime8s = data.dutyTime8s;
+                const dutyTime8c = data.dutyTime8c;
+
+                const span = document.createElement('span')
+                span.id = "dutyName"
+                span.innerHTML = pharmacyName;
+                centerDiv.append(span)
+
+                const span2 = document.createElement('span')
+                span2.id = "dutyAddr"
+                span2.innerHTML = pharmacyAddr;
+                centerDiv.append(span2)
+
+                const span3 = document.createElement('span')
+                span3.id = "dutyTel1"
+                span3.innerHTML = pharmacyTel;
+                centerDiv.append(span3)
+
+                // 운영시간 00시 ~ 00시
+                const span4 = document.createElement('span')
+                span4.id = "dutyTime1"
+                span4.innerHTML = dutyTime1s + " ~ " + dutyTime1c;
+                centerDiv.append(span4)
+
+                const span5 = document.createElement('span')
+                span5.id = "dutyTime2"
+                span5.innerHTML = dutyTime2s + " ~ " + dutyTime2c;
+                centerDiv.append(span5)
+
+
+                }
+
+            );
     }
-    const closeNav = () => {
-        document.getElementById("container-collapse").style.left = "104px";
-        document.getElementById("container-collapse").style.display = "none";
-    }
+
 
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
