@@ -7,6 +7,7 @@ import ssg.middlepj.pharmafinder.dao.ProductDao;
 import ssg.middlepj.pharmafinder.dto.PaginationParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyProductQtyDto;
 import ssg.middlepj.pharmafinder.dto.ProductDto;
+import ssg.middlepj.pharmafinder.dto.ProductResDto;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<ProductDto> selectProducts(PaginationParam paginationParam) {
+    public List<ProductResDto> selectProducts(PaginationParam paginationParam) {
         return sqlSession.selectList(ns + "selectProducts", paginationParam);
     }
 

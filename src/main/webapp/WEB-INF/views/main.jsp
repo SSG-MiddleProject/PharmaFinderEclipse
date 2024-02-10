@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="ssg.middlepj.pharmafinder.dto.ProductResDto" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     InputStream input = application.getClassLoader().getResourceAsStream("properties/apikey.properties");
@@ -25,7 +26,7 @@
     Pagination pagination = (Pagination) request.getAttribute("pagination");
     Integer currentPage = pagination.getPaginationParam().getPage();
     Integer lastPage = pagination.getTotalPageCount();
-    List<ProductDto> productList = (List<ProductDto>) request.getAttribute("products");
+    List<ProductResDto> productList = (List<ProductResDto>) request.getAttribute("products");
     searchType = pagination.getPaginationParam().getSearchType();
     keyword = pagination.getPaginationParam().getKeyword();
 %>
@@ -177,7 +178,7 @@
             </li>
             <%
                 }
-                for (ProductDto product : productList) {
+                for (ProductResDto product : productList) {
             %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black">
@@ -186,6 +187,21 @@
                         <%=product.getItemName().length() > 15 ? product.getItemName().substring(0, 15) + "..." : product.getItemName()%>
                         <span class="has-text-grey is-size-7"><%= product.getEntpName().length() > 15 ? product.getEntpName().substring(0, 15) + "..." : product.getEntpName()%></span>
                     </a>
+                    <p>
+                        <%
+                            if (product.isBookmark()) {
+                        %>
+                        <img src="${pageContext.request.contextPath}/resources/Bookmarked.svg" alt="북마크"
+                             style="width: 1.5rem; height: 1.5rem; float: right;"/>
+                        <%
+                            } else {
+                        %>
+                        <img src="${pageContext.request.contextPath}/resources/Bookmark.svg" alt="북마크"
+                             style="width: 1.5rem; height: 1.5rem; float: right;"/>
+                        <%
+                            }
+                        %>
+                    </p>
                     <p>
                         &nbsp;<%=product.getEfcyQes().length() > 30 ? product.getEfcyQes().substring(0, 30) + "..." : product.getEfcyQes()%>
                     </p>

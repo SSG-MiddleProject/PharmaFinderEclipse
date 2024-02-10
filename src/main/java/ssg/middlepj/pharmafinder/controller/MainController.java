@@ -36,6 +36,7 @@ public class MainController {
 
     @RequestMapping(value = "/main.do", method = RequestMethod.GET)
     public String landing(Model model, PaginationParam paginationParam) {
+        paginationParam.setUserId(1);
         model.addAttribute("products", productService.selectProducts(paginationParam));
         model.addAttribute("pagination", new Pagination(productService.selectProductsCnt(paginationParam), paginationParam));
         return "main.tiles";
