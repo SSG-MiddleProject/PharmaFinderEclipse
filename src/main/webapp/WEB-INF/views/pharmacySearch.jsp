@@ -74,15 +74,14 @@
 
 <style>
     #full {
-        /*display: flex;*/
         justify-content: space-between;
         width: 100vw;
         height: 100vh;
         z-index: 0;
     }
 
+
     #container-left {
-        /*flex-shrink: 0;*/
         position: absolute;
         left: calc(4rem + 1px);
         top: 0;
@@ -141,43 +140,14 @@
 
     #detail {
         visibility: inherit;
+        display: flex;
+        padding-left: 1rem;
+        padding-bottom: 1rem;
+        flex-direction: column;
+        font-size: small;
 
-        #entpName #itemName {
-            text-align: center;
-        }
 
-        #itemName {
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        #entpName {
-            color: #4a4a4a;
-        }
     }
-
-    #detail-collapse {
-        display: none;
-
-        #detail-extra {
-            display: inherit;
-        }
-    }
-
-    #collapse-extend {
-        cursor: pointer;
-        padding: 0.5rem 0;
-    }
-
-    #img-collapse-reduce {
-        display: none;
-    }
-
-    #pharmacy-list {
-        width: 100%;
-        background-color: #f5f5f5;
-    }
-
 
     #container-right {
         position: absolute;
@@ -245,8 +215,7 @@
                 style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
             X
         </button>
-        <div id="detail" class="content has-text-black" style="background-color: lightgray">
-
+        <div id="detail" class="container">
         </div>
         <div id="stock-list">
             재고
@@ -287,7 +256,6 @@
     }
     const handleDetail = (e) => {
         handlePharmacy(e.getAttribute('value'));
-        // console.log(e.getAttribute('value'));
         openCollapse();
     }
     const openCollapse = () => {
@@ -298,19 +266,18 @@
     }
 
     const handlePharmacy = async (name) => {
-        console.log(name)
         const detailDiv = document.getElementById('detail')
-        detailDiv.innerHTML = "dmdkdkdmdkd";
+        detailDiv.innerHTML = "";
 
         const centerDiv = document.createElement('div')
-        centerDiv.style.textAlign = "center";
-        centerDiv.style.paddingTop = "1rem";
+        centerDiv.id = "centerDiv"
+        centerDiv.style.textAlign = "start";
+        centerDiv.style.paddingTop = "2rem";
         detailDiv.append(centerDiv)
 
-        await fetch(`/pharmacydetail.do?QN=`+name)
+        await fetch(`/pharmacydetail.do?QN=` + name)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 const pharmacyName = data.dutyName;
                 const pharmacyAddr = data.dutyAddr;
                 const pharmacyTel = data.dutyTel1;
@@ -331,36 +298,94 @@
                 const dutyTime8s = data.dutyTime8s;
                 const dutyTime8c = data.dutyTime8c;
 
-                const span = document.createElement('span')
-                span.id = "dutyName"
-                span.innerHTML = pharmacyName;
-                centerDiv.append(span)
+                const h2 = document.createElement('h2')
+                h2.id = "dutyName"
+                h2.style.fontSize = "1.5rem"
+                h2.style.paddingBottom = "1rem"
+                h2.innerHTML = pharmacyName;
+                centerDiv.append(h2)
 
-                const span2 = document.createElement('span')
-                span2.id = "dutyAddr"
-                span2.innerHTML = pharmacyAddr;
-                centerDiv.append(span2)
+                const addr = document.createElement('p')
+                addr.id = "dutyAddr"
+                addr.innerHTML = "📍 " + pharmacyAddr;
+                addr.classList.add("bold")
+                centerDiv.append(addr)
 
-                const span3 = document.createElement('span')
-                span3.id = "dutyTel1"
-                span3.innerHTML = pharmacyTel;
-                centerDiv.append(span3)
+                const tel = document.createElement('p')
+                tel.id = "dutyTel1"
+                addr.classList.add("bold")
+                tel.innerHTML = "📞 " + pharmacyTel;
+                centerDiv.append(tel)
 
-                // 운영시간 00시 ~ 00시
-                const span4 = document.createElement('span')
-                span4.id = "dutyTime1"
-                span4.innerHTML = dutyTime1s + " ~ " + dutyTime1c;
-                centerDiv.append(span4)
+                const timeContainer = document.createElement('div')
+                timeContainer.style.display = "flex"
+                timeContainer.style.justifyContent = "space-between"
+                timeContainer.style.alignItems = "center"
 
-                const span5 = document.createElement('span')
-                span5.id = "dutyTime2"
-                span5.innerHTML = dutyTime2s + " ~ " + dutyTime2c;
-                centerDiv.append(span5)
+                const time = document.createElement('b')
+                time.id = "dutyTime"
+                time.classList.add("bold")
+                let timeText = "";
+                const today = new Date().getDay();
 
-
+                switch (today) {
+                    case 1:
+                        timeText = dutyTime1c && dutyTime1s ? "⏰ 월요일 " + dutyTime1s + " ~ " + dutyTime1c : "⏰ 월요일 휴무";
+                        break;
+                    case 2:
+                        timeText = dutyTime2c && dutyTime2s ? "⏰ 화요일 " + dutyTime2s + " ~ " + dutyTime2c : "⏰ 화요일 휴무";
+                        break;
+                    case 3:
+                        timeText = dutyTime3c && dutyTime3s ? "⏰ 수요일 " + dutyTime3s + " ~ " + dutyTime3c : "⏰ 수요일 휴무";
+                        break;
+                    case 4:
+                        timeText = dutyTime4c && dutyTime4s ? "⏰ 목요일 " + dutyTime4s + " ~ " + dutyTime4c : "⏰ 목요일 휴무";
+                        break;
+                    case 5:
+                        timeText = dutyTime5c && dutyTime5s ? "⏰ 금요일 " + dutyTime5s + " ~ " + dutyTime5c : "⏰ 금요일 휴무";
+                        break;
+                    case 6:
+                        timeText = dutyTime6c && dutyTime6s ? "⏰ 토요일 " + dutyTime6s + " ~ " + dutyTime6c : "⏰ 토요일 휴무";
+                        break;
+                    case 7:
+                        timeText = dutyTime7c && dutyTime7s ? "⏰ 일요일 " + dutyTime7s + " ~ " + dutyTime7c : "⏰ 일요일 휴무";
+                        break;
+                    default:
+                        break;
                 }
 
-            );
+                time.innerHTML = timeText;
+                timeContainer.append(time);
+
+                const toggle = document.createElement('p')
+                toggle.id = "toggle"
+                toggle.innerHTML = "▼"
+                toggle.onclick = function () {
+                    if (allOpeTime.style.display === "none") {
+                        allOpeTime.style.display = "block";
+                        toggle.innerHTML = "▲";
+                    } else {
+                        allOpeTime.style.display = "none";
+                        toggle.innerHTML = "▼";
+                    }
+                };
+
+                timeContainer.append(toggle);
+                centerDiv.append(timeContainer);
+
+                const allOpeTime = document.createElement("p")
+                allOpeTime.id = "allOpeTime"
+                allOpeTime.style.display = "none"
+                allOpeTime.innerHTML = (dutyTime1c && dutyTime1s ? "⏰ 월요일 " + dutyTime1s + " ~ " + dutyTime1c : "⏰ 월요일 휴무") +
+                    (dutyTime2c && dutyTime2s ? "<br>⏰ 화요일 " + dutyTime2s + " ~ " + dutyTime2c : "<br>⏰ 화요일 휴무") +
+                    (dutyTime3c && dutyTime3s ? "<br>⏰ 수요일 " + dutyTime3s + " ~ " + dutyTime3c : "<br>⏰ 수요일 휴무") +
+                    (dutyTime4c && dutyTime4s ? "<br>⏰ 목요일 " + dutyTime4s + " ~ " + dutyTime4c : "<br>⏰ 목요일 휴무") +
+                    (dutyTime5c && dutyTime5s ? "<br>⏰ 금요일 " + dutyTime5s + " ~ " + dutyTime5c : "<br>⏰ 금요일 휴무") +
+                    (dutyTime6c && dutyTime6s ? "<br>⏰ 토요일 " + dutyTime6s + " ~ " + dutyTime6c : "<br>⏰ 토요일 휴무") +
+                    (dutyTime7c && dutyTime7s ? "<br>⏰ 일요일 " + dutyTime7s + " ~ " + dutyTime7c : "<br>⏰ 일요일 휴무");
+
+                centerDiv.append(allOpeTime);
+            });
     }
 
 
