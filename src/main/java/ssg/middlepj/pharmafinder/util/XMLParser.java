@@ -308,7 +308,7 @@ public class XMLParser {
         if (dutyTime7cList.getLength() > 0) {
             Node dutyTime7cNode = dutyTime7cList.item(0);
             dutyTimeRaw = dutyTime7cNode.getTextContent().trim();
-            dutyTimeFormat = dutyTime7cNode.getTextContent().trim();
+            dutyTimeFormat = dutyTimeRaw.substring(0, 2) + ":" + dutyTimeRaw.substring(2, 4);
             pharmacy.setDutyTime7c(dutyTimeFormat);
         }
 
@@ -316,7 +316,7 @@ public class XMLParser {
         if (dutyTime7sList.getLength() > 0) {
             Node dutyTime7sNode = dutyTime7sList.item(0);
             dutyTimeRaw = dutyTime7sNode.getTextContent().trim();
-            dutyTimeFormat = dutyTime7sNode.getTextContent().trim();
+            dutyTimeFormat = dutyTimeRaw.substring(0, 2) + ":" + dutyTimeRaw.substring(2, 4);
             pharmacy.setDutyTime7s(dutyTimeFormat);
         }
 
