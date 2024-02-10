@@ -63,4 +63,12 @@
         </choose>
         limit #{recordSize} offset #{offset}
     </select>
+
+    <select id="selectPharmacyProductQtyByProductId" resultType="ssg.middlepj.pharmafinder.dto.PharmacyProductQtyDto" parameterType="Integer" >
+        select store.*, store_stock.quantity as qty
+        from store_stock,
+             store
+        where store_stock.store_id = store.id
+            and store_stock.product_id = #{productId}
+    </select>
 </mapper>
