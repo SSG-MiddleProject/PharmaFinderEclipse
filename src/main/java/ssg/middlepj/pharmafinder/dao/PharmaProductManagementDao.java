@@ -4,13 +4,17 @@ import java.util.List;
 
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam;
-import ssg.middlepj.pharmafinder.dto.PharmaProductSearchParam;
 import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
+import ssg.middlepj.pharmafinder.dto.PharmaStoreStockDto;
 
 public interface PharmaProductManagementDao {
 
-	int insertPharmaProduct(PharmaProductManagementDto dto);
 	int selectDuplicationProductsCount(PharmaProductManagementParam param);
+	PharmaProductWithProductDto selectPharmaProduct(int id);
 	List<PharmaProductWithProductDto> selectPharmaProducts(PharmaProductManagementParam param);
+	int insertStoreStock(PharmaStoreStockDto dto);
+	int insertPharmaProduct(PharmaProductManagementDto dto);
+	int updatePharmaProduct(PharmaProductManagementDto dto);
 	int deletePharmaProduct(PharmaProductManagementDto dto);
+
 }

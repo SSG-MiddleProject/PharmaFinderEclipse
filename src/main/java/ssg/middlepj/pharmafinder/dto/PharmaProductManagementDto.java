@@ -10,9 +10,9 @@ public class PharmaProductManagementDto implements Serializable{
 	private int inputPrice;
 	private int outputPrice;
 	private String createdAt;
-	
+
 	public PharmaProductManagementDto() {
-		
+
 	}
 
 	public PharmaProductManagementDto(int id, int storeId, int productId, int inputPrice, int outputPrice,
@@ -78,7 +78,7 @@ public class PharmaProductManagementDto implements Serializable{
 		return "PharmaProductManagementDto [id=" + id + ", storeId=" + storeId + ", productId=" + productId
 				+ ", inputPrice=" + inputPrice + ", outputPrice=" + outputPrice + ", createdAt=" + createdAt + "]";
 	}
-	
-	
-	
+
+
+
 }

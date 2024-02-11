@@ -12,6 +12,7 @@ import ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam;
 import ssg.middlepj.pharmafinder.dto.PharmaProductSearchParam;
 import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
+import ssg.middlepj.pharmafinder.dto.PharmaStoreStockDto;
 
 @Repository
 public class PharmaProductManagementDaoImpl implements PharmaProductManagementDao {
@@ -19,17 +20,18 @@ public class PharmaProductManagementDaoImpl implements PharmaProductManagementDa
 	@Autowired
 	private SqlSession session;
 	private String ns = "PharmaProductManagement.";
-	
-	@Override
-	public int insertPharmaProduct(PharmaProductManagementDto dto) {
-		
-		return session.insert(ns +"insert-product", dto);
-	}
+
+
 
 	@Override
 	public int selectDuplicationProductsCount(PharmaProductManagementParam param) {
-		
+
 		return session.selectOne(ns + "select-duplication-products-count", param);
+	}
+
+	@Override
+	public PharmaProductWithProductDto selectPharmaProduct(int id) {
+		return session.selectOne(ns + "select-pharma-product", id);
 	}
 
 	@Override
@@ -39,8 +41,25 @@ public class PharmaProductManagementDaoImpl implements PharmaProductManagementDa
 	}
 
 	@Override
+	public int insertPharmaProduct(PharmaProductManagementDto dto) {
+
+		return session.insert(ns +"insert-product", dto);
+	}
+
+	@Override
+	public int insertStoreStock(PharmaStoreStockDto dto) {
+		return session.insert(ns + "insert-store-stock", dto);
+	}
+
+
+	@Override
 	public int deletePharmaProduct(PharmaProductManagementDto dto) {
 		return session.delete(ns+"delete-pharma-product",dto);
+	}
+
+	@Override
+	public int updatePharmaProduct(PharmaProductManagementDto dto) {
+		return session.update(ns + "update-pharma-product", dto);
 	}
 
 }

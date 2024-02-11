@@ -22,83 +22,104 @@ public class PharmaProductManagementController {
 
 	@Autowired
 	private PharmaProductManagementService service;
-	
+
 	@GetMapping(value = "/pharma-product-management.do")
 	public String productManagement(Model model, HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController productManagement()");
-		
+
 		int storeId = (int)request.getSession().getAttribute("storeId");
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
-		
+
 		model.addAttribute("list", list);
-		
+
 		return "pharma/product/management.tiles";
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/select-pharma-products.do")
 	public List<PharmaProductWithProductDto> selectPharmaProducts(HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController selectPharmaProducts()");
-		
+
 		int storeId = (int)request.getSession().getAttribute("storeId");
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
-		
-		return list; 
+
+		return list;
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/select-specific-pharma-products.do")
 	public List<PharmaProductWithProductDto> selectSpecificPharmaProducts(PharmaProductManagementParam param ,HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController selectSpecificPharmaProducts()");
-		
+
 		int storeId = (int)request.getSession().getAttribute("storeId");
-		
+
 		param.setStoreId(storeId);
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(param);
-		
+
 		return list;
 	}
-	
-	
-	
+
+
+
 	@ResponseBody
 	@GetMapping(value = "/pharma-product-register.do")
 	public ResultMsg pharmaProductRegister(PharmaProductManagementDto dto, HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController pharmaProductRegister()");
-		
+
 		int storeId = (int)request.getSession().getAttribute("storeId");
 		PharmaProductManagementParam param = new PharmaProductManagementParam(storeId, dto.getProductId(), null);
-		
+
 		boolean isDuplication = service.isDuplicationPharmaProduct(param);
-				
+
 		if(isDuplication) {
 			return new ResultMsg(!isDuplication, "제품이 중복되었습니다.");
 		}
-		
+
 		boolean isS = service.registerPharmaProduct(dto);
-		
+
 		if(isS) {
 			return new ResultMsg(isS);
 		} else {
 			return new ResultMsg(false, null);
 		}
 	}
-	
+
 	//pharmaProductId
 	@ResponseBody
 	@GetMapping(value = "/delete-pharma-product.do")
 	public ResultMsg deletePharmaProduct(int pharmaProductId) {
 		System.out.println("PharmaProductManagementController deletePharmaProduct()");
-		
+
 		PharmaProductManagementDto dto = new PharmaProductManagementDto();
 		dto.setId(pharmaProductId);
-		
+
 		int deletedRows = service.deletePharmaProduct(dto);
-		
+
 		if(deletedRows > 0) {
 			return new ResultMsg(true);
 		} else {
 			return new ResultMsg(false, "삭제된 행이 0개 입니다.");
 		}
 	}
+
+	@GetMapping(value = "/pharma-product-update.do")
+	public String updatePharmaProduct(int id, Model model) {
+		System.out.println("PharmaProductManagementController updatePharmaProduct()");
+
+		PharmaProductWithProductDto dto = service.selectPharmaProduct(id);
+		model.addAttribute("dto", dto);
+
+		return "pharma/product/update.tiles";
+	}
+
+	@GetMapping(value = "/pharma-product-updateAf.do")
+	public String updateAfPharmaProduct(PharmaProductManagementDto dto, Model model, HttpServletRequest request) {
+		System.out.println("PharmaProductManagementController updateAfPharmaProduct()");
+
+		service.updatePharmaProduct(dto);
+
+		return "redirect:/pharma-product-management.do";
+	}
+
+
 }

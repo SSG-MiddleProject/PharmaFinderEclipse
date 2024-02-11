@@ -1,7 +1,7 @@
 <%@page import="ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto" %>
 <%@page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<% 
+<%
 	List<PharmaProductWithProductDto> list = (List<PharmaProductWithProductDto>)request.getAttribute("list");
 %>
 <!DOCTYPE html>
@@ -64,7 +64,7 @@
                     <td>입고단가</td>
                     <td>출고단가</td>
                     <td>제품등록일</td>
-                    <td>삭제</td>
+                    <td>수정</td>
                 </tr>
             </thead>
             <tbody id="pharma-product-tbody">
@@ -91,7 +91,7 @@
                             <%=item.getCreatedAt().substring(0, 10)%>
                         </td>
                         <td><button type="button"
-                                onclick="deletePharmaProduct(<%=item.getId()%>)">삭제</button></td>
+                                onclick="updatePharmaProduct(<%=item.getId()%>)">수정</button></td>
                     </tr>
                     <% } } %>
             </tbody>
@@ -154,8 +154,8 @@
     <!--  -->
 
     <script>
-	const noImageUrl = "https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png";
-	
+	const noImageUrl = "https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725020-stock-illustration-image-available-icon-flat-vector.jpg";
+
           function calVAT() {
               let outputPrice = $("#insertOutputPrice").val();
 
@@ -189,10 +189,10 @@
                       if (data != null) {
                           $("#result").html("");
                           let table = $(`<table class="table"></table>`);
-                          
+
                           $("#result").append(table);
                           let rowHeader = $(`<thead><tr><th>제품코드</th><th>제품명</th><th>비고</th></tr></thead>`);
-                          
+
                         $("#result > table").append(rowHeader);
                         for (let i = 0; i < data.length; i++) {
                             let newElement = $(
@@ -200,7 +200,7 @@
                                 	"<td>" + data[i].id + "</td>" +
                                 	"<td>" + data[i].itemName + "</td>" +
                                 	`<td>
-										<button onclick="selectionProduct(this)" type='button' 
+										<button onclick="selectionProduct(this)" type='button'
 											data-object='{"id":"`+ data[i].id + `", "itemName":"` + data[i].itemName + `", "itemImage":"` + data[i].itemImage + `"}'>
 											선택
 										</button>
@@ -264,19 +264,21 @@
             let id = jsonObj.id;
             let itemName = jsonObj.itemName;
             let itemImage = jsonObj.itemImage;
-            
+
             $("#insertId").val(id);
             $("#insertItemName").val(itemName);
-			
+
             // null or undefined
 			if(itemImage === "null"){
 	            $("#productImage").attr("src", noImageUrl);
+	            $("#productImage").attr("width", "200px");
+				$("#productImage").attr("height", "200px");
 			}else{
 				$("#productImage").attr("src", itemImage);
 				$("#productImage").attr("width", "200px");
 				$("#productImage").attr("height", "200px");
 			}
-            
+
             closeSearchModal();
         }
         function refreshPharmaProduct(isSelectLast) {
@@ -312,7 +314,7 @@
                 let inputPrice = $("<td>" + item.inputPrice + "</td>");
                 let outputPrice = $("<td>" + item.outputPrice + "</td>");
                 let createdAt = $("<td>" + item.createdAt.substring(0, 10) + "</td>");
-                let btnDelete = $("<td><button type='button' onclick='deletePharmaProduct(" + item.id + ")' >삭제</button></td>");
+                let btnDelete = $("<td><button type='button' onclick='updatePharmaProduct(" + item.id + ")' >수정</button></td>");
                 row.append(id);
                 row.append(productId);
                 row.append(itemName);
@@ -333,25 +335,8 @@
             $("#productImage").removeAttr("width");
             $("#productImage").removeAttr("height");
         }
-        function deletePharmaProduct(id) {
-            $.ajax({
-                url: "./delete-pharma-product.do",
-                type: "get",
-                data: {
-                    "pharmaProductId": id
-                },
-                success: function (data) {
-                    if (data.msg === "SUCCESS") {
-                        alert("삭제완료");
-                        refreshPharmaProduct(false);
-                    } else {
-                        alert("error");
-                    }
-                },
-                error: function () {
-                    alert("error");
-                },
-            });
+        function updatePharmaProduct(id) {
+            location.href = "./pharma-product-update.do?id=" + id;
         }
     </script>
 
