@@ -3,7 +3,7 @@ package ssg.middlepj.pharmafinder.dto;
 import lombok.Data;
 
 @Data
-public class ProductBookmarkDto {
+public class BookmarkDto {
     private Integer userId;
-    private Integer productId;
+    private Integer targetId;
 }
