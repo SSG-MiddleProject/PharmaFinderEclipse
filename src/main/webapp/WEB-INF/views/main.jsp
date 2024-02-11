@@ -198,11 +198,13 @@
                             if (product.isBookmark()) {
                         %>
                         <img src="${pageContext.request.contextPath}/resources/Bookmarked.svg" alt="북마크"
+                             value="<%=product.getId()%>" onclick="handleBookmark(this, '<%=product.isBookmark()%>')"
                              style="width: 1.3rem; height: 1.3rem; float: right;"/>
                         <%
                         } else {
                         %>
                         <img src="${pageContext.request.contextPath}/resources/Bookmark.svg" alt="북마크"
+                             value="<%=product.getId()%>" onclick="handleBookmark(this, '<%=product.isBookmark()%>')"
                              style="width: 1.3rem; height: 1.3rem; float: right;"/>
                         <%
                             }
@@ -232,7 +234,8 @@
         </div>
     </div>
     <div id="container-collapse">
-        <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button" style="width: 1.3rem; height: 1.3rem; float: right" />
+        <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button"
+             style="width: 1.3rem; height: 1.3rem; float: right"/>
         <div id="detail" class="content has-text-black"></div>
         <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
@@ -440,6 +443,35 @@
                 node.style.color = "steelblue"
             }
         })
+    }
+
+    const handleBookmark = (element, isBookmark) => {
+        const productId = parseInt(element.getAttribute("value"))
+        if (isBookmark === "true") {
+            fetch('/bookmark/product.do?targetId='+productId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => res.json()).then((data) => {
+                if (data !== true) {
+                    throw new Error("북마크 삭제 실패")
+                }
+                location.reload()
+            }).catch((err) => console.error(err))
+            return
+        }
+        fetch('/bookmark/product.do?targetId='+productId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => res.json()).then((data) => {
+            if (data !== true) {
+                throw new Error("북마크 추가 실패")
+            }
+            location.reload()
+        }).catch((err) => console.error(err))
     }
 
     const mapOptions = {
