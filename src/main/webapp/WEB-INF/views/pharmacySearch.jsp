@@ -347,7 +347,7 @@
                     case 6:
                         timeText = dutyTime6c && dutyTime6s ? "⏰ 토요일 " + dutyTime6s + " ~ " + dutyTime6c : "⏰ 토요일 휴무";
                         break;
-                    case 7:
+                    case 0:
                         timeText = dutyTime7c && dutyTime7s ? "⏰ 일요일 " + dutyTime7s + " ~ " + dutyTime7c : "⏰ 일요일 휴무";
                         break;
                     default:
