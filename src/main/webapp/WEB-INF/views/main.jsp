@@ -107,6 +107,12 @@
             #entpName {
                 color: #4a4a4a;
             }
+
+            > img {
+                display: block;
+                margin: 0 auto;
+                padding-top: 1rem;
+            }
         }
 
         #detail-collapse {
@@ -187,21 +193,21 @@
                         <%=product.getItemName().length() > 15 ? product.getItemName().substring(0, 15) + "..." : product.getItemName()%>
                         <span class="has-text-grey is-size-7"><%= product.getEntpName().length() > 15 ? product.getEntpName().substring(0, 15) + "..." : product.getEntpName()%></span>
                     </a>
-                    <p>
+                    <span>
                         <%
                             if (product.isBookmark()) {
                         %>
                         <img src="${pageContext.request.contextPath}/resources/Bookmarked.svg" alt="북마크"
-                             style="width: 1.5rem; height: 1.5rem; float: right;"/>
+                             style="width: 1.3rem; height: 1.3rem; float: right;"/>
                         <%
-                            } else {
+                        } else {
                         %>
                         <img src="${pageContext.request.contextPath}/resources/Bookmark.svg" alt="북마크"
-                             style="width: 1.5rem; height: 1.5rem; float: right;"/>
+                             style="width: 1.3rem; height: 1.3rem; float: right;"/>
                         <%
                             }
                         %>
-                    </p>
+                    </span>
                     <p>
                         &nbsp;<%=product.getEfcyQes().length() > 30 ? product.getEfcyQes().substring(0, 30) + "..." : product.getEfcyQes()%>
                     </p>
@@ -226,10 +232,7 @@
         </div>
     </div>
     <div id="container-collapse">
-        <button onclick="closeCollapse()"
-                style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
-            X
-        </button>
+        <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button" style="width: 1.3rem; height: 1.3rem; float: right" />
         <div id="detail" class="content has-text-black"></div>
         <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
@@ -306,14 +309,14 @@
         const detailDiv = document.getElementById('detail')
         detailDiv.innerHTML = ""
 
-        const centerDiv = document.createElement('div')
-        centerDiv.style.textAlign = "center"
-        centerDiv.style.paddingTop = "2rem"
+        const titleDiv = document.createElement('div')
+        titleDiv.style.paddingTop = "2rem"
+        titleDiv.innerHTML = ""
 
         const detailExtraDiv = document.getElementById('detail-extra')
         detailExtraDiv.innerHTML = ""
 
-        detailDiv.append(centerDiv)
+        detailDiv.append(titleDiv)
 
         const pharmacyList = document.getElementById('pharmacy-list')
         pharmacyList.innerHTML = ""
@@ -322,20 +325,23 @@
             .then(res => res.json())
             .then(data => {
                 Object.entries(data["product"]).forEach(([key, value]) => {
-                    if (key === "entpName") {
-                        const span = document.createElement('span')
-                        span.id = "entpName"
-                        span.innerText = value
-                        centerDiv.append(span)
-                    }
                     if (key === "itemName") {
-                        const h2 = document.createElement('h2')
-                        h2.id = "itemName"
-                        h2.innerText = value
-                        centerDiv.append(h2)
+                        const sp = document.createElement("span")
+                        sp.innerText = value
+                        sp.className = "is-size-4"
+                        titleDiv.prepend(sp)
+                    }
+                    if (key === "entpName") {
+                        const sp = document.createElement("span")
+                        sp.innerText = value
+                        sp.className = "is-size-6 has-text-grey pl-2"
+                        titleDiv.append(sp)
                     }
                     if (key === "efcyQes") {
-                        detailDiv.append(creatDetailH4("효능", value))
+                        const p = document.createElement('p')
+                        p.innerText = value
+                        p.className = "pt-4"
+                        detailDiv.append(p)
                     }
                     if (key === "useMethodQes") {
                         detailDiv.append(creatDetailH4("용법", value))
@@ -359,8 +365,7 @@
                         const img = document.createElement('img')
                         img.src = value
                         img.style.width = "50%"
-                        img.style.paddingBottom = "2rem"
-                        centerDiv.append(img)
+                        detailDiv.childNodes[0].after(img)
                     }
                 })
                 Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
@@ -390,11 +395,20 @@
         }
 
         const rootP = document.createElement('p')
+        const div = document.createElement('div')
+        const check = document.createElement('img')
 
-        const h4 = document.createElement('h4')
-        h4.className = "detail-title"
-        h4.innerText = "[" + title + "]"
-        rootP.append(h4)
+        check.src = "${pageContext.request.contextPath}/resources/Check.svg"
+        check.style.width = "1.4rem"
+        check.style.height = "1.4rem"
+
+
+        div.innerHTML = "<span>" + title + "</span>"
+        div.style.display = "flex"
+        div.style.alignItems = "center"
+
+        div.prepend(check)
+        rootP.append(div)
 
         const p = document.createElement('p')
         p.className
