@@ -18,7 +18,6 @@
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 
     List<PharmacyExtDto> pharmacyList = (List<PharmacyExtDto>) request.getAttribute("pharmacies");
-    System.out.println(pharmacyList);
 
     List<PharmacyDto> list = pharmacyList.get(0).getItems();
 
@@ -66,9 +65,6 @@
 
 %>
 
-<%
-
-%>
 <script type="text/javascript"
         src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>"></script>
 

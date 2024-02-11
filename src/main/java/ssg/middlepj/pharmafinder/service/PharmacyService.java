@@ -15,4 +15,6 @@ public interface PharmacyService {
     List<PharmacyExtDto> selectPharmacies(PharmacyParam pharmacyParam) throws IOException, JDOMException, ParserConfigurationException, SAXException;
 
     PharmacyDto selectPharmacy(PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, SAXException;
+
+    List<PharmacyExtDto> selectPharmaciesByDB(PharmacyParam pharmacyParam);
 }

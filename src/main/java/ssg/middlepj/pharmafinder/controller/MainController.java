@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.xml.sax.SAXException;
 import ssg.middlepj.pharmafinder.dto.Pagination;
 import ssg.middlepj.pharmafinder.dto.PaginationParam;
+import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
 import ssg.middlepj.pharmafinder.service.PharmacyService;
 import ssg.middlepj.pharmafinder.service.ProductService;
@@ -22,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -40,6 +42,18 @@ public class MainController {
         model.addAttribute("products", productService.selectProducts(paginationParam));
         model.addAttribute("pagination", new Pagination(productService.selectProductsCnt(paginationParam), paginationParam));
         return "main.tiles";
+    }
+
+    @RequestMapping(value = "/pharmacyTest.do", method = RequestMethod.GET)
+    public String pharmacyT(Model model, PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
+        model.addAttribute("pharmacies", pharmacyService.selectPharmacies(pharmacyParam));
+        List<PharmacyExtDto> pharmacies1 = pharmacyService.selectPharmacies(pharmacyParam);
+        List<PharmacyExtDto> pharmacies2 = pharmacyService.selectPharmaciesByDB(pharmacyParam);
+        System.out.println(pharmacies2);
+        // pharmacies1+pharmacies2
+//        pharmacies1.addAll(pharmacies2);
+//        model.addAttribute("pharmacies", pharmacies1);
+        return "pharmacySearch.tiles";
     }
 
     @RequestMapping(value = "/pharmacy.do", method = RequestMethod.GET)

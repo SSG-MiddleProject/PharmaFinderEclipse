@@ -13,8 +13,8 @@ public class PharmacyParam {
     private int numOfRows;
 
     public PharmacyParam() {
-        this.Q0 = "부산광역시";
-        this.Q1 = "해운대구";
+        this.Q0 = "부산";
+        this.Q1 = "해운대";
         this.QN = "";
         this.ORD = "NAME";
         this.pageNo = 1;

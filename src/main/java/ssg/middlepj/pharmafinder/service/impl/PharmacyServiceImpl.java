@@ -4,6 +4,7 @@ import org.jdom.JDOMException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
+import ssg.middlepj.pharmafinder.dao.PharmacyDao;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
@@ -25,8 +26,14 @@ import static ssg.middlepj.pharmafinder.util.XMLParser.xmlParser;
 
 @Service
 public class PharmacyServiceImpl implements PharmacyService {
+    private final PharmacyDao pharmacyDao;
+
     @Value("${SERVICE_KEY}")
     private String SERVICE_KEY;
+
+    public PharmacyServiceImpl(PharmacyDao pharmacyDao) {
+        this.pharmacyDao = pharmacyDao;
+    }
 
     @Override
     public List<PharmacyExtDto> selectPharmacies(PharmacyParam pharmacyParam) throws IOException, JDOMException, ParserConfigurationException, SAXException {
@@ -88,6 +95,14 @@ public class PharmacyServiceImpl implements PharmacyService {
         return XMLParser.pharmaParser(sb.toString());
     }
 
+    @Override
+    public List<PharmacyExtDto> selectPharmaciesByDB(PharmacyParam pharmacyParam) {
+        List<PharmacyExtDto> pharmacies = null;
+        System.out.println("service "+pharmacyDao.selectPharmaciesByDB(pharmacyParam));
+        pharmacies.get(0).setItems(pharmacyDao.selectPharmaciesByDB(pharmacyParam));
+        pharmacies.get(0).setAllCount(pharmacyDao.countPharmacyList(pharmacyParam));
+        return pharmacies;
+    }
 
 
 }
