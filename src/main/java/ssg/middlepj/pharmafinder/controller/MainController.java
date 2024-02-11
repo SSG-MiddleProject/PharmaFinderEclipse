@@ -44,7 +44,7 @@ public class MainController {
         return "main.tiles";
     }
 
-    @RequestMapping(value = "/pharmacyTest.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/pharmacy.do", method = RequestMethod.GET)
     public String pharmacyT(Model model, PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
         List<PharmacyExtDto> pharmacies1 = pharmacyService.selectPharmacies(pharmacyParam);
         List<PharmacyExtDto> pharmacies2 = pharmacyService.selectPharmaciesByDB(pharmacyParam);
@@ -55,16 +55,10 @@ public class MainController {
         merge.addAll(pharmacies2.get(0).getItems());
         Collections.sort(merge, Comparator.comparing(PharmacyDto::getDutyName));
         pharmacies.get(0).setItems(merge);
-        System.out.println(pharmacies.get(0).getItems());
         model.addAttribute("pharmacies", pharmacies);
 
         return "pharmacySearch.tiles";
     }
 
-    @RequestMapping(value = "/pharmacy.do", method = RequestMethod.GET)
-    public String pharmacy(Model model, PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
-        model.addAttribute("pharmacies", pharmacyService.selectPharmacies(pharmacyParam));
-        return "pharmacySearch.tiles";
-    }
 
 }
