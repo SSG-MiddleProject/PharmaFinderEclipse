@@ -3,51 +3,47 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Pharmacy">
-    <resultMap id="pharmacyResultMap" type="PharmacyDto">
-        <id property="id" column="id" jdbcType="INTEGER"/>
+    <resultMap id="pharmacyResultMap" type="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        <id property="dutyName" column="dutyName" jdbcType="VARCHAR"/>
         <result property="dutyAddr" column="dutyAddr" jdbcType="VARCHAR"/>
-        <result property="dutyName" column="dutyName" jdbcType="VARCHAR"/>
         <result property="dutyTel1" column="dutyTel1" jdbcType="VARCHAR"/>
-        <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="bnNum" column="bg_reg_num" jdbcType="INTEGER"/>
-        <result property="dutyTime1s" column="dutyTime1s" jdbcType="VARCHAR"/>
         <result property="dutyTime1c" column="dutyTime1c" jdbcType="VARCHAR"/>
-        <result property="dutyTime2s" column="dutyTime2s" jdbcType="VARCHAR"/>
+        <result property="dutyTime1s" column="dutyTime1s" jdbcType="VARCHAR"/>
         <result property="dutyTime2c" column="dutyTime2c" jdbcType="VARCHAR"/>
-        <result property="dutyTime3s" column="dutyTime3s" jdbcType="VARCHAR"/>
+        <result property="dutyTime2s" column="dutyTime2s" jdbcType="VARCHAR"/>
         <result property="dutyTime3c" column="dutyTime3c" jdbcType="VARCHAR"/>
-        <result property="dutyTime4s" column="dutyTime4s" jdbcType="VARCHAR"/>
+        <result property="dutyTime3s" column="dutyTime3s" jdbcType="VARCHAR"/>
         <result property="dutyTime4c" column="dutyTime4c" jdbcType="VARCHAR"/>
-        <result property="dutyTime5s" column="dutyTime5s" jdbcType="VARCHAR"/>
+        <result property="dutyTime4s" column="dutyTime4s" jdbcType="VARCHAR"/>
         <result property="dutyTime5c" column="dutyTime5c" jdbcType="VARCHAR"/>
-        <result property="dutyTime6s" column="dutyTime6s" jdbcType="VARCHAR"/>
+        <result property="dutyTime5s" column="dutyTime5s" jdbcType="VARCHAR"/>
         <result property="dutyTime6c" column="dutyTime6c" jdbcType="VARCHAR"/>
-        <result property="dutyTime7s" column="dutyTime7s" jdbcType="VARCHAR"/>
+        <result property="dutyTime6s" column="dutyTime6s" jdbcType="VARCHAR"/>
         <result property="dutyTime7c" column="dutyTime7c" jdbcType="VARCHAR"/>
-        <result property="dutyTime8s" column="dutyTime8s" jdbcType="VARCHAR"/>
+        <result property="dutyTime7s" column="dutyTime7s" jdbcType="VARCHAR"/>
         <result property="dutyTime8c" column="dutyTime8c" jdbcType="VARCHAR"/>
-        <result property="dutyTime9s" column="dutyTime9s" jdbcType="VARCHAR"/>
+        <result property="dutyTime8s" column="dutyTime8s" jdbcType="VARCHAR"/>
         <result property="hpid" column="hpid" jdbcType="VARCHAR"/>
         <result property="wgs84Lon" column="wgs84Lon" jdbcType="DECIMAL"/>
         <result property="wgs84Lat" column="wgs84Lat" jdbcType="DECIMAL"/>
     </resultMap>
-<!--    내 주변 약국 리스트 count => ExtDto all count-->
-    <select id="countPharmacyList" resultMap="pharmacyResultMap" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
+    <!--    내 주변 약국 리스트 count => ExtDto all count-->
+    <select id="countPharmacyList" resultType="int" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
         SELECT COUNT(*)
         FROM store
         WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
           AND dutyAddr LIKE CONCAT('%', #{Q1}, '%');
     </select>
 
-<!--    내 주변 약국 리스트 => ExtDto List<dto> -->
-    <select id="selectPharmaciesByDB" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
+    <!--    내 주변 약국 리스트 => ExtDto List<dto> -->
+    <select id="selectPharmaciesByDB" resultMap="pharmacyResultMap" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
         SELECT *
         FROM store
-        WHERE dutyAddr LIKE CONCAT('%', #{Q0} , '%')
-          AND dutyAddr LIKE CONCAT('%', #{Q1} , '%')
+        WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
+          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
     </select>
 
-<!--    약국 상세 정보-->
+    <!--    약국 상세 정보-->
     <select id="selectPharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
         SELECT *
         FROM store

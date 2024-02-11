@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ssg.middlepj.pharmafinder.util.XMLParser.xmlParser;
@@ -97,10 +98,14 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     @Override
     public List<PharmacyExtDto> selectPharmaciesByDB(PharmacyParam pharmacyParam) {
-        List<PharmacyExtDto> pharmacies = null;
-        System.out.println("service "+pharmacyDao.selectPharmaciesByDB(pharmacyParam));
-        pharmacies.get(0).setItems(pharmacyDao.selectPharmaciesByDB(pharmacyParam));
-        pharmacies.get(0).setAllCount(pharmacyDao.countPharmacyList(pharmacyParam));
+        int count = pharmacyDao.countPharmacyList(pharmacyParam);
+
+        PharmacyExtDto pharmacyExtDto = new PharmacyExtDto();
+        pharmacyExtDto.setAllCount(pharmacyDao.countPharmacyList(pharmacyParam));
+        pharmacyExtDto.setItems(pharmacyDao.selectPharmaciesByDB(pharmacyParam));
+
+        List<PharmacyExtDto> pharmacies = new ArrayList<>();
+        pharmacies.add(pharmacyExtDto);
         return pharmacies;
     }
 

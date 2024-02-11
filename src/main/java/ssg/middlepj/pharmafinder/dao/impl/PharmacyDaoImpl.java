@@ -22,9 +22,7 @@ public class PharmacyDaoImpl implements PharmacyDao {
 
     @Override
     public int countPharmacyList(PharmacyParam pharmacyParam) {
-        System.out.println("dao list");
         return sqlSession.selectOne(ns + "countPharmacyList", pharmacyParam);
-
     }
 
     @Override
