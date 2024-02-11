@@ -232,10 +232,7 @@
         </div>
     </div>
     <div id="container-collapse">
-        <button onclick="closeCollapse()"
-                style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
-            X
-        </button>
+        <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button" style="width: 1.3rem; height: 1.3rem; float: right" />
         <div id="detail" class="content has-text-black"></div>
         <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
