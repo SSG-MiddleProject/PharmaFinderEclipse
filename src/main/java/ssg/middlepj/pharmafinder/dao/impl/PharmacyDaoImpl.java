@@ -29,4 +29,9 @@ public class PharmacyDaoImpl implements PharmacyDao {
     public List<PharmacyDto> selectPharmaciesByDB(PharmacyParam pharmacyParam) {
         return sqlSession.selectList(ns + "selectPharmaciesByDB", pharmacyParam);
     }
+
+    @Override
+    public PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam) {
+        return sqlSession.selectOne(ns + "selectPharmacybyDB", pharmacyParam);
+    }
 }

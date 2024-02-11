@@ -23,6 +23,10 @@ public class PharmacyController {
     @GetMapping("/pharmacydetail.do")
     @ResponseBody
     public PharmacyDto pharmacyDetail(PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, SAXException {
-        return pharmacyService.selectPharmacy(pharmacyParam);
+        if (pharmacyService.selectPharmacybyDB(pharmacyParam) != null) {
+            return pharmacyService.selectPharmacybyDB(pharmacyParam);
+        } else {
+            return pharmacyService.selectPharmacy(pharmacyParam);
+        }
     }
 }

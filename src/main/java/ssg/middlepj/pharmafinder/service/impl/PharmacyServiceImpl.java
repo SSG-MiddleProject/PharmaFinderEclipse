@@ -109,5 +109,10 @@ public class PharmacyServiceImpl implements PharmacyService {
         return pharmacies;
     }
 
+    @Override
+    public PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam) {
+        return pharmacyDao.selectPharmacybyDB(pharmacyParam);
+    }
+
 
 }

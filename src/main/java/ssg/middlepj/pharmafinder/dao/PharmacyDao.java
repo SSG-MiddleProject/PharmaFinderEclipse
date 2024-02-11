@@ -9,4 +9,6 @@ public interface PharmacyDao {
     int countPharmacyList(PharmacyParam pharmacyParam);
 
     List<PharmacyDto> selectPharmaciesByDB(PharmacyParam pharmacyParam);
+
+    PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam);
 }
