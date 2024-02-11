@@ -5,13 +5,13 @@
 <mapper namespace="Bookmark">
     <insert id="insertProductBookmark" parameterType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
         insert into user_bookmark_product (user_id, product_id)
-        values (#{userId}, #{productId})
+        values (#{userId}, #{targetId})
     </insert>
 
     <!--  북마크한 약 조회  -->
 
     <delete id="deleteProductBookmark" parameterType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
         delete from user_bookmark_product
-        where user_id = #{userId} and product_id = #{productId}
+        where user_id = #{userId} and product_id = #{targetId}
     </delete>
 </mapper>

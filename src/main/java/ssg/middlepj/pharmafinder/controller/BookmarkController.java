@@ -20,14 +20,20 @@ public class BookmarkController {
     }
 
     @ResponseBody
-    @PostMapping("/product")
-    public Boolean insertProductBookmark(BookmarkDto bookmarkDto) {
-        return bookmarkService.insertProductBookmark(bookmarkDto);
+    @PostMapping("/product.do")
+    public Boolean insertProductBookmark(Integer targetId) {
+        // TODO: Get userId from session
+        Integer userId = 1;
+        if (userId == null || targetId == null) return false;
+        return bookmarkService.insertProductBookmark(new BookmarkDto(userId, targetId));
     }
 
     @ResponseBody
-    @DeleteMapping("/product")
-    public Boolean deleteProductBookmark(BookmarkDto bookmarkDto) {
-        return bookmarkService.deleteProductBookmark(bookmarkDto);
+    @DeleteMapping("/product.do")
+    public Boolean deleteProductBookmark(Integer targetId) {
+        // TODO: Get userId from session
+        Integer userId = 1;
+        if (userId == null || targetId == null) return false;
+        return bookmarkService.deleteProductBookmark(new BookmarkDto(userId, targetId));
     }
 }
