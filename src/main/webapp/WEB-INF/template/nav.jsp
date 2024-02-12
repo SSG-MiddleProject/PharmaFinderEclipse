@@ -100,7 +100,8 @@
             </a>
 
             <a href="login.do">
-
+            로그인
+			</a>
             <a href="regi.do">
 
                 로그아웃

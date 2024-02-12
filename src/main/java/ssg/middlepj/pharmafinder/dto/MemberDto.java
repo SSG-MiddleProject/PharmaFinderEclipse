@@ -4,17 +4,17 @@ import com.google.protobuf.Timestamp;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MemberDto {
+public class MemberDto implements Serializable{
 	
-	private int id;
-	private int store_id;
-	private String username;
-	private String email;
-	private String password;
+	private int id;	//회원의 고유 식별자
+	private int store_id;//상호(약국 이름등)
+	private String username;//회원의 아이디
+	private String email;//회원의 이메일 주소
+	private String password;//회원의 비밀번호
 	private int state; /* 0=비활성 1=활성 */
 	private int roll; /* 0=약국관리자 1=약국일반 2=고객일반 */
-	private Timestamp created_at;
-	private Timestamp modified_at;
+	private Timestamp created_at;// 회원 정보가 생성된 시간
+	private Timestamp modified_at;// 회원 정보가 수정된 시간
 	
 	// 기본생성자
 	public MemberDto() {

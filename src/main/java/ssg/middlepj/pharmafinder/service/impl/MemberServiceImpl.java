@@ -14,8 +14,8 @@ public class MemberServiceImpl implements MemberService {
 	MemberDao dao;
 	
 	@Override
-	public boolean idcheck(String id) {
-		int count = dao.idcheck(id);
+	public boolean idcheck(String username) {
+		int count = dao.idcheck(username);
 		return count>0?true:false;
 	}
 	
@@ -23,5 +23,24 @@ public class MemberServiceImpl implements MemberService {
 	public boolean addmember(MemberDto mem) {
 		int count = dao.addmember(mem);
 		return count>0?true:false;
+	}
+
+	@Override
+	public boolean login(String username, String password) {
+		
+		return dao.login(username, password);
+	}
+	
+	@Override
+    public String findPassword(String username, String email) {
+        // 여기서는 DAO를 통해 username과 email을 이용하여 비밀번호를 찾아 반환합니다.
+        return dao.findPassword(username, email);
+    }
+	
+	//이메일로 유저아이디 찾기
+	@Override
+	public String findUsernameByEmail(String email) {
+		// 이메일을 통해 아이디를 조회하는 DAO 메서드 호출
+        return dao.findUsernameByEmail(email);
 	}
 }

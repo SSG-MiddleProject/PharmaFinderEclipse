@@ -5,6 +5,9 @@
 <head>
 <meta charset="EUC-KR">
 <title>로그인 페이지</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <style type="text/css">
 /* General styling */
 body {
@@ -107,22 +110,56 @@ body {
 	<form class="login-form" action="loginAf.do" method="post">
 		<input type="text" id="id" name="id" size=20 placeholder="example@test.com">
 		<input type="password" name="password" placeholder="Password">
+		<input type="checkbox" id="saveId" name="saveId">
+		<label for="saveId">아이디 저장</label><br/><br/>
 		<input type="submit" value="login">
 	</form>
 	<br/>
 	<div class="login-links">
 		<a href="#">아이디/비밀번호 찾기</a>
-		
+		<form action="">
 		<div>
 			<p class="mb-0">
-				회원이 아니신가요? <a href="regi.do" class="text-white-50 fw-bold">회원가입</a>
+				회원이 아니신가요?<a href="userregi.do" class="text-white-50 fw-bold">일반고객 회원가입</a><br/>
+				<a href="regi.do" class="text-white-50 fw-bold" >약국 회원가입</a>
 			</p>
 		</div>
+		</form>
 	</div>
 
 </div>
 
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // 페이지 로드 시, 저장된 아이디가 있는지 확인하고 아이디 입력 필드에 설정
+    var savedUsername = localStorage.getItem("savedUsername");
+    if (savedUsername) {
+        $("#username").val(savedUsername);
+        $("#saveId").prop("checked", true);
+    }
+    
+    // 아이디 저장 체크박스 이벤트 리스너
+    $("#saveId").change(function() {
+        if ($(this).is(":checked")) {
+            // 체크되었을 때, 아이디를 로컬 스토리지에 저장
+            localStorage.setItem("savedUsername", $("#username").val());
+        } else {
+            // 체크 해제되었을 때, 로컬 스토리지에서 아이디 삭제
+            localStorage.removeItem("savedUsername");
+        }
+    });
+
+    // 서버에서 받아온 roll 값에 따라 페이지 리디렉션 수행
+    var roll = "<%= request.getAttribute("roll") %>";
+    if (roll === "1") {
+        window.location.href = "regi.do"; // 약국일반 페이지로 리디렉션
+    } else if (roll === "2") {
+        window.location.href = "userregi.do"; // 일반 유저 페이지로 리디렉션
+    }
+});
+</script>
 
 </body>
 </html>
