@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on sp.product_id = p.id
 		<where>
 		    <if test="storeId > 0">
-		      AND store_id like CONCAT('%', #{storeId}, '%')
+		      AND store_id = #{storeId}
 		    </if>
 		    <if test="productId > 0">
 		      AND product_id = #{productId}
