@@ -19,7 +19,7 @@
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 %>
 <script type="text/javascript"
-        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>"></script>
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>&submodules=geocoder"></script>
 <%
     String searchType = "";
     String keyword = "";
