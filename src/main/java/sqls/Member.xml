@@ -2,50 +2,61 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-        
+
 <mapper namespace="Member">
     <resultMap id="BaseResultMap" type="ssg.middlepj.pharmafinder.dto.MemberDto">
-    	<id property="id" column="id" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="storeId" column="store_id" jdbcType="INTEGER"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="state" column="state" jdbcType="TINYINT"/>
         <result property="roll" column="roll" jdbcType="TINYINT"/>
-        <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
-        <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>   
+        <result property="createdAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>
     </resultMap>
-    
+
     <select id="idcheck" parameterType="String" resultType="Integer">
-    	select count(*)
-		from user
-		where username=#{username}
+        select count(*)
+        from user
+        where username = #{username}
     </select>
-    
+
+    <!-- user 테이블 추가 -->
     <!-- <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
     insert into user(id, storeId, username, email, password, state, roll, createAt, modifiedAt)
     values(#{id}, #{storeId}, #{username}, #{email}, #{password}, ${state}, ${roll}, #{createAt}, #{modifiedAt})
     </insert> -->
-    <!-- 
+    <!--
     	email unique key 체크 / notnull 체크안됨 -> 한명은 null값으로 가입가능 그뒤는 안됨
     	밑에방법은 내가 일반사용자용으로만 가입시킬때 그리고 약국 관리자로 사용할때 따로 insert문을 두개 만들어야함
     	values(#{username}, #{email}, #{password}, 1, 2, now(), now())
     	밑에방법은 두가지 가입방법을 하나의 insert문으로 만들었을때 dto.getStoreId -> null 그래서 크게 상관없음
-    	values(#{storeId}, #{username}, #{email}, #{password}, 1, ${roll}, now(), now()) 
+    	values(#{storeId}, #{username}, #{email}, #{password}, 1, ${roll}, now(), now())
    	-->
-   <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
-    insert into user(username, email, password, state, roll, created_at, modified_at)
-    values(#{username}, #{email}, #{password}, 1, 2, now(), now())
-</insert>
-   
-   	
-   	
-   	<!-- 로그인Af  -->
-   	<select id="loginAf" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto" resultType="ssg.middlepj.pharmafinder.dto.MemberDto">
-	    select count(*)
-		from user
-		where username=#{username}
-   	</select>
-    
-    
+    <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
+        insert into user(username, email, password, state, roll, created_at, modified_at)
+        values (#{username}, #{email}, #{password}, 1, #{roll}, now(), now())
+    </insert>
+
+
+    <!-- 로그인Af  -->
+    <select id="loginAf" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto"
+            resultType="ssg.middlepj.pharmafinder.dto.MemberDto">
+        select count(*)
+        from user
+        where username = #{username}
+    </select>
+
+    <!-- store 테이블 추가 -->
+    <insert id="addStore" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        INSERT INTO store (id, dutyName, dutyAddr, dutyTel1, dutyEt, bn_reg_num, dutyTime1s, dutyTime1c, dutyTime2s,
+                           dutyTime2c, dutyTime3s, dutyTime3c, dutyTime4s, dutyTime4c, dutyTime5s, dutyTime5c,
+                           dutyTime6s, dutyTime6c, dutyTime7s, dutyTime7c, dutyTime8s, dutyTime8c, hpid, wgs84Lon,
+                           wgs84Lat)
+        VALUES (#{id}, #{dutyName}, #{dutyAddr}, #{dutyTel1}, #{dutyEt}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c},
+                #{dutyTime2s}, #{dutyTime2c}, #{dutyTime3s}, #{dutyTime3c}, #{dutyTime4s}, #{dutyTime4c}, #{dutyTime5s},
+                #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c},
+                #{hpid}, #{wgs84Lon}, #{wgs84Lat})
+    </insert>
 </mapper>

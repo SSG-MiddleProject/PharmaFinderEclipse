@@ -1,36 +1,41 @@
 package ssg.middlepj.pharmafinder.dao.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import ssg.middlepj.pharmafinder.dao.MemberDao;
 import ssg.middlepj.pharmafinder.dto.MemberDto;
+import ssg.middlepj.pharmafinder.dto.PharmacyDto;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
 
-	@Autowired
-	SqlSession session;
-	
-	String ns = "Member.";
+    @Autowired
+    SqlSession session;
+    private static final String namespace = "ssg.middlepj.pharmafinder.dao.MemberDao";
 
-	@Override
-	public int idcheck(String username) {		
-		return session.selectOne(ns + "idcheck", username);
-	}
-	
-	@Override
-	public int addmember(MemberDto mem) {
-		return session.insert(ns + "addmember", mem);
-	}
-	
-	@Override
-	public boolean login(String username, String password) {
-		// 여기서는 하나의 파라미터로만 전달하도록 변경
+    String ns = "Member.";
+
+    public int idcheck(String username) {
+        return session.selectOne(ns + "idcheck", username);
+    }
+
+    @Override
+    public int addmember(MemberDto mem) {
+        return session.insert(ns + "addmember", mem);
+    }
+
+    @Override
+    public int addstore(PharmacyDto store) {
+        return session.insert(ns + "addstore", store);
+    }
+
+    @Override
+    public boolean login(String username, String password) {
+        // 여기서는 하나의 파라미터로만 전달하도록 변경
         // MyBatis Mapper에서는 하나의 객체에 필요한 데이터를 담아 전달하므로,
         // 여러 개의 파라미터를 받을 수 없습니다.
         // 따라서 Mapper에서는 해당 파라미터를 전달할 수 있는 방식으로 변경해야 합니다.
@@ -40,21 +45,22 @@ public class MemberDaoImpl implements MemberDao {
         paramMap.put("username", username);
         paramMap.put("password", password);
         int count = session.selectOne(ns + "login", paramMap);
-		return count>0;
-	}
-	
-	 // 비밀번호 찾기
-	 @Override
-	    public String findPassword(String username, String email) {
-	        Map<String, String> paramMap = new HashMap<>();
-	        paramMap.put("username", username);
-	        paramMap.put("email", email);
-	        return session.selectOne(ns + "findPassword", paramMap);
-	    }
-	// 이메일로 아이디 찾기
-	@Override
-	public String findUsernameByEmail(String email) {
-		 // 이메일을 통해 아이디를 조회하는 쿼리를 실행하는 부분
+        return count > 0;
+    }
+
+    // 비밀번호 찾기
+    @Override
+    public String findPassword(String username, String email) {
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("email", email);
+        return session.selectOne(ns + "findPassword", paramMap);
+    }
+
+    // 이메일로 아이디 찾기
+    @Override
+    public String findUsernameByEmail(String email) {
+        // 이메일을 통해 아이디를 조회하는 쿼리를 실행하는 부분
         return session.selectOne(ns + "findUsernameByEmail", email);
-	}
+    }
 }
