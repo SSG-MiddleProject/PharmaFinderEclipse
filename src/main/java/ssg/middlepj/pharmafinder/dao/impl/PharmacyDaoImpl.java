@@ -4,9 +4,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ssg.middlepj.pharmafinder.dao.PharmacyDao;
-import ssg.middlepj.pharmafinder.dto.PaginationParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
+import ssg.middlepj.pharmafinder.dto.PharmacyResDto;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class PharmacyDaoImpl implements PharmacyDao {
     }
 
     @Override
-    public List<PharmacyDto> selectPharmaciesByDB(PharmacyParam paginationParam) {
+    public List<PharmacyResDto> selectPharmaciesByDB(PharmacyParam paginationParam) {
         return sqlSession.selectList(ns + "selectPharmaciesByDB", paginationParam);
     }
 

@@ -27,6 +27,10 @@
         <result property="wgs84Lon" column="wgs84Lon" jdbcType="DECIMAL"/>
         <result property="wgs84Lat" column="wgs84Lat" jdbcType="DECIMAL"/>
     </resultMap>
+    <resultMap id="pharmacyResDto" type="ssg.middlepj.pharmafinder.dto.PharmacyResDto" extends="pharmacyResultMap">
+        <result property="isBookmark" column="is_bookmark" jdbcType="INTEGER"/>
+    </resultMap>
+
     <select id="countPharmacyList" resultType="int" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
         SELECT COUNT(*)
         FROM store
@@ -34,13 +38,19 @@
           AND dutyAddr LIKE CONCAT('%', #{Q1}, '%');
     </select>
 
-    <select id="selectPharmaciesByDB" resultMap="pharmacyResultMap"
+    <select id="selectPharmaciesByDB" resultMap="pharmacyResDto"
             parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
-        SELECT *
-        FROM store
+        SELECT s.*,
+               IF(EXISTS(select *
+                         from user_bookmark_store ubs
+                         where ubs.store_id = s.id
+                           and ubs.user_id = #{userId}), true, false)
+                   as is_bookmark
+        FROM store s
         WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
           AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
           AND dutyName LIKE CONCAT('%', #{QN}, '%')
+        order by is_bookmark desc, dutyName
         limit #{recordSize} offset #{offset}
 
     </select>

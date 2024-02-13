@@ -1,5 +1,4 @@
-<%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyExtDto" %>
-<%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyDto" %>
+<%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyResDto" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
@@ -19,7 +18,7 @@
 
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 
-    List<PharmacyDto> list = (List<PharmacyDto>) request.getAttribute("pharmacies");
+    List<PharmacyResDto> list = (List<PharmacyResDto>) request.getAttribute("pharmacies");
     Pagination pagination = (Pagination) request.getAttribute("pagination");
 
     String keyword = "";
@@ -135,12 +134,29 @@
             </div>
         </div>
         <ul id="search-result">
-            <% for (PharmacyDto pharmacy : list) { %>
+            <% for (PharmacyResDto pharmacy : list) { %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black" id="test">
                     <a value="<%=pharmacy.getDutyName()%>" onclick="handleDetail(this)">
                         <%=pharmacy.getDutyName().length() > 15 ? pharmacy.getDutyName().substring(0, 15) + "..." : pharmacy.getDutyName()%>
                     </a>
+                    <span>
+                        <%
+                            if (pharmacy.isBookmark()) {
+                        %>
+                        <img src="${pageContext.request.contextPath}/resources/Bookmarked.svg" alt="북마크"
+                             value="<%=pharmacy.getId()%>" onclick="handleBookmark(this, '<%=pharmacy.isBookmark()%>')"
+                             style="width: 1.3rem; height: 1.3rem; float: right;"/>
+                        <%
+                        } else {
+                        %>
+                        <img src="${pageContext.request.contextPath}/resources/Bookmark.svg" alt="북마크"
+                             value="<%=pharmacy.getId()%>" onclick="handleBookmark(this, '<%=pharmacy.isBookmark()%>')"
+                             style="width: 1.3rem; height: 1.3rem; float: right;"/>
+                        <%
+                            }
+                        %>
+                    </span>
                     <p><%=pharmacy.getDutyAddr()%>
                     </p>
                 </div>
@@ -353,6 +369,37 @@
                 centerDiv.append(allOpeTime);
             });
     }
+
+    const handleBookmark = (element, isBookmark) => {
+        const pharmacyId = parseInt(element.getAttribute("value"))
+        if (isBookmark === "true") {
+            fetch('/bookmark/pharmacy.do?targetId=' + pharmacyId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => res.json()).then((data) => {
+                if (data !== true) {
+                    throw new Error("북마크 삭제 실패")
+                }
+                location.reload()
+            }).catch((err) => console.error(err))
+            return
+        }
+        fetch('/bookmark/pharmacy.do?targetId=' + pharmacyId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => res.json()).then((data) => {
+            if (data !== true) {
+                throw new Error("북마크 추가 실패")
+            }
+            location.reload()
+        }).catch((err) => console.error(err))
+    }
+
+
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
