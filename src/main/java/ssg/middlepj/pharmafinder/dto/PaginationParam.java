@@ -10,6 +10,7 @@ public class PaginationParam {
     private Integer offset;
     private String keyword;
     private String searchType;
+    private Integer userId;
 
     public PaginationParam() {
         this.page = 1;
