@@ -1,4 +1,3 @@
-<%@ page import="ssg.middlepj.pharmafinder.dto.ProductDto" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 <%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
 <%@ page import="java.util.List" %>
