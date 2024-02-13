@@ -408,7 +408,9 @@
                         const productName = product.itemName;
                         const entpName = product.entpName;
                         const qty = product.qty;
+                        const productId = product.id;
                         // const price = product.price;
+
                         const li = document.createElement('li');
                         li.className = "p-2";
                         li.style.borderBottom = "solid 1px #dbdbdb";
@@ -418,6 +420,9 @@
 
                         const productNameA = document.createElement('a');
                         productNameA.innerText = productName.length > 15 ? productName.substring(0, 15) + "..." : productName;
+                        productNameA.onclick = function () {
+                            location.href = encodeURI("/main.do?searchType=itemName&keyword=" + productName + "&page=1");
+                        }
 
                         const entpNameSpan = document.createElement('span');
                         entpNameSpan.innerText = entpName;
