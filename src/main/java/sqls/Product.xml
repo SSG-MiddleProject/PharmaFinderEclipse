@@ -47,7 +47,7 @@
     </select>
 
     <select id="selectProducts" resultMap="ProductResMap" parameterType="ssg.middlepj.pharmafinder.dto.PaginationParam">
-        select p.*, CASE WHEN EXISTS(select * from user_bookmark_product ubp where ubp.product_id = p.id and ubp.user_id = #{userId}) THEN 1 ELSE 0 END as is_bookmark
+        select p.*, IF(EXISTS(select * from user_bookmark_product ubp where ubp.product_id = p.id and ubp.user_id = #{userId}), true, false) as is_bookmark
         from product p
         where
         <choose>
@@ -64,6 +64,7 @@
                 efcy_qes like CONCAT('%', #{keyword}, '%')
             </when>
         </choose>
+        order by is_bookmark desc, p.item_name
         limit #{recordSize} offset #{offset}
     </select>
 

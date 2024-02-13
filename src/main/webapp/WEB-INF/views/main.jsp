@@ -382,8 +382,7 @@
                     const div = document.createElement('div')
                     div.className = "has-text-black"
                     const a = document.createElement('a')
-                    a.value = value["hpid"]
-                    a.onclick = () => handlePharmacyDetail(a)
+                    a.onclick = () => handlePharmacyDetail(value["dutyName"])
                     a.innerText = value["dutyName"].length > 15 ? value["dutyName"].substring(0, 15) + "..." : value["dutyName"]
                     const p = document.createElement('p')
                     p.innerText = value["dutyAddr"]
@@ -426,7 +425,6 @@
     }
 
     const createMarker = (pharmacy) => {
-        console.log(pharmacy["dutyName"])
         const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
             title: pharmacy["dutyName"],
@@ -457,6 +455,10 @@
                 node.style.color = "steelblue"
             }
         })
+    }
+
+    const handlePharmacyDetail = (dutyName) => {
+        location.href = encodeURI("pharmacy.do?QN=" + dutyName)
     }
 
     const handleBookmark = (element, isBookmark) => {
