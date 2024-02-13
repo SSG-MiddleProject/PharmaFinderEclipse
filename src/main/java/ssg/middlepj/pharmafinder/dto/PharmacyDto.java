@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PharmacyDto {
-    private String dutyAddr; // 주소
+    private String dutyAddr; // 주소 (도로명주소)
+    private String bnRegNum; // 사업자등록번호
     private String dutyName; // 약국명
     private String dutyTel1; // 대표번호 1
     private String dutyTime1c; // 진료시간(mon) Close
@@ -25,6 +26,7 @@ public class PharmacyDto {
     private String dutyTime7s; // 진료시간(sun) Start
     private String dutyTime8c; // 진료시간(holi) Close
     private String dutyTime8s; // 진료시간(holi) Start
+    private String postcode; // 우편번호
     private String hpid; // 약국 ID
     private float wgs84Lon; // 경도
     private float wgs84Lat; // 위도

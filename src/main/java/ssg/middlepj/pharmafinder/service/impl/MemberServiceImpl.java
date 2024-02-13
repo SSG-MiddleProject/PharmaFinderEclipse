@@ -1,5 +1,8 @@
 package ssg.middlepj.pharmafinder.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssg.middlepj.pharmafinder.dao.MemberDao;
@@ -9,7 +12,8 @@ import ssg.middlepj.pharmafinder.service.MemberService;
 
 @Service
 public class MemberServiceImpl implements MemberService {
-    @Autowired
+    
+	@Autowired
     MemberDao dao;
 
     @Override
@@ -25,16 +29,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean addstore(PharmacyDto store) {
-        int count = dao.addstore(store);
+    public boolean addpharmacy(PharmacyDto pharmacy) {
+        int count = dao.addpharmacy(pharmacy);
         return count > 0;
     }
 
-    @Override
-    public boolean login(String username, String password) {
-
-        return dao.login(username, password);
-    }
+	@Override
+	public boolean login(String username, String password) {
+		Map<String, String> paramMap = new HashMap<>();
+		paramMap.put("username", username);
+		paramMap.put("password", password);
+		// DAO의 수정된 login 메서드 호출
+		return dao.login(paramMap);
+	}
 
     @Override
     public String findPassword(String username, String email) {

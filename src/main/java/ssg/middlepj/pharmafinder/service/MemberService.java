@@ -5,9 +5,9 @@ import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
 public interface MemberService {
 
-    boolean addmember(MemberDto dto);
+    boolean addmember(MemberDto mem);
 
-    boolean addstore(PharmacyDto dto);
+	boolean addpharmacy(PharmacyDto pharmacy);
 
     boolean idcheck(String username);
 

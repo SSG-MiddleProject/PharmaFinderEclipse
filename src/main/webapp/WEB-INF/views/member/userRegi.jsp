@@ -1,32 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>ÀÏ¹İ À¯Àú È¸¿ø°¡ÀÔÆäÀÌÁö</title>
+<meta charset="UTF-8">
+<title>ì¼ë°˜ ìœ ì € íšŒì›ê°€ì…í˜ì´ì§€</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 
-<form action="regiAf.do" method="post">
+<form action="userRegiAf.do" method="post">
 <table>
 <tr>
-    <th>¾ÆÀÌµğ</th>
+    <th>ì•„ì´ë””</th>
     <td>
         <input type="text" name="username" id="username">
 		<p id="idcheck" style="font-size: 10px"></p>
-		<input type="button" class="btn btn-primary" id="id_chk_btn" value="idÈ®ÀÎ">	
+		<input type="button" class="btn btn-primary" id="id_chk_btn" value="idí™•ì¸">	
     </td>
 </tr>
 <tr>
-    <th>ÀÌ¸ŞÀÏ</th>
+    <th>ì´ë©”ì¼</th>
     <td>
         <input type="email" name="email" id="email" required>
     </td>
 </tr>
 <tr>
-    <th>ºñ¹Ğ¹øÈ£</th>
+    <th>ë¹„ë°€ë²ˆí˜¸</th>
     <td>
         <input type="password" name="password" id="password" required>
     </td>
@@ -34,11 +34,11 @@
 </table>
 <br>
 
-<input type="submit" value="°¡ÀÔ">
+<input type="submit" value="íšŒì›ê°€ì…">
 </form>
 
 
-<!-- id À¯È¿¼º °Ë»ç -->
+<!-- id ìœ íš¨ì„± ê²€ì‚¬ -->
 <script type="text/javascript">
 $(document).ready(function () {
 	
@@ -46,41 +46,41 @@ $(document).ready(function () {
 		var inputId = $("#username").val().trim();
 		
 		if($("#username").val().trim() === "") {
-	        alert("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+	        alert("ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 	        return;
 		}
 		
 		$.ajax({
-			url:"idcheck.do",	//¼öÁ¤ ÇÊ¿äÇÑ ºÎºĞ
+			url:"idcheck.do",	//ìˆ˜ì • í•„ìš”í•œ ë¶€ë¶„
 			type:"post",
-			data:{ "username": inputId }, //¼öÁ¤ ÇÊ¿äÇÑ ºÎºĞ
+			data:{ "username": inputId }, //ìˆ˜ì • í•„ìš”í•œ ë¶€ë¶„
 			success:function(msg){
 				// alert('success');
 				if(msg.trim() === "YES"){
 					$("#idcheck").css("color", "#0000ff");
-					$("#idcheck").text("»ç¿ëÇÒ ¼ö ÀÖ´Â ¾ÆÀÌµğÀÔ´Ï´Ù");
+					$("#idcheck").text("ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” ì•„ì´ë””ì…ë‹ˆë‹¤");
 				}else{
 					$("#idcheck").css("color", "#ff0000");
-					$("#idcheck").text("»ç¿ëÁßÀÎ ¾ÆÀÌµğÀÔ´Ï´Ù");
+					$("#idcheck").text("ì‚¬ìš©ì¤‘ì¸ ì•„ì´ë””ì…ë‹ˆë‹¤");
 					$("#username").val("");
 				}
 			},
 			error:function(){
-				alert('¾ÆÀÌµğ È®ÀÎ Áß ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù');
+				alert('ì•„ì´ë”” í™•ì¸ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤');
 			}
 		});				
 	});		
 	
 	$("#regibtn").click(function () {
 		
-		// ºóÄ­ °Ë»ç(id, password)
+		// ë¹ˆì¹¸ ê²€ì‚¬(id, password)
 		if($("#username").val().trim() === "") {
-		    alert("¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		    alert("ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 		    return;
 		}
 		
 		if($("#password").val().trim() === "") {
-		    alert("ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+		    alert("ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”.");
 		    return;
 		}
 				
