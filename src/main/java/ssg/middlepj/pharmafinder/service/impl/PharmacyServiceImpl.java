@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 import ssg.middlepj.pharmafinder.dao.PharmacyDao;
-import ssg.middlepj.pharmafinder.dto.PaginationParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
+import ssg.middlepj.pharmafinder.dto.PharmacyResDto;
 import ssg.middlepj.pharmafinder.service.PharmacyService;
 import ssg.middlepj.pharmafinder.util.XMLParser;
 
@@ -20,7 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ssg.middlepj.pharmafinder.util.XMLParser.xmlParser;
@@ -94,7 +93,7 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public List<PharmacyDto> selectPharmaciesByDB(PharmacyParam paiginationParam) {
+    public List<PharmacyResDto> selectPharmaciesByDB(PharmacyParam paiginationParam) {
         return pharmacyDao.selectPharmaciesByDB(paiginationParam);
     }
 
