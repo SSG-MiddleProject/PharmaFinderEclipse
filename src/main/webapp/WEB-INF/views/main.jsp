@@ -1,4 +1,3 @@
-<%@ page import="ssg.middlepj.pharmafinder.dto.ProductDto" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 <%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
 <%@ page import="java.util.List" %>
@@ -19,7 +18,7 @@
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 %>
 <script type="text/javascript"
-        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>"></script>
+        src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=<%=NHN_CLIENT_KEY%>&submodules=geocoder"></script>
 <%
     String searchType = "";
     String keyword = "";
@@ -235,7 +234,7 @@
     </div>
     <div id="container-collapse">
         <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button"
-             style="width: 1.3rem; height: 1.3rem; float: right"/>
+             style="width: 1.3rem; height: 1.3rem; float: right" onclick="closeCollapse()"/>
         <div id="detail" class="content has-text-black"></div>
         <div id="detail-collapse" style="display: none">
             <div id="detail-extra" class="content has-text-black"></div>
@@ -262,6 +261,8 @@
     const existNext = "<%=pagination.getExistNext()%>";
     const currentPage = parseInt("<%=currentPage%>");
     const lastPage = parseInt("<%=lastPage%>");
+    const markers = [];
+    let map;
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");
     choice.value = "<%=searchType %>";
@@ -301,10 +302,12 @@
     }
 
     const openCollapse = () => {
+        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "visible";
     }
 
     const closeCollapse = () => {
+        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
@@ -372,6 +375,7 @@
                     }
                 })
                 Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
+                    createMarker(value)
                     const li = document.createElement('li')
                     li.className = "p-2"
                     li.style.borderBottom = "solid 1px"
@@ -421,6 +425,16 @@
         return rootP
     }
 
+    const createMarker = (pharmacy) => {
+        console.log(pharmacy["dutyName"])
+        const marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
+            title: pharmacy["dutyName"],
+            map
+        });
+        markers.push(marker)
+    }
+
     const handleDetailExtand = () => {
         const detailCollapse = document.getElementById('detail-collapse')
         const imgCollapseExtend = document.getElementById('img-collapse-extend')
@@ -448,7 +462,7 @@
     const handleBookmark = (element, isBookmark) => {
         const productId = parseInt(element.getAttribute("value"))
         if (isBookmark === "true") {
-            fetch('/bookmark/product.do?targetId='+productId, {
+            fetch('/bookmark/product.do?targetId=' + productId, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -461,7 +475,7 @@
             }).catch((err) => console.error(err))
             return
         }
-        fetch('/bookmark/product.do?targetId='+productId, {
+        fetch('/bookmark/product.do?targetId=' + productId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -474,13 +488,38 @@
         }).catch((err) => console.error(err))
     }
 
+    const deleteMarkers = () => {
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers.length = 0;
+    }
+
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
     };
 
-    const map = new naver.maps.Map('map', mapOptions);
+    map = new naver.maps.Map('map', mapOptions);
 
-    handleCurrentPageNum()
+    const onSuccessGeolocation = (position) => {
+        var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
+        map.setZoom(13); // 지도의 줌 레벨을 변경합니다.
+    }
+
+    const onErrorGeolocation = () => {
+        var center = map.getCenter();
+    }
+
+    $(window).on('load', () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+        } else {
+            alert('geolocation not supported');
+        }
+        handleCurrentPageNum()
+    })
 </script>
 
