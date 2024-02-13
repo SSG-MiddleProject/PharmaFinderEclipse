@@ -33,5 +33,13 @@
         <property name="order" value="1" />
     </bean>
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/properties/apikey.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <mvc:resources mapping="/resources/**" location="/resources/" />
 </beans>
