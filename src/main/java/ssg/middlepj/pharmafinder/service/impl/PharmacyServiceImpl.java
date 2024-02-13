@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 import ssg.middlepj.pharmafinder.dao.PharmacyDao;
-import ssg.middlepj.pharmafinder.dto.PharmacyDto;
-import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
-import ssg.middlepj.pharmafinder.dto.PharmacyParam;
-import ssg.middlepj.pharmafinder.dto.PharmacyResDto;
+import ssg.middlepj.pharmafinder.dto.*;
 import ssg.middlepj.pharmafinder.service.PharmacyService;
 import ssg.middlepj.pharmafinder.util.XMLParser;
 
@@ -103,8 +100,8 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam) {
-        return pharmacyDao.selectPharmacybyDB(pharmacyParam);
+    public PharmacyDto selectPharmacybyDB(int storeId) {
+        return pharmacyDao.selectPharmacybyDB(storeId);
     }
 
     @Override
@@ -134,13 +131,14 @@ public class PharmacyServiceImpl implements PharmacyService {
         conn.disconnect();
 
         List<PharmacyDto> pharmacies = XMLParser.insertPharmacy(sb.toString());
-
-//        System.out.println(pharmacies);
-
         for (PharmacyDto pharmacy : pharmacies) {
-//            System.out.println("service"+   pharmacy);
             pharmacyDao.insertPharmacy(pharmacy);
         }
+    }
+
+    @Override
+    public List<ProductPharmacyQtyDto> selectProductByPharmacyId(Integer storeId) {
+        return pharmacyDao.selectProductByPharmacyId(storeId);
     }
 
 }

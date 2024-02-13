@@ -137,7 +137,7 @@
             <% for (PharmacyResDto pharmacy : list) { %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black" id="test">
-                    <a value="<%=pharmacy.getDutyName()%>" onclick="handleDetail(this)">
+                    <a value="<%=pharmacy.getId()%>" onclick="handleDetail(this)">
                         <%=pharmacy.getDutyName().length() > 15 ? pharmacy.getDutyName().substring(0, 15) + "..." : pharmacy.getDutyName()%>
                     </a>
                     <span>
@@ -183,12 +183,11 @@
     <div id="container-collapse">
         <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button"
              style="width: 1.3rem; height: 1.3rem; float: right" onclick="closeCollapse()"/>
-        <div id="detail" class="content has-text-black"></div>
-        <div id="detail-collapse" style="display: none">
-            <div id="detail-extra" class="content has-text-black"></div>
-        </div>
+        <div id="detail" class="content has-text-black">
 
-        <ul id="pharmacy-list">
+        </div>
+        <ul id="pharmacy-list" style="border-top: solid #dbdbdb 1px">
+
         </ul>
     </div>
     <div id="container-right">
@@ -247,7 +246,7 @@
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
-    const handlePharmacy = async (name) => {
+    const handlePharmacy = async (storeId) => {
         const detailDiv = document.getElementById('detail')
         detailDiv.innerHTML = "";
 
@@ -257,28 +256,32 @@
         centerDiv.style.paddingTop = "2rem";
         detailDiv.append(centerDiv)
 
-        await fetch(`/pharmacydetail.do?QN=` + name)
+        const listDiv = document.getElementById('pharmacy-list')
+        listDiv.innerHTML = "";
+
+        await fetch(`/pharmacydetail.do?storeId=` + parseInt(storeId))
             .then((response) => response.json())
             .then((data) => {
-                const pharmacyName = data.dutyName;
-                const pharmacyAddr = data.dutyAddr;
-                const pharmacyTel = data.dutyTel1;
-                const dutyTime1s = data.dutyTime1s;
-                const dutyTime1c = data.dutyTime1c;
-                const dutyTime2s = data.dutyTime2s;
-                const dutyTime2c = data.dutyTime2c;
-                const dutyTime3s = data.dutyTime3s;
-                const dutyTime3c = data.dutyTime3c;
-                const dutyTime4s = data.dutyTime4s;
-                const dutyTime4c = data.dutyTime4c;
-                const dutyTime5s = data.dutyTime5s;
-                const dutyTime5c = data.dutyTime5c;
-                const dutyTime6s = data.dutyTime6s;
-                const dutyTime6c = data.dutyTime6c;
-                const dutyTime7s = data.dutyTime7s;
-                const dutyTime7c = data.dutyTime7c;
-                const dutyTime8s = data.dutyTime8s;
-                const dutyTime8c = data.dutyTime8c;
+                const pharmacyDetail = data["pharmacy"];
+                const pharmacyName = pharmacyDetail.dutyName;
+                const pharmacyAddr = pharmacyDetail.dutyAddr;
+                const pharmacyTel = pharmacyDetail.dutyTel1;
+                const dutyTime1s = pharmacyDetail.dutyTime1s;
+                const dutyTime1c = pharmacyDetail.dutyTime1c;
+                const dutyTime2s = pharmacyDetail.dutyTime2s;
+                const dutyTime2c = pharmacyDetail.dutyTime2c;
+                const dutyTime3s = pharmacyDetail.dutyTime3s;
+                const dutyTime3c = pharmacyDetail.dutyTime3c;
+                const dutyTime4s = pharmacyDetail.dutyTime4s;
+                const dutyTime4c = pharmacyDetail.dutyTime4c;
+                const dutyTime5s = pharmacyDetail.dutyTime5s;
+                const dutyTime5c = pharmacyDetail.dutyTime5c;
+                const dutyTime6s = pharmacyDetail.dutyTime6s;
+                const dutyTime6c = pharmacyDetail.dutyTime6c;
+                const dutyTime7s = pharmacyDetail.dutyTime7s;
+                const dutyTime7c = pharmacyDetail.dutyTime7c;
+                const dutyTime8s = pharmacyDetail.dutyTime8s;
+                const dutyTime8c = pharmacyDetail.dutyTime8c;
 
                 const h2 = document.createElement('h2')
                 h2.id = "dutyName"
@@ -310,6 +313,7 @@
                 let timeText = "";
                 const today = new Date().getDay();
 
+
                 switch (today) {
                     case 1:
                         timeText = dutyTime1c && dutyTime1s ? "⏰ 월요일 " + dutyTime1s + " ~ " + dutyTime1c : "⏰ 월요일 휴무";
@@ -339,6 +343,7 @@
                 time.innerHTML = timeText;
                 timeContainer.append(time);
 
+
                 const toggle = document.createElement('p')
                 toggle.id = "toggle"
                 toggle.innerHTML = "▼"
@@ -351,6 +356,7 @@
                         toggle.innerHTML = "▼";
                     }
                 };
+
 
                 timeContainer.append(toggle);
                 centerDiv.append(timeContainer);
@@ -367,7 +373,72 @@
                     (dutyTime7c && dutyTime7s ? "<br>⏰ 일요일 " + dutyTime7s + " ~ " + dutyTime7c : "<br>⏰ 일요일 휴무");
 
                 centerDiv.append(allOpeTime);
-            });
+
+                time.onclick = function () {
+                    if (allOpeTime.style.display === "none") {
+                        allOpeTime.style.display = "block";
+                        toggle.innerHTML = "▲";
+                    } else {
+                        allOpeTime.style.display = "none";
+                        toggle.innerHTML = "▼";
+                    }
+                };
+
+                const productList = data["productsWithQty"];
+                console.log(productList)
+                if (productList.length === 0) {
+                    const noProduct = document.createElement('p')
+                    noProduct.innerHTML = "등록된 제품이 없습니다."
+                    noProduct.style.paddingTop = "1rem"
+                    noProduct.style.textAlign = "center"
+                    listDiv.append(noProduct)
+                } else {
+                    productList.forEach((product) => {
+                        console.log(product)
+
+                        const productName = product.itemName;
+                        const entpName = product.entpName;
+                        const qty = product.qty;
+                        // const price = product.price;
+                        const li = document.createElement('li');
+                        li.className = "p-2";
+                        li.style.borderBottom = "solid 1px #dbdbdb";
+
+                        const div = document.createElement('div');
+                        div.className = "has-text-black";
+
+                        const productNameA = document.createElement('a');
+                        productNameA.innerText = productName.length > 15 ? productName.substring(0, 15) + "..." : productName;
+
+                        const entpNameSpan = document.createElement('span');
+                        entpNameSpan.innerText = entpName;
+                        entpNameSpan.style.fontSize = "small";
+                        entpNameSpan.style.color = "gray";
+                        entpNameSpan.style.paddingLeft = "0.5rem";
+
+                        // // 단가
+                        // const priceSpan = document.createElement('span');
+                        // priceSpan.innerText = price + "원";
+                        // priceSpan.style.float = "right";
+                        // priceSpan.style.fontSize = "small";
+
+
+                        const qtySpan = document.createElement('span');
+                        qtySpan.innerText = "(재고:" + qty + ")";
+                        qtySpan.style.float = "right";
+                        qtySpan.style.fontSize = "small";
+
+                        div.append(productNameA);
+                        div.append(entpNameSpan);
+                        div.append(qtySpan);
+                        // div.append(priceSpan);
+
+                        li.append(div);
+                        listDiv.append(li);
+
+                    })
+                }
+            })
     }
 
     const handleBookmark = (element, isBookmark) => {

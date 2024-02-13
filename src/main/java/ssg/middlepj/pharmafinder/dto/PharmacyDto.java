@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PharmacyDto {
-    private Integer id; // 약국 ID
+    private int id; // 약국 ID
     private String dutyAddr; // 주소
     private String dutyName; // 약국명
     private String dutyTel1; // 대표번호 1

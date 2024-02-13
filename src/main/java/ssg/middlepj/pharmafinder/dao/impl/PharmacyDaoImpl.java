@@ -7,6 +7,7 @@ import ssg.middlepj.pharmafinder.dao.PharmacyDao;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyResDto;
+import ssg.middlepj.pharmafinder.dto.ProductPharmacyQtyDto;
 
 import java.util.List;
 
@@ -32,12 +33,18 @@ public class PharmacyDaoImpl implements PharmacyDao {
     }
 
     @Override
-    public PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam) {
-        return sqlSession.selectOne(ns + "selectPharmacybyDB", pharmacyParam);
+    public PharmacyDto selectPharmacybyDB(int storeId) {
+        return sqlSession.selectOne(ns + "selectPharmacybyDB", storeId);
     }
 
     @Override
     public void insertPharmacy(PharmacyDto pharmacyDto) {
         sqlSession.insert(ns + "insertPharmacy", pharmacyDto);
     }
+
+    @Override
+    public List<ProductPharmacyQtyDto> selectProductByPharmacyId(Integer storeId) {
+        return sqlSession.selectList(ns + "selectProductByPharmacyId", storeId);
+    }
+
 }

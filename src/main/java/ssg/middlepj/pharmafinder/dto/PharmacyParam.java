@@ -14,7 +14,7 @@ public class PharmacyParam extends PaginationParam {
 
     public PharmacyParam() {
         this.Q0 = "부산";
-        this.Q1 = "";
+        this.Q1 = "해운대구";
         this.QN = "";
         this.ORD = "NAME";
     }

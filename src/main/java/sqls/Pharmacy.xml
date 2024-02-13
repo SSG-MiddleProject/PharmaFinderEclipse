@@ -27,6 +27,13 @@
         <result property="wgs84Lon" column="wgs84Lon" jdbcType="DECIMAL"/>
         <result property="wgs84Lat" column="wgs84Lat" jdbcType="DECIMAL"/>
     </resultMap>
+    <resultMap id="productResultMap" type="ssg.middlepj.pharmafinder.dto.ProductPharmacyQtyDto">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="entpName" column="entp_name" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="qty" column="qty" jdbcType="INTEGER"/>
+
+    </resultMap>
     <resultMap id="pharmacyResDto" type="ssg.middlepj.pharmafinder.dto.PharmacyResDto" extends="pharmacyResultMap">
         <result property="isBookmark" column="is_bookmark" jdbcType="INTEGER"/>
     </resultMap>
@@ -59,9 +66,7 @@
             parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
         SELECT *
         FROM store
-        WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
-          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
-          AND dutyName = #{QN}
+        WHERE id = #{storeId}
     </select>
 
     <insert id="insertPharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
@@ -73,5 +78,12 @@
                 #{dutyTime6s}, #{dutyTime7c}, #{dutyTime7s}, #{dutyTime8c}, #{dutyTime8s}, #{hpid}, #{wgs84Lon},
                 #{wgs84Lat})
     </insert>
+
+    <select id="selectProductByPharmacyId" resultMap="productResultMap" parameterType="Integer">
+        SELECT product.*, store_stock.quantity AS qty
+        FROM store_stock
+                 INNER JOIN product ON store_stock.product_id = product.id
+        WHERE store_stock.store_id = #{storeId} AND store_stock.quantity > 0
+    </select>
 
 </mapper>

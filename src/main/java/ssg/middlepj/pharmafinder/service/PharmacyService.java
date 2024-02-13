@@ -18,7 +18,9 @@ public interface PharmacyService {
 
     int countPharmacyList(PharmacyParam paginationParam);
 
-    PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam);
+    PharmacyDto selectPharmacybyDB(int storeId);
 
     void insertPharmacy(PharmacyParam pharmacyParam) throws IOException, JDOMException, ParserConfigurationException, SAXException;
+
+    List<ProductPharmacyQtyDto> selectProductByPharmacyId(Integer storeId);
 }
