@@ -49,4 +49,9 @@
           AND dutyName = #{QN}
     </select>
 
+    <insert id="insertPharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        insert into store (dutyName, dutyAddr, dutyTel1, dutyTime1c, dutyTime1s, dutyTime2c, dutyTime2s, dutyTime3c, dutyTime3s, dutyTime4c, dutyTime4s, dutyTime5c, dutyTime5s, dutyTime6c, dutyTime6s, dutyTime7c, dutyTime7s, dutyTime8c, dutyTime8s, hpid, wgs84Lon, wgs84Lat)
+        values (#{dutyName}, #{dutyAddr}, #{dutyTel1}, #{dutyTime1c}, #{dutyTime1s}, #{dutyTime2c}, #{dutyTime2s}, #{dutyTime3c}, #{dutyTime3s}, #{dutyTime4c}, #{dutyTime4s}, #{dutyTime5c}, #{dutyTime5s}, #{dutyTime6c}, #{dutyTime6s}, #{dutyTime7c}, #{dutyTime7s}, #{dutyTime8c}, #{dutyTime8s}, #{hpid}, #{wgs84Lon}, #{wgs84Lat})
+    </insert>
+
 </mapper>

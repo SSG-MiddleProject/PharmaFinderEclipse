@@ -14,11 +14,11 @@ public class PharmacyParam {
 
     public PharmacyParam() {
         this.Q0 = "부산";
-        this.Q1 = "해운대";
+        this.Q1 = "";
         this.QN = "";
         this.ORD = "NAME";
         this.pageNo = 1;
-        this.numOfRows = 10;
+        this.numOfRows = 1660;
     }
 
 }

@@ -34,4 +34,9 @@ public class PharmacyDaoImpl implements PharmacyDao {
     public PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam) {
         return sqlSession.selectOne(ns + "selectPharmacybyDB", pharmacyParam);
     }
+
+    @Override
+    public void insertPharmacy(PharmacyDto pharmacyDto) {
+        sqlSession.insert(ns + "insertPharmacy", pharmacyDto);
+    }
 }

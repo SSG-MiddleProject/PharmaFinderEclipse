@@ -11,4 +11,6 @@ public interface PharmacyDao {
     List<PharmacyDto> selectPharmaciesByDB(PharmacyParam pharmacyParam);
 
     PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam);
+
+    void insertPharmacy(PharmacyDto pharmacyDto);
 }
