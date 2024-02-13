@@ -3,6 +3,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
+<%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
+<%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -17,51 +19,13 @@
 
     String NHN_CLIENT_KEY = properties.getProperty("NCP_CLIENT_ID");
 
-    List<PharmacyExtDto> pharmacyList = (List<PharmacyExtDto>) request.getAttribute("pharmacies");
-
-    List<PharmacyDto> list = pharmacyList.get(0).getItems();
+    List<PharmacyDto> list = (List<PharmacyDto>) request.getAttribute("pharmacies");
+    Pagination pagination = (Pagination) request.getAttribute("pagination");
 
     String keyword = "";
-    keyword = request.getParameter("QN") == null ? "" : request.getParameter("QN");
-    int pageNo = 1;
-    pageNo = request.getParameter("pageNo") == null ? 1 : Integer.parseInt(request.getParameter("pageNo"));
-
-    int pageSize = 10;
-    int recordSize = 5;
-    int allCount = pharmacyList.get(0).getAllCount();
-    int startPage = 1;
-    int endPage = allCount / pageSize + 1;
-    int currentPage = pageNo;
-    boolean existPrev = false;
-    boolean existNext = false;
-
-    if (currentPage > recordSize) {
-        startPage = currentPage - recordSize / 2;
-        endPage = currentPage + recordSize / 2;
-    }
-    if (currentPage <= recordSize) {
-        startPage = 1;
-        endPage = recordSize;
-    }
-    if (startPage < 1) {
-        startPage = 1;
-    }
-    if (endPage > allCount / pageSize + 1) {
-        endPage = allCount / pageSize + 1;
-    }
-    if (startPage > 1) {
-        existPrev = true;
-    }
-    if (endPage < allCount / pageSize + 1) {
-        existNext = true;
-    }
-    if (allCount > recordSize) {
-
-    }
-    startPage = endPage - recordSize + 1;
-    if (currentPage < recordSize) {
-        startPage = 1;
-    }
+    Integer currentPage = pagination.getPaginationParam().getPage();
+    Integer lastPage = pagination.getTotalPageCount();
+    keyword = pagination.getPaginationParam().getKeyword();
 
 %>
 
@@ -185,37 +149,31 @@
         </ul>
         <div id="search-pagination">
             <ul id="pagination-list">
-                <% if (existPrev) { %>
-                <li onclick="handlePagination(<%= currentPage - 1 %>)"><</li>
-                <% } %>
                 <%
-                    for (int i = startPage; i <= endPage; i++) {
+                    if (currentPage > 1) {
                 %>
-                <% if (i == currentPage) { %>
-                <li style="color: steelblue" onclick="handlePagination(<%= i %>)"><%= i %>
-                </li>
-                <% } else { %>
-                <li onclick="handlePagination(<%= i %>)"><%= i %>
-                </li>
+                <li onclick="handlePrev()"><</li>
                 <% } %>
-                <% } %>
-                <% if (existNext) { %>
-                <li onclick="handlePagination(<%= currentPage + 1 %>)">></li>
+                <%=PaginationUtil.CreatePaginationList(currentPage, pagination)%>
+                <%
+                    if (currentPage < lastPage) {
+                %>
+                <li onclick="handleNext()">></li>
                 <% } %>
             </ul>
         </div>
     </div>
 
     <div id="container-collapse">
-        <button onclick="closeCollapse()"
-                style="float: right; border-radius: 50%; background-color: transparent; border: solid 1px black; width: 1.5rem; height: 1.5rem">
-            X
-        </button>
-        <div id="detail" class="container">
+        <img src="${pageContext.request.contextPath}/resources/Close.svg" alt="Close Button"
+             style="width: 1.3rem; height: 1.3rem; float: right" onclick="closeCollapse()"/>
+        <div id="detail" class="content has-text-black"></div>
+        <div id="detail-collapse" style="display: none">
+            <div id="detail-extra" class="content has-text-black"></div>
         </div>
-        <div id="stock-list">
-            재고
-        </div>
+
+        <ul id="pharmacy-list">
+        </ul>
     </div>
     <div id="container-right">
         <div id="map" style="width: 100%; height: 100%"></div>
@@ -223,8 +181,12 @@
 </div>
 
 <script>
+    const existPrev = "<%=pagination.getExistPrev()%>";
+    const existNext = "<%=pagination.getExistNext()%>";
     const currentPage = parseInt("<%=currentPage%>");
-    const lastPage = parseInt("<%=endPage%>");
+    const lastPage = parseInt("<%=lastPage%>");
+    const markers = [];
+    let map;
     let keyword = "<%=keyword%>"
 
     const handleSearch = () => {
@@ -232,22 +194,30 @@
         location.href = encodeURI("pharmacy.do?QN=" + keyword);
     }
     const handlePagination = (pageNo) => {
-        location.href = encodeURI("pharmacy.do?QN=" + "<%=keyword%>" + "&pageNo=" + pageNo);
+        location.href = encodeURI("pharmacy.do?QN=" + "<%=keyword%>" + "&page=" + pageNo);
     }
     const handlePrev = () => {
         if (existPrev === "true") {
-            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         }
         if (currentPage !== 1) {
-            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage - 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&page=" + (currentPage - 1));
         }
+    }
+    const handleCurrentPageNum = () => {
+        const paginationList = document.getElementById('pagination-list')
+        paginationList.childNodes.forEach((node) => {
+            if (parseInt(node.innerText) === currentPage) {
+                node.style.color = "steelblue"
+            }
+        })
     }
     const handleNext = () => {
         if (existNext === "true") {
-            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
         }
         if (currentPage !== lastPage) {
-            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&pageNo=" + (currentPage + 1));
+            location.href = encodeURI("pharmacy.do?" + "QN=" + "<%=keyword%>" + "&page=" + (currentPage + 1));
         }
     }
     const handleDetail = (e) => {
@@ -383,13 +353,32 @@
                 centerDiv.append(allOpeTime);
             });
     }
-
-
     const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10
     };
-    const map = new naver.maps.Map('map', mapOptions);
+
+    map = new naver.maps.Map('map', mapOptions);
+
+    const onSuccessGeolocation = (position) => {
+        var location = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        map.setCenter(location); // 얻은 좌표를 지도의 중심으로 설정합니다.
+        map.setZoom(13); // 지도의 줌 레벨을 변경합니다.
+    }
+
+    const onErrorGeolocation = () => {
+        var center = map.getCenter();
+    }
+
+    $(window).on('load', () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccessGeolocation, onErrorGeolocation);
+        } else {
+            alert('geolocation not supported');
+        }
+        handleCurrentPageNum()
+    })
 
 
 </script>

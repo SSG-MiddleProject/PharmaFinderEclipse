@@ -25,7 +25,7 @@
     Pagination pagination = (Pagination) request.getAttribute("pagination");
     Integer currentPage = pagination.getPaginationParam().getPage();
     Integer lastPage = pagination.getTotalPageCount();
-    List<ProductDto> productList = (List<ProductDto>) request.getAttribute("products");
+    List<ProductResDto> productList = (List<ProductResDto>) request.getAttribute("products");
     searchType = pagination.getPaginationParam().getSearchType();
     keyword = pagination.getPaginationParam().getKeyword();
 %>

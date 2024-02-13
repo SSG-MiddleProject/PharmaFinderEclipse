@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 import ssg.middlepj.pharmafinder.dao.PharmacyDao;
+import ssg.middlepj.pharmafinder.dto.PaginationParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
@@ -42,9 +43,7 @@ public class PharmacyServiceImpl implements PharmacyService {
                 "&" + URLEncoder.encode("Q0", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ0(), StandardCharsets.UTF_8) + /*주소(시도)*/
                 "&" + URLEncoder.encode("Q1", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ1(), StandardCharsets.UTF_8) + /*주소(시군구)*/
                 "&" + URLEncoder.encode("QN", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQN(), StandardCharsets.UTF_8) + /*기관명*/
-                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8) + /*순서*/
-                "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getPageNo()), StandardCharsets.UTF_8) + /*페이지 번호*/
-                "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getNumOfRows()), StandardCharsets.UTF_8); /*목록 건수*/
+                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8); /*목록 건수*/
 
         URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -72,9 +71,7 @@ public class PharmacyServiceImpl implements PharmacyService {
                 "&" + URLEncoder.encode("Q0", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ0(), StandardCharsets.UTF_8) + /*주소(시도)*/
                 "&" + URLEncoder.encode("Q1", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ1(), StandardCharsets.UTF_8) + /*주소(시군구)*/
                 "&" + URLEncoder.encode("QN", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQN(), StandardCharsets.UTF_8) + /*기관명*/
-                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8) + /*순서*/
-                "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getPageNo()), StandardCharsets.UTF_8) + /*페이지 번호*/
-                "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getNumOfRows()), StandardCharsets.UTF_8); /*목록 건수*/
+                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8); /*목록 건수*/
 
         URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -97,16 +94,13 @@ public class PharmacyServiceImpl implements PharmacyService {
     }
 
     @Override
-    public List<PharmacyExtDto> selectPharmaciesByDB(PharmacyParam pharmacyParam) {
-        int count = pharmacyDao.countPharmacyList(pharmacyParam);
+    public List<PharmacyDto> selectPharmaciesByDB(PharmacyParam paiginationParam) {
+        return pharmacyDao.selectPharmaciesByDB(paiginationParam);
+    }
 
-        PharmacyExtDto pharmacyExtDto = new PharmacyExtDto();
-        pharmacyExtDto.setAllCount(pharmacyDao.countPharmacyList(pharmacyParam));
-        pharmacyExtDto.setItems(pharmacyDao.selectPharmaciesByDB(pharmacyParam));
-
-        List<PharmacyExtDto> pharmacies = new ArrayList<>();
-        pharmacies.add(pharmacyExtDto);
-        return pharmacies;
+    @Override
+    public int countPharmacyList(PharmacyParam paginationParam) {
+        return pharmacyDao.countPharmacyList(paginationParam);
     }
 
     @Override
@@ -120,9 +114,7 @@ public class PharmacyServiceImpl implements PharmacyService {
                 "&" + URLEncoder.encode("Q0", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ0(), StandardCharsets.UTF_8) + /*주소(시도)*/
                 "&" + URLEncoder.encode("Q1", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQ1(), StandardCharsets.UTF_8) + /*주소(시군구)*/
                 "&" + URLEncoder.encode("QN", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getQN(), StandardCharsets.UTF_8) + /*기관명*/
-                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8) + /*순서*/
-                "&" + URLEncoder.encode("pageNo", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getPageNo()), StandardCharsets.UTF_8) + /*페이지 번호*/
-                "&" + URLEncoder.encode("numOfRows", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(String.valueOf(pharmacyParam.getNumOfRows()), StandardCharsets.UTF_8); /*목록 건수*/
+                "&" + URLEncoder.encode("ORD", StandardCharsets.UTF_8) + "=" + URLEncoder.encode(pharmacyParam.getORD(), StandardCharsets.UTF_8); /*목록 건수*/
 
         URL url = new URL(urlBuilder);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

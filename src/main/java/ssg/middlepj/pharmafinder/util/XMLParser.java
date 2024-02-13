@@ -258,7 +258,6 @@ public class XMLParser {
     }
 
     public static List<PharmacyDto> insertPharmacy(String xml) throws ParserConfigurationException, IOException, SAXException {
-        // TODO implement here
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 

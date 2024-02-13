@@ -45,17 +45,10 @@ public class MainController {
     }
 
     @RequestMapping(value = "/pharmacy.do", method = RequestMethod.GET)
-    public String pharmacyT(Model model, PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
-        List<PharmacyExtDto> pharmacies1 = pharmacyService.selectPharmacies(pharmacyParam);
-        List<PharmacyExtDto> pharmacies2 = pharmacyService.selectPharmaciesByDB(pharmacyParam);
-        pharmacies1.addAll(pharmacies2);
-
-        List<PharmacyExtDto> pharmacies = new ArrayList<>(pharmacies1);
-        List<PharmacyDto> merge = new ArrayList<>(pharmacies1.get(0).getItems());
-        merge.addAll(pharmacies2.get(0).getItems());
-        Collections.sort(merge, Comparator.comparing(PharmacyDto::getDutyName));
-        pharmacies.get(0).setItems(merge);
+    public String pharmacyT(Model model, PharmacyParam paginationParam) throws IOException, ParserConfigurationException, JDOMException, SAXException {
+        List<PharmacyDto> pharmacies = pharmacyService.selectPharmaciesByDB(paginationParam);
         model.addAttribute("pharmacies", pharmacies);
+        model.addAttribute("pagination", new Pagination(pharmacyService.countPharmacyList(paginationParam), paginationParam));
 
         return "pharmacySearch.tiles";
     }

@@ -2,6 +2,7 @@ package ssg.middlepj.pharmafinder.service;
 
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
+import ssg.middlepj.pharmafinder.dto.PaginationParam;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyExtDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyParam;
@@ -16,7 +17,9 @@ public interface PharmacyService {
 
     PharmacyDto selectPharmacy(PharmacyParam pharmacyParam) throws IOException, ParserConfigurationException, SAXException;
 
-    List<PharmacyExtDto> selectPharmaciesByDB(PharmacyParam pharmacyParam);
+    List<PharmacyDto> selectPharmaciesByDB(PharmacyParam paiginationParam);
+
+    int countPharmacyList(PharmacyParam paginationParam);
 
     PharmacyDto selectPharmacybyDB(PharmacyParam pharmacyParam);
 
