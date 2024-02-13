@@ -36,7 +36,7 @@
    <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
     insert into user(username, email, password, state, roll, created_at, modified_at)
     values(#{username}, #{email}, #{password}, 1, 2, now(), now())
-</insert>
+	</insert>
    
    	
    	

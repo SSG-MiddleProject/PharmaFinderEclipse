@@ -34,7 +34,13 @@ public class MemberController {
 		// 결과에 따라 YES 또는 NO를 반환
 		return isIdDuplicate ? "NO" : "YES";
 	}
-
+	//로그인페이지에서 회원가입 누르면 이동되는 회원가입선택하는페이지로 이동 메서드
+	@GetMapping("/regiSelect.do")
+	public String regiSelect() {
+		System.out.println("MemberController regiSelect " + new Date());
+		return "member/regiSelect";
+	}
+	
 	// 회원가입(약국) 페이지 이동 메서드
 	@GetMapping("/regi.do")
 	public String regi() {

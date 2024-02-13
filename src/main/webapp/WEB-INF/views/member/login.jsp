@@ -120,8 +120,7 @@ body {
 		<form action="">
 		<div>
 			<p class="mb-0">
-				회원이 아니신가요?<a href="userregi.do" class="text-white-50 fw-bold">일반고객 회원가입</a><br/>
-				<a href="regi.do" class="text-white-50 fw-bold" >약국 회원가입</a>
+				회원이 아니신가요?<a href="regiSelect.do" class="text-white-50 fw-bold">회원가입</a><br/>
 			</p>
 		</div>
 		</form>
