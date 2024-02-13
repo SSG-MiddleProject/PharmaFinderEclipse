@@ -103,13 +103,18 @@
             <a>
                 즐겨찾기
             </a>
-            <a>
+            <a href="mypage.do">
                 마이페이지
             </a>
             <a>
                 설정
             </a>
-            <a>
+
+            <a href="login.do">
+            로그인
+			</a>
+            <a href="regi.do">
+
                 로그아웃
             </a>
 
