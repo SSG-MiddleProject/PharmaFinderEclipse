@@ -48,5 +48,7 @@ public class MainController {
 //        model.addAttribute("pagination", pharmacyService.selectPharmacies(pharmacyParam));
         return "pharmacySearch.tiles";
     }
+    
+    
 
 }

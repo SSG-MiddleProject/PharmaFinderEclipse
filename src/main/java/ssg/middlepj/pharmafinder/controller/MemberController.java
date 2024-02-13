@@ -76,9 +76,9 @@ public class MemberController {
         }
     }
 
-    // 로그인 처리 메서드
+ // 로그인 처리 메서드
     @PostMapping("/loginAf.do")
-    public String loginProcess(HttpServletRequest request, Model model, @RequestParam("id") String username, @RequestParam("password") String password) {
+    public String loginProcess(HttpServletRequest request, Model model, @RequestParam("username") String username, @RequestParam("password") String password) {
         // 로그인 쿼리문 접속 (Service를 통해 데이터베이스에서 아이디와 비밀번호 확인)
         boolean loginResult = service.login(username, password);
         if (loginResult) {
@@ -86,6 +86,7 @@ public class MemberController {
             // 세션에 로그인 정보 저장
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
+            session.setAttribute("userId", username);
             // 메인 페이지로 이동
             return "redirect:/main.do";
         } else {
@@ -95,6 +96,7 @@ public class MemberController {
             return "member/login";
         }
     }
+
 
 
     // 로그인 쿼리문 접속

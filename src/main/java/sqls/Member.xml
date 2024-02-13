@@ -59,4 +59,5 @@
                 #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c},
                 #{hpid}, #{wgs84Lon}, #{wgs84Lat})
     </insert>
+    
 </mapper>

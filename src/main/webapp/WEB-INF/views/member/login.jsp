@@ -108,7 +108,7 @@ body {
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
-		<input type="text" id="id" name="id" size=20 placeholder="example@test.com">
+		<input type="text" id="username" name="username" size=20 placeholder="example@test.com">
 		<input type="password" name="password" placeholder="Password">
 		<input type="checkbox" id="saveId" name="saveId">
 		<label for="saveId">아이디 저장</label><br/><br/>
