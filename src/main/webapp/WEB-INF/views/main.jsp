@@ -426,7 +426,6 @@
     }
 
     const createMarker = (pharmacy) => {
-        console.log(pharmacy["dutyName"])
         const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
             title: pharmacy["dutyName"],

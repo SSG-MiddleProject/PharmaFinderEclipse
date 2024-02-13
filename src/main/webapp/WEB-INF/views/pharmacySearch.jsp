@@ -385,7 +385,6 @@
                 };
 
                 const productList = data["productsWithQty"];
-                console.log(productList)
                 if (productList.length === 0) {
                     const noProduct = document.createElement('p')
                     noProduct.innerHTML = "등록된 제품이 없습니다."
@@ -394,8 +393,6 @@
                     listDiv.append(noProduct)
                 } else {
                     productList.forEach((product) => {
-                        console.log(product)
-
                         const productName = product.itemName;
                         const entpName = product.entpName;
                         const qty = product.qty;
