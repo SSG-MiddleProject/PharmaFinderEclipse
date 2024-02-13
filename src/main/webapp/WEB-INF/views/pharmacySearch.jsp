@@ -24,7 +24,8 @@
     String keyword = "";
     Integer currentPage = pagination.getPaginationParam().getPage();
     Integer lastPage = pagination.getTotalPageCount();
-    keyword = pagination.getPaginationParam().getKeyword();
+    if(request.getParameter("QN") != null) keyword = request.getParameter("QN");
+    else keyword = "";
 
 %>
 
@@ -134,7 +135,17 @@
             </div>
         </div>
         <ul id="search-result">
-            <% for (PharmacyResDto pharmacy : list) { %>
+            <%
+                if (list.isEmpty()) {
+            %>
+            <li class="p-2" style="border-top: solid 1px">
+                <div class="has-text-black mt-4" style="text-align: center">
+                    검색 결과가 없습니다.
+                </div>
+            </li>
+            <%
+                }
+                for (PharmacyResDto pharmacy : list) { %>
             <li class="p-2" style="border-top: solid 1px">
                 <div class="has-text-black" id="test">
                     <a value="<%=pharmacy.getId()%>" onclick="handleDetail(this)">
@@ -206,6 +217,7 @@
 
     const handleSearch = () => {
         const keyword = document.querySelector('input[name="keyword"]').value;
+
         location.href = encodeURI("pharmacy.do?QN=" + keyword);
     }
     const handlePagination = (pageNo) => {
