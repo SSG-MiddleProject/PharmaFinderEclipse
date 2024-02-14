@@ -15,70 +15,65 @@ body {
     background-color: #f9f9f9;
 }
 
-.container {
-    position: relative;
-    width: 100%;
-    max-width: 1440px;
-    height: 100vh;
+.center{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    height: 100vh;
+}
+
+.container {
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
 
 .title {
-    font-family: 'Inter';
-    font-style: normal;
     font-weight: 800;
     font-size: 48px;
-    line-height: 58px;
     text-align: center;
-    color: #000000;
     margin-bottom: 20px;
 }
 
 .btn-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
 }
 
 .btn {
-    position: relative;
-    width: 300px;
-    height: 70px;
-    background: #FFFFFF;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     text-decoration: none;
-    color: #000000;
-    font-family: 'Inter';
-    font-style: normal;
+    display: inline-block;
     font-weight: bold;
-    font-size: 24px;
-    line-height: 29px;
-    transition: all 0.3s ease;
 }
 
 .btn:hover {
-    background: #000000;
-    color: #FFFFFF;
+    background-color: #0056b3;
 }
 
 /* Login text */
 .login-text {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 29px;
     text-align: center;
-    color: #989898;
     margin-top: 30px;
+    transition: color 0.3s ease;
+}
+
+.login-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    color: #0056b3;
 }
 
 </style>
@@ -86,13 +81,18 @@ body {
 </head>
 <body>
 
+<div class="center">
 <div class="container">
     <h2 class="title">PharmaFinder</h2>
-    <p>Register</p>
+    <p class="login-text">회원가입 선택</p>
     <div class="btn-container">
-        <a href="userRegi.do" class="btn">일반고객 회원가입</a>
-        <a href="pharmacyRegi.do" class="btn">약국 회원가입</a>
+        <a href="userRegi.do" class="btn">사용자 등록</a>
+        <a href="pharmacyRegi.do" class="btn">약국직원 등록</a>
     </div>
+    <div class="login-text">
+        이미 계정이 있으신가요? <a href="login.do">로그인</a>
+    </div>
+</div>
 </div>
 
 </body>

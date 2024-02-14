@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<% System.out.println("로그인"); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인 페이지</title>
+<title>Login</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -25,7 +24,7 @@ body {
 }
 
 /* Login container */
-.login-container {
+.container {
     max-width: 600px;
     padding: 20px;
     border: 1px solid #ccc;
@@ -34,7 +33,7 @@ body {
 }
 
 /* PharmaFinder Login */
-.login-title {
+.title {
     font-weight: 800;
     font-size: 48px;
     text-align: center;
@@ -100,8 +99,8 @@ body {
 <body>
 
 <div class="center">
-<div class="login-container">
-	<h2 class="login-title">PharmaFinder</h2>
+<div class="container">
+	<h1 class="title">PharmaFinder</h1>
 	
 	<p align="center">Login</p>
 	
@@ -113,11 +112,11 @@ body {
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
-		<input type="text" id="username" name="username" size=20 placeholder="example@test.com">
-		<input type="password" name="password" placeholder="Password">
+		<input type="text" id="username" name="username" size=20 placeholder="Id" required>
+		<input type="password" name="password" placeholder="Password" required>
 		<input type="checkbox" id="saveId" name="saveId">
 		<label for="saveUsername">아이디 저장</label><br/><br/>
-		<input type="submit" value="login">
+		<input type="submit" value="로그인">
 	</form>
 	<br/>
 	<div class="login-links">
