@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PharmaInOut">
+
+	<!-- INPUT AREA START -->
+
+	<resultMap id="dailyInputWithProductsDtoMap"
+		type="ssg.middlepj.pharmafinder.dto.PharmaInDto">
+		<id property="id" column="id" />
+		<result property="storeId" column="storeId" />
+		<result property="currentInputDate" column="currentInputDate" />
+		<collection property="products"
+			ofType="ssg.middlepj.pharmafinder.dto.PharmaInProductDto"
+			resultMap="dailyInputProductDtoMap" />
+	</resultMap>
+
+	<resultMap id="dailyInputProductDtoMap"
+		type="ssg.middlepj.pharmafinder.dto.PharmaInProductDto">
+		<id property="id" column="inputProductId" />
+		<result property="dailyInputId" column="dailyInputId" />
+		<result property="storeProductId" column="storeProductId" />
+		<result property="inputCnt" column="inputCnt" />
+	</resultMap>
+
+	<select id="select-daily-input-last-id" resultType="Integer">
+		select max(id)
+		from daily_input
+	</select>
+
+	<select id="select-daily-inputs" parameterType="ssg.middlepj.pharmafinder.dto.PharmaDailyInOutSearchByPeriodParam" resultType="ssg.middlepj.pharmafinder.dto.PharmaInDto">
+		select id, store_id as storeId, current_input_date as currentInputDate
+		from daily_input
+		where store_id = #{storeId} and (current_input_date between #{startDate} and #{endDate})
+	</select>
+
+	<select id="select-daily-input-products" resultType="ssg.middlepj.pharmafinder.dto.PharmaInDetailDto">
+		select dip.id as id, dip.daily_input_id as dailyInputId, dip.store_product_id as storeProductId, dip.input_cnt as inputCnt,
+		p.item_name as itemName, sp.input_price as inputPrice
+		from daily_input_product dip
+			inner join store_product sp on dip.store_product_id = sp.id
+			inner join product p on sp.product_id = p.id
+		where dip.daily_input_id = #{id}
+	</select>
+
+	<select id="select-daily-input-with-products" parameterType="ssg.middlepj.pharmafinder.dto.PharmaInDto" resultMap="dailyInputWithProductsDtoMap">
+		select di.id as id, di.store_id as storeId, di.current_input_date as currentInputDate,
+	           dip.id as inputProductId, dip.daily_input_id as dailyInputId, dip.store_product_id as storeProductId
+	           dip.input_cnt as inputCnt
+		from daily_input di
+			join daily_input_product dip
+			on di.id = dip.daily_input_id
+		where di.id = #{id}
+	</select>
+
+	<insert id="insert-daily-input"
+		parameterType="ssg.middlepj.pharmafinder.dto.PharmaInDto">
+		insert into daily_input(store_id, current_input_date)
+		values(#{storeId}, #{currentInputDate})
+	</insert>
+
+	<insert id="insert-daily-input-product" parameterType="ssg.middlepj.pharmafinder.dto.PharmaInProductDto">
+		insert into daily_input_product(daily_input_id, store_product_id, input_cnt)
+		values(#{dailyInputId},#{storeProductId},#{inputCnt})
+	</insert>
+
+	<update id="update-store-stock-input" parameterType="ssg.middlepj.pharmafinder.dto.PharmaInProductDto">
+		update store_stock
+		set quantity = quantity + #{inputCnt}
+		where product_id = (select product_id from store_product where id = #{storeProductId})
+			  and store_id = (select store_id from daily_input where id = #{dailyInputId})
+	</update>
+
+	<delete id="delete-daily-input">
+		delete from daily_input where id = #{id}
+	</delete>
+
+	<!-- INPUT AREA END -->
+
+	<!-- OUTPUT AREA START -->
+
+	<resultMap id="dailyOutputWithProductsDtoMap"
+		type="ssg.middlepj.pharmafinder.dto.PharmaOutDto">
+		<id property="id" column="id" />
+		<result property="storeId" column="storeId" />
+		<result property="currentOutputDate" column="currentOutputDate" />
+		<collection property="products"
+			ofType="ssg.middlepj.pharmafinder.dto.PharmaOutProductDto"
+			resultMap="dailyOutputProductDtoMap" />
+	</resultMap>
+
+	<resultMap id="dailyOutputProductDtoMap"
+		type="ssg.middlepj.pharmafinder.dto.PharmaOutProductDto">
+		<id property="id" column="outputProductId" />
+		<result property="dailyOutputId" column="dailyOutputId" />
+		<result property="storeProductId" column="storeProductId" />
+		<result property="outputCnt" column="outputCnt" />
+	</resultMap>
+
+	<select id="select-daily-output-last-id" resultType="Integer">
+		select max(id)
+		from daily_output
+	</select>
+
+	<select id="select-daily-outputs" parameterType="ssg.middlepj.pharmafinder.dto.PharmaDailyInOutSearchByPeriodParam" resultType="ssg.middlepj.pharmafinder.dto.PharmaOutDto">
+		select id, store_id as storeId, current_output_date as currentOutputDate
+		from daily_output
+		where store_id = #{storeId} and (current_output_date between #{startDate} and #{endDate})
+	</select>
+
+	<select id="select-daily-output-products" resultType="ssg.middlepj.pharmafinder.dto.PharmaOutDetailDto">
+		select dip.id as id, dip.daily_output_id as dailyOutputId, dip.store_product_id as storeProductId, dip.output_cnt as outputCnt,
+		p.item_name as itemName, sp.output_price as outputPrice
+		from daily_output_product dip
+			inner join store_product sp on dip.store_product_id = sp.id
+			inner join product p on sp.product_id = p.id
+		where dip.daily_output_id = #{id}
+	</select>
+
+	<select id="select-daily-output-with-products" parameterType="ssg.middlepj.pharmafinder.dto.PharmaOutDto" resultMap="dailyOutputWithProductsDtoMap">
+		select di.id as id, di.store_id as storeId, di.current_output_date as currentOutputDate,
+	           dip.id as outputProductId, dip.daily_output_id as dailyOutputId, dip.store_product_id as storeProductId
+	           dip.output_cnt as outputCnt
+		from daily_output di
+			join daily_output_product dip
+			on di.id = dip.daily_output_id
+		where di.id = #{id}
+	</select>
+
+	<insert id="insert-daily-output"
+		parameterType="ssg.middlepj.pharmafinder.dto.PharmaOutDto">
+		insert into daily_output(store_id, current_output_date)
+		values(#{storeId}, #{currentOutputDate})
+	</insert>
+
+	<insert id="insert-daily-output-product" parameterType="ssg.middlepj.pharmafinder.dto.PharmaOutProductDto">
+		insert into daily_output_product(daily_output_id, store_product_id, output_cnt)
+		values(#{dailyOutputId},#{storeProductId},#{outputCnt})
+	</insert>
+
+	<update id="update-store-stock-output" parameterType="ssg.middlepj.pharmafinder.dto.PharmaOutProductDto">
+		update store_stock
+		set quantity = quantity - #{outputCnt}
+		where product_id = (select product_id from store_product where id = #{storeProductId})
+			  and store_id = (select store_id from daily_output where id = #{dailyOutputId})
+	</update>
+
+	<delete id="delete-daily-output">
+		delete from daily_output where id = #{id}
+	</delete>
+
+	<!-- OUTPUT AREA END -->
+</mapper>
