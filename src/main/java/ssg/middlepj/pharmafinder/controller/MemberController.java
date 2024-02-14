@@ -270,12 +270,6 @@ public class MemberController {
 	        return "member/updateOriginPassword";
 	    }
 	}
-	
-		/*
-		model.addAttribute("newPassword", newPassword);
-		return "showPassword";
-		*/
-	
 
 	//로그아웃 처리 메서드
 	@GetMapping("/logout.do")
@@ -285,39 +279,6 @@ public class MemberController {
 	 if (session != null) {
 	     session.invalidate(); // 세션 무효화
 	 }
-	 return "member/logout"; // 로그인 페이지로 리다이렉트
+	 return "redirect:/main.do"; // 메인 페이지로 리다이렉트
 	}
 }
-
-/*
-private void convertPharmacyOperatingTimes(PharmacyDto pharmacy) {
-	pharmacy.setDutyTime1s(convertTimeFormat(pharmacy.getDutyTime1s()));
-	pharmacy.setDutyTime1c(convertTimeFormat(pharmacy.getDutyTime1c()));
-	pharmacy.setDutyTime2s(convertTimeFormat(pharmacy.getDutyTime2s()));
-	pharmacy.setDutyTime2c(convertTimeFormat(pharmacy.getDutyTime2c()));
-	pharmacy.setDutyTime3s(convertTimeFormat(pharmacy.getDutyTime3s()));
-	pharmacy.setDutyTime3c(convertTimeFormat(pharmacy.getDutyTime3c()));
-	pharmacy.setDutyTime4s(convertTimeFormat(pharmacy.getDutyTime4s()));
-	pharmacy.setDutyTime4c(convertTimeFormat(pharmacy.getDutyTime4c()));
-	pharmacy.setDutyTime5s(convertTimeFormat(pharmacy.getDutyTime5s()));
-	pharmacy.setDutyTime5c(convertTimeFormat(pharmacy.getDutyTime5c()));
-	pharmacy.setDutyTime6s(convertTimeFormat(pharmacy.getDutyTime6s()));
-	pharmacy.setDutyTime6c(convertTimeFormat(pharmacy.getDutyTime6c()));
-	pharmacy.setDutyTime7s(convertTimeFormat(pharmacy.getDutyTime7s()));
-	pharmacy.setDutyTime7c(convertTimeFormat(pharmacy.getDutyTime7c()));
-	pharmacy.setDutyTime8s(convertTimeFormat(pharmacy.getDutyTime8s()));
-	pharmacy.setDutyTime8c(convertTimeFormat(pharmacy.getDutyTime8c()));
-}
-
-private String convertTimeFormat(String timeStr) {
-	if (timeStr == null || timeStr.isEmpty()) {
-		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-	}
-	String[] parts = timeStr.split(":");
-	if (parts.length < 2) {
-		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-	}
-	// 시간과 분을 각각 두 자리 숫자로 포맷
-	return parts[0] + parts[1];
-}
-*/
