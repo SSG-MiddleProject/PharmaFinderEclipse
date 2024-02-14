@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 <%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
 <%@ page import="java.util.List" %>
@@ -516,6 +517,10 @@
     }
 
     const handleBookmark = (element, isBookmark) => {
+        <c:if test="${empty sessionScope.member}">
+            alert("로그인이 필요한 서비스입니다.")
+            return location.href = "${pageContext.request.contextPath}/login.do"
+        </c:if>
         const productId = parseInt(element.getAttribute("value"))
         if (isBookmark === "true") {
             fetch('/bookmark/product.do?targetId=' + productId, {
