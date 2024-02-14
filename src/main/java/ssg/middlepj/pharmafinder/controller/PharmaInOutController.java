@@ -159,7 +159,7 @@ public class PharmaInOutController {
 		model.addAttribute("month", smonth);
 		model.addAttribute("day", sday);
 
-		return "pharma/inout/inwrite.tiles";
+		return "pharma/inout/inwrite";
 	}
 
 	@ResponseBody
@@ -210,7 +210,7 @@ public class PharmaInOutController {
 		model.addAttribute("month", smonth);
 		model.addAttribute("day", sday);
 
-		return "pharma/inout/outwrite.tiles";
+		return "pharma/inout/outwrite";
 	}
 
 	@ResponseBody

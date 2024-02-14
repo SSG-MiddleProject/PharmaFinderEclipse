@@ -46,7 +46,7 @@ public class PharmaInOutCalendarUtil {
 		String str = "";
 
 		String img = "<i class='fas fa-file-signature' style='color: #0000ff;' title='입고'></i>";
-		str = String.format("<a href='./pharma-in-write.do?syear=%d&smonth=%d&sday=%d'>%s</a>", year, month, day, img);
+		str = String.format("<a class='js-modal-trigger' data-target='modal' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
 	}
@@ -56,7 +56,7 @@ public class PharmaInOutCalendarUtil {
 		String str = "";
 
 		String img = "<i class='fas fa-file-signature' style='color: #ff0000;' title='출고'></i>";
-		str = String.format("<a href='./pharma-out-write.do?syear=%d&smonth=%d&sday=%d'>%s</a>", year, month, day, img);
+		str = String.format("<a class='js-modal-trigger' data-target='modal' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
 	}
