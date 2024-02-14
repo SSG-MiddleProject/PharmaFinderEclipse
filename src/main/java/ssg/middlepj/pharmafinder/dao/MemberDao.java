@@ -15,8 +15,9 @@ public interface MemberDao {
 	int addpharmacy(PharmacyDto pharmacy);    // 약국 추가정보
 
     // 로그인
-    boolean login(Map<String, String> paramMap);// 인자를 두 개로 변경
-
+    // boolean login(Map<String, String> paramMap); // 인자를 두 개로 변경
+	MemberDto login(Map<String, String> paramMap);
+	
     // 비밀번호찾기
     String findPassword(String username, String email); // 비밀번호 찾기 메서드 추가
 

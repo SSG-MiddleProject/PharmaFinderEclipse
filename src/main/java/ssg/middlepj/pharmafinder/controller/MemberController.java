@@ -110,27 +110,38 @@ public class MemberController {
 	// 로그인 페이지 이동 메서드
 	@GetMapping(value = "login.do")
 	public String login() {
-		// System.out.println("MemberController login" + new Date());
+		 System.out.println("MemberController login");
 		return "member/login";
 	}
 
 	// 로그인 처리 메서드
 	@PostMapping("/loginAf.do")
 	public String loginProcess(HttpServletRequest request, Model model) {
+		System.out.println("Controller login");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
-		boolean loginResult = service.login(username, password);
-		if (loginResult) {
-			// 로그인이 성공한 경우
-			// 세션에 로그인 정보 저장
+		// 로그인 시도 후 MemberDto 객체 반환
+		MemberDto loginResult = service.login(username, password);
+		
+		if (loginResult != null) {
 			HttpSession session = request.getSession();
-			session.setAttribute("username", username);
-			// 메인 페이지로 이동
+			
+			// 사용자 기본 정보 세션에 저장
+	        session.setAttribute("id", loginResult.getId());
+	        session.setAttribute("username", loginResult.getUsername());
+	        session.setAttribute("roll", loginResult.getRoll());
+
+	        // 약국 유저의 경우 storeId도 세션에 저장
+	        if (loginResult.getRoll() == 1) {
+	            session.setAttribute("storeId", loginResult.getStoreId());
+	        }
+	        
+	        System.out.println("test" + session.getAttribute("id"));
+	        
+	        // 메인 페이지로 이동
 			return "redirect:/main.do";
 		} else {
-			// 로그인이 실패한 경우
-			// 에러 메시지를 모델에 추가하여 로그인 페이지로 이동
 			model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
 			return "member/login";
 		}

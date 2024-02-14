@@ -38,15 +38,14 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean login(Map<String, String> paramMap) {
+    public MemberDto login(Map<String, String> paramMap) {
         // 여기서는 하나의 파라미터로만 전달하도록 변경
         // MyBatis Mapper에서는 하나의 객체에 필요한 데이터를 담아 전달하므로,
         // 여러 개의 파라미터를 받을 수 없습니다.
         // 따라서 Mapper에서는 해당 파라미터를 전달할 수 있는 방식으로 변경해야 합니다.
         // 예를 들어, Map<String, String> 형태로 전달하거나, 객체 하나로 묶어 전달하는 방식을 사용할 수 있습니다.
         // 여기서는 Map<String, String>으로 변경하여 처리합니다.
-        int count = session.selectOne(ns + "login", paramMap);
-        return count > 0;
+        return session.selectOne(ns + "login", paramMap);
     }
 
     // 비밀번호 찾기

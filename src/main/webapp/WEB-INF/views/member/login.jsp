@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<% System.out.println("로그인"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,16 +100,25 @@ body {
 <body>
 
 <div class="center">
-
 <div class="login-container">
-
 	<h2 class="login-title">PharmaFinder</h2>
 	
 	<p align="center">Login</p>
+	
+	<!-- 로그인 실패 시 에러 메시지 출력 -->
+        <% if (request.getAttribute("error") != null) { 
+        %>
+            <p style="color: red;">
+            <%= 
+            request.getAttribute("error") 
+            %></p>
+        <% 
+        } 
+        %>
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
-		<input type="text" id="id" name="id" size=20 placeholder="example@test.com">
+		<input type="text" id="id" name="username" size=20 placeholder="example@test.com">
 		<input type="password" name="password" placeholder="Password">
 		<input type="checkbox" id="saveId" name="saveId">
 		<label for="saveId">아이디 저장</label><br/><br/>

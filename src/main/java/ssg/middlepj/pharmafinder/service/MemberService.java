@@ -13,7 +13,7 @@ public interface MemberService {
     
     boolean emailcheck(String email);
 
-    boolean login(String username, String password);    // 로그인하기
+    MemberDto login(String username, String password);    // 로그인하기
 
     String findPassword(String username, String email); // 비밀번호 찾기 메서드 추가
 

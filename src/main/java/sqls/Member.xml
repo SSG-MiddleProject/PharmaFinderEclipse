@@ -12,7 +12,7 @@
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="state" column="state" jdbcType="TINYINT"/>
         <result property="roll" column="roll" jdbcType="TINYINT"/>
-        <result property="createdAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
         <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
@@ -29,8 +29,8 @@
     </select>
     
     <!-- 로그인Af  -->
-    <select id="login" parameterType="map" resultType="int">
-        select count(*)
+    <select id="login" parameterType="map" resultType="ssg.middlepj.pharmafinder.dto.MemberDto">
+        select id, username, email, state, roll, created_at, modified_at
         from user
         where username = #{username} and password = #{password}
     </select>

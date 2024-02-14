@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 	@Override
-	public boolean login(String username, String password) {
+	public MemberDto login(String username, String password) {
 		Map<String, String> paramMap = new HashMap<>();
 		paramMap.put("username", username);
 		paramMap.put("password", password);
