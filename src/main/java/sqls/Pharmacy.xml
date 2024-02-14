@@ -42,7 +42,8 @@
         SELECT COUNT(*)
         FROM store
         WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
-          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%');
+          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
+            AND dutyName LIKE CONCAT('%', #{QN}, '%')
     </select>
 
     <select id="selectPharmaciesByDB" resultMap="pharmacyResDto"
