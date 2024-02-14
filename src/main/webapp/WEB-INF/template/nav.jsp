@@ -111,6 +111,9 @@
                 <a href="${pageContext.request.contextPath}/mypage.do">
                     마이페이지
                 </a>
+                <a href="${pageContext.request.contextPath}/logout.do">
+                    로그아웃
+                </a>
             </c:if>
             <c:if test="${empty sessionScope.member.id}">
                 <a href="${pageContext.request.contextPath}/login.do">
