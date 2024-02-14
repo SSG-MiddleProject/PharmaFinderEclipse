@@ -36,4 +36,22 @@ public class BookmarkController {
         if (userId == null || targetId == null) return false;
         return bookmarkService.deleteProductBookmark(new BookmarkDto(userId, targetId));
     }
+
+    @ResponseBody
+    @PostMapping("/pharmacy.do")
+    public Boolean insertPharmacyBookmark(Integer targetId) {
+        // TODO: Get userId from session
+        Integer userId = 1;
+        if (userId == null || targetId == null) return false;
+        return bookmarkService.insertPharmacyBookmark(new BookmarkDto(userId, targetId));
+    }
+
+    @ResponseBody
+    @DeleteMapping("/pharmacy.do")
+    public Boolean deletePharmacyBookmark(Integer targetId) {
+        // TODO: Get userId from session
+        Integer userId = 1;
+        if (userId == null || targetId == null) return false;
+        return bookmarkService.deletePharmacyBookmark(new BookmarkDto(userId, targetId));
+    }
 }
