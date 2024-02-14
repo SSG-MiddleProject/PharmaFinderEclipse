@@ -105,7 +105,7 @@
 
         <li id="nav-bottom" class="has-text-centered py-2">
             <c:if test="${not empty sessionScope.member.id}">
-                <a>
+                <a href="${pageContext.request.contextPath}/bookmark/list.do">
                     즐겨찾기
                 </a>
                 <a href="${pageContext.request.contextPath}/mypage.do">

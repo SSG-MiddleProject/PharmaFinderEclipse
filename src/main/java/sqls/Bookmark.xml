@@ -30,4 +30,8 @@
         where user_id = #{userId}
           and store_id = #{targetId}
     </delete>
+    
+    <select id="getBookmarksByUserId" parameterType="java.lang.Integer" resultType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
+    SELECT * FROM user_bookmark_store WHERE user_id = #{userId}
+	</select>
 </mapper>

@@ -1,5 +1,7 @@
 package ssg.middlepj.pharmafinder.dao.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,4 +38,8 @@ public class BookmarkDaoImpl implements BookmarkDao {
     public Boolean deletePharmacyBookmark(BookmarkDto bookmarkDto) {
         return sqlSession.delete(ns + "deletePharmacyBookmark", bookmarkDto) > 0;
     }
+
+	public List<BookmarkDto> getBookmarksByUserId(Integer userId) {
+		 return sqlSession.selectList("Bookmark.getBookmarksByUserId", userId);
+	}
 }

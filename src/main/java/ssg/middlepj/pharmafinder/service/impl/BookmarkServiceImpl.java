@@ -1,5 +1,7 @@
 package ssg.middlepj.pharmafinder.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssg.middlepj.pharmafinder.dao.impl.BookmarkDaoImpl;
@@ -34,4 +36,10 @@ public class BookmarkServiceImpl implements BookmarkService {
     public Boolean deletePharmacyBookmark(BookmarkDto bookmarkDto) {
         return bookmarkDao.deletePharmacyBookmark(bookmarkDto);
     }
+
+	@Override
+	public List<BookmarkDto> getBookmarksByUserId(Integer userId) {
+		// DAO를 통해 북마크 목록 조회
+		return bookmarkDao.getBookmarksByUserId(userId);
+	}
 }
