@@ -54,13 +54,13 @@ public class MyPageController {
 //        // 마이페이지 JSP로 포워딩
 //        return "mypages/mypage";
 //    }
-    
+
 //    @GetMapping("/bookmark.do")
 //    public String bookmarkPage() {
 //    	System.out.println("MemberController bookmark " + new Date());
 //        return "mypages/bookmarkpage"; // bookmarkPage.jsp로 포워딩
 //    }
-    
+
     @GetMapping("bookmark.do")
     public String getBookmarks(Model model, HttpSession session) {
         // 세션에서 사용자 정보 가져오기
@@ -71,21 +71,21 @@ public class MyPageController {
         }
 
         // 사용자의 즐겨찾기 정보 조회
-        List<BookmarkDto> bookmarks = BookmarkService.getBookmarksByUsername(username);
+//        List<BookmarkDto> bookmarks = BookmarkService.getBookmarksByUsername(username);
 
         // 즐겨찾기 정보를 모델에 추가
-        model.addAttribute("bookmarks", bookmarks);
+//        model.addAttribute("bookmarks", bookmarks);
 
         // 마이페이지 즐겨찾기 JSP로 포워딩
         return "mypages/bookmarkpage";
     }
-    
+
     @GetMapping("/userupdate.do")
     public String userupdate() {
-    	System.out.println("MemberController userupdate " + new Date());
+        System.out.println("MemberController userupdate " + new Date());
         return "mypages/userupdatepage"; // userupdate.jsp로 포워딩
     }
-    
+
     @PostMapping("/userUpdateAf.do")
     public String updateUser(HttpServletRequest request, RedirectAttributes redirectAttributes, MemberDto member) {
         HttpSession session = request.getSession();
@@ -98,7 +98,7 @@ public class MyPageController {
 
         try {
             // 회원 정보 업데이트 처리
-            MemberService.updateMember(member);
+//            MemberService.updateMember(member);
             // 성공 메시지 추가
             redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
         } catch (Exception e) {
@@ -111,4 +111,4 @@ public class MyPageController {
         return "redirect:/mypage.do";
     }
 }
-}
+
