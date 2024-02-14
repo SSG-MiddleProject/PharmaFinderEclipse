@@ -8,10 +8,26 @@
         values (#{userId}, #{targetId})
     </insert>
 
-    <!--  북마크한 약 조회  -->
+    <!--  TODO: 북마크 제품 조회  -->
 
     <delete id="deleteProductBookmark" parameterType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
-        delete from user_bookmark_product
-        where user_id = #{userId} and product_id = #{targetId}
+        delete
+        from user_bookmark_product
+        where user_id = #{userId}
+          and product_id = #{targetId}
+    </delete>
+
+    <insert id="insertPharmacyBookmark" parameterType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
+        insert into user_bookmark_store (user_id, store_id)
+        values (#{userId}, #{targetId})
+    </insert>
+
+    <!--  TODO: 북마크 약국 조회  -->
+
+    <delete id="deletePharmacyBookmark" parameterType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
+        delete
+        from user_bookmark_store
+        where user_id = #{userId}
+          and store_id = #{targetId}
     </delete>
 </mapper>

@@ -26,4 +26,14 @@ public class BookmarkDaoImpl implements BookmarkDao {
     public Boolean deleteProductBookmark(BookmarkDto bookmarkDto) {
         return sqlSession.delete(ns + "deleteProductBookmark", bookmarkDto) > 0;
     }
+
+    @Override
+    public Boolean insertPharmacyBookmark(BookmarkDto bookmarkDto) {
+        return sqlSession.insert(ns + "insertPharmacyBookmark", bookmarkDto) > 0;
+    }
+
+    @Override
+    public Boolean deletePharmacyBookmark(BookmarkDto bookmarkDto) {
+        return sqlSession.delete(ns + "deletePharmacyBookmark", bookmarkDto) > 0;
+    }
 }
