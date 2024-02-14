@@ -46,7 +46,7 @@ public class PharmaInOutCalendarUtil {
 		String str = "";
 
 		String img = "<i class='fas fa-file-signature' style='color: #0000ff;' title='입고'></i>";
-		str = String.format("<a class='js-modal-trigger' data-target='modal' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
+		str = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='w' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
 	}
@@ -56,7 +56,7 @@ public class PharmaInOutCalendarUtil {
 		String str = "";
 
 		String img = "<i class='fas fa-file-signature' style='color: #ff0000;' title='출고'></i>";
-		str = String.format("<a class='js-modal-trigger' data-target='modal' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
+		str = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='w' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
 	}
@@ -106,7 +106,7 @@ public class PharmaInOutCalendarUtil {
 		if(inoutDtoes[0] != null) {
 			PharmaInDto inDto = (PharmaInDto)inoutDtoes[0];
 
-			String appendStr = String.format("<a href='pharma-in-detail.do?syear=%d&smonth=%d&sday=%d&id=%d'>%s</a>",
+			String appendStr = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='r' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d' data-id='%d'>%s</a>",
 					year, month, day, inDto.getId(), "<i class='fas fa-file-download fa-3x' style='color: #0000ff'></i>");
 
 			str += appendStr;
@@ -119,7 +119,7 @@ public class PharmaInOutCalendarUtil {
 		if(inoutDtoes[1] != null) {
 			PharmaOutDto outDto = (PharmaOutDto)inoutDtoes[1];
 
-			String appendStr = String.format("<a href='pharma-out-detail.do?syear=%d&smonth=%d&sday=%d&id=%d'>%s</a>",
+			String appendStr = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='r' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d' data-id='%d'>%s</a>",
 												year, month, day, outDto.getId(), "<i class='fas fa-file-upload fa-3x' style='color: #ff0000'></i>");
 			str += appendStr;
 		}

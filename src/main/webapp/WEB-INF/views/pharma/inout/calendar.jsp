@@ -165,10 +165,21 @@ for(int i = 0; i< 7 -weekday;i++){
 			const $target = document.getElementById(modal);
 
 			$trigger.addEventListener('click', () => {
-				if ($trigger.dataset.inout === "in") {
-					$(".modal-content").load("${pageContext.request.contextPath}/pharma-in-write.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday);
-				} else {
-					$(".modal-content").load("${pageContext.request.contextPath}/pharma-out-write.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday);
+				if ($trigger.dataset.rw === 'r') {
+                    if ($trigger.dataset.inout === "in") {
+                        $(".modal-content").load("${pageContext.request.contextPath}/pharma-in-detail.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday + "&id=" + $trigger.dataset.id);
+                    }
+                    if ($trigger.dataset.inout === "out") {
+                        $(".modal-content").load("${pageContext.request.contextPath}/pharma-out-detail.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday + "&id=" + $trigger.dataset.id);
+                    }
+				}
+				if ($trigger.dataset.rw === 'w') {
+                    if ($trigger.dataset.inout === "in") {
+                        $(".modal-content").load("${pageContext.request.contextPath}/pharma-in-write.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday);
+                    }
+                    if ($trigger.dataset.inout === "out") {
+                        $(".modal-content").load("${pageContext.request.contextPath}/pharma-out-write.do?syear=" + $trigger.dataset.syear + "&smonth=" + $trigger.dataset.smonth + "&sday=" + $trigger.dataset.sday);
+                    }
 				}
 				openModal($target);
 			});
