@@ -41,9 +41,9 @@
     
     <!-- 로그인Af  -->
     <select id="login" parameterType="map" resultType="ssg.middlepj.pharmafinder.dto.MemberDto">
-        select id, username, email, state, roll, created_at, modified_at
+        select id, store_id as 'storeId', username, email, state, roll, created_at as 'createdAt', modified_at as 'modifiedAt'
         from user
-        where username = #{username} and password = #{password}
+        where username = #{username}
     </select>
     
     <!--
@@ -54,8 +54,8 @@
     	values(#{storeId}, #{username}, #{email}, #{password}, 1, ${roll}, now(), now())
    	-->
     <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto" useGeneratedKeys="true" keyProperty="id">
-        insert into user(username, email, password, state, roll, created_at, modified_at)
-        values (#{username}, #{email}, #{password}, 1, #{roll}, now(), now())
+        insert into user(id, username, email, password, state, roll)
+        values (#{id}, #{username}, #{email}, #{password}, 1, #{roll})
     </insert>
 
     <!-- store 테이블 추가 -->

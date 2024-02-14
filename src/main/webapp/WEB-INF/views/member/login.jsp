@@ -106,22 +106,17 @@ body {
 	<p align="center">Login</p>
 	
 	<!-- 로그인 실패 시 에러 메시지 출력 -->
-        <% if (request.getAttribute("error") != null) { 
-        %>
+        <% if (request.getAttribute("error") != null) { %>
             <p style="color: red;">
-            <%= 
-            request.getAttribute("error") 
-            %></p>
-        <% 
-        } 
-        %>
+            <%= request.getAttribute("error") %></p>
+        <% } %>
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
-		<input type="text" id="id" name="username" size=20 placeholder="example@test.com">
+		<input type="text" id="username" name="username" size=20 placeholder="example@test.com">
 		<input type="password" name="password" placeholder="Password">
 		<input type="checkbox" id="saveId" name="saveId">
-		<label for="saveId">아이디 저장</label><br/><br/>
+		<label for="saveUsername">아이디 저장</label><br/><br/>
 		<input type="submit" value="login">
 	</form>
 	<br/>
@@ -144,12 +139,12 @@ $(document).ready(function() {
     // 페이지 로드 시, 저장된 아이디가 있는지 확인하고 아이디 입력 필드에 설정
     var savedUsername = localStorage.getItem("savedUsername");
     if (savedUsername) {
-        $("#id").val(savedUsername);
-        $("#saveId").prop("checked", true);
+        $("#username").val(savedUsername);
+        $("#saveUsername").prop("checked", true);
     }
     
     // 아이디 저장 체크박스 이벤트 리스너
-    $("#saveId").change(function() {
+    $("#saveUsername").change(function() {
         if ($(this).is(":checked")) {
             // 체크되었을 때, 아이디를 로컬 스토리지에 저장
             localStorage.setItem("savedUsername", $("#username").val());
@@ -158,14 +153,6 @@ $(document).ready(function() {
             localStorage.removeItem("savedUsername");
         }
     });
-
-    // 서버에서 받아온 roll 값에 따라 페이지 리디렉션 수행
-    var roll = "<%= request.getAttribute("roll") %>";
-    if (roll === "1") {
-        window.location.href = "pharmacyRegi.do"; // 약국일반 페이지로 리디렉션
-    } else if (roll === "2") {
-        window.location.href = "userRegi.do"; // 일반 유저 페이지로 리디렉션
-    }
 });
 </script>
 
