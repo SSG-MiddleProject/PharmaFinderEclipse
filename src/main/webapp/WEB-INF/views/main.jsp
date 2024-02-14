@@ -442,11 +442,12 @@
             title: pharmacy["dutyName"],
             map
         });
+        naver.maps.Event.addListener(marker, 'mouseover', mouseoverHandler(marker))
         naver.maps.Event.addListener(marker, 'click', clickHandler(marker))
         return marker
     }
 
-    const clickHandler = (marker) => {
+    const mouseoverHandler = (marker) => {
         return () => {
             storeOverlay.forEach((overlay) => {
                 overlay.infoWindow.close()
@@ -456,6 +457,14 @@
                     overlay.infoWindow.open(map, marker)
                 }
             })
+        }
+    }
+
+    const clickHandler = (marker) => {
+        return () => {
+            const panPos = marker.getPosition()
+            map.setZoom(15, false);
+            map.panTo(panPos.destinationPoint(270, 600))
         }
     }
 
