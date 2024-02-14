@@ -1,17 +1,26 @@
 package ssg.middlepj.pharmafinder.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.service.MemberService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller // 컨트롤러 사용
 public class MemberController {
@@ -51,7 +60,7 @@ public class MemberController {
 	// 회원가입(일반 유저) 페이지 이동 메서드
 	@GetMapping("/userRegi.do")
 	public String registerUser() {
-		// System.out.println("MemberController userRegi " + new Date());
+		System.out.println("MemberController userregi ");
 		return "member/userRegi";
 	}
 
@@ -83,7 +92,12 @@ public class MemberController {
 	@PostMapping("/pharmacyRegiAf.do") // 메서드가 처리할 요청 경로 지정
 	public String registerAfPharmacy(HttpServletRequest request, RedirectAttributes redirectAttributes,
 			@ModelAttribute MemberDto mem,
-			@ModelAttribute PharmacyDto pharmacy) {
+			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
+		
+		String rawPassword = mem.getPassword();
+		String encryptedPassword = encryptStringBySHA256(rawPassword);
+		
+		mem.setPassword(encryptedPassword);
 
 		mem.setState(1); // 활성화 상태로 설정
 		mem.setRoll(1); // 약국 유저로 설정
@@ -116,13 +130,19 @@ public class MemberController {
 
 	// 로그인 처리 메서드
 	@PostMapping("/loginAf.do")
-	public String loginProcess(HttpServletRequest request, Model model) {
+	public String loginProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
 		System.out.println("Controller login");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		
+		//비밀번호 암호화
+		String encryptedPassword = encryptStringBySHA256(password);
+		
+		System.out.println("input-password: " + password);
+		System.out.println("encryted-password: " + encryptedPassword);
 
 		// 로그인 시도 후 MemberDto 객체 반환
-		MemberDto loginResult = service.login(username, password);
+		MemberDto loginResult = service.login(username, encryptedPassword);
 		
 		if (loginResult != null) {
 			HttpSession session = request.getSession();
@@ -146,6 +166,7 @@ public class MemberController {
 			return "member/login";
 		}
 	}
+
 
 	// 아이디 찾기 페이지로 이동
 	@GetMapping("/findUsernamePage")
@@ -177,7 +198,29 @@ public class MemberController {
 		model.addAttribute("newPassword", newPassword);
 		return "showPassword";
 	}
+	
+	 // 입력 문자열을 SHA-256으로 암호화하여 해시 값을 반환하는 메서드
+    private String encryptStringBySHA256(String text) throws NoSuchAlgorithmException {
+       // SHA-256 알고리즘의 인스턴스 생성
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        // 입력 문자열의 바이트 배열을 업데이트하여 해시 값을 계산
+        md.update(text.getBytes());
+      // 계산된 해시 값을 16진수 문자열로 변환하여 반환
+        return bytesToHex(md.digest());
+    }
 
+    // 바이트 배열을 16진수 문자열로 변환하는 메서드
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+           // 바이트 값을 16진수 문자열로 변환하여 StringBuilder에 추가
+            builder.append(String.format("%02x", b));
+        }
+        // StringBuilder의 내용을 문자열로 반환
+        return builder.toString();
+    }
+
+	
 }
 
 

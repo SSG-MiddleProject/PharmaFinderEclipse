@@ -90,8 +90,8 @@ body {
     <h2 class="title">PharmaFinder</h2>
     <p>Register</p>
     <div class="btn-container">
-        <a href="userregi.do" class="btn">일반고객 회원가입</a>
-        <a href="regi.do" class="btn">약국 회원가입</a>
+        <a href="userRegi.do" class="btn">일반고객 회원가입</a>
+        <a href="pharmacyRegi.do" class="btn">약국 회원가입</a>
     </div>
 </div>
 
