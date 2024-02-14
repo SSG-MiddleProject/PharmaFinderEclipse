@@ -22,6 +22,10 @@ public class MemberDaoImpl implements MemberDao {
     public int idcheck(String username) {
         return session.selectOne(ns + "idcheck", username);
     }
+    
+    public int emailcheck(String email) {
+        return session.selectOne(ns + "emailcheck", email);
+    }
 
     @Override
     public int addmember(MemberDto mem) {

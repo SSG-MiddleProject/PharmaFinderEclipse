@@ -10,6 +10,8 @@ public interface MemberService {
 	boolean addpharmacy(PharmacyDto pharmacy);
 
     boolean idcheck(String username);
+    
+    boolean emailcheck(String email);
 
     boolean login(String username, String password);    // 로그인하기
 

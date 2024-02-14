@@ -71,6 +71,34 @@ $(document).ready(function () {
 		});				
 	});		
 	
+	// 이메일 중복 체크
+	$("#email").keyup(function() {
+	    var inputEmail = $(this).val().trim();
+	    
+	    if(inputEmail !== "") {
+	        $.ajax({
+	            url: "emailcheck.do",
+	            type: "post",
+	            data: {"email": inputEmail},
+	            success: function(msg) {
+	                if(msg.trim() === "YES") {
+	                    $("#emailcheck").css("color", "#0000ff");
+	                    $("#emailcheck").text("사용할 수 있는 이메일입니다");
+	                } else {
+	                    $("#emailcheck").css("color", "#ff0000");
+	                    $("#emailcheck").text("사용중인 이메일입니다");
+	                    $("#emailcheck").val("");
+	                }
+	            },
+	            error: function() {
+	                alert("이메일 확인 중 오류가 발생했습니다");
+	            }
+	        });
+	    } else {
+	        $("#emailcheck").text(""); // 입력값이 없을 때 메시지를 비움
+	    }
+	});
+	
 	$("#regibtn").click(function () {
 		
 		// 빈칸 검사(id, password)

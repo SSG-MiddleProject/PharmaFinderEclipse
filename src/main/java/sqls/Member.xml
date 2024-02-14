@@ -22,6 +22,12 @@
         where username = #{username}
     </select>
     
+    <select id="emailcheck" parameterType="String" resultType="Integer">
+        select count(*)
+        from user
+        where email = #{email}
+    </select>
+    
     <!-- 로그인Af  -->
     <select id="login" parameterType="map" resultType="int">
         select count(*)
@@ -36,17 +42,17 @@
     	밑에방법은 두가지 가입방법을 하나의 insert문으로 만들었을때 dto.getStoreId -> null 그래서 크게 상관없음
     	values(#{storeId}, #{username}, #{email}, #{password}, 1, ${roll}, now(), now())
    	-->
-    <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
+    <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto" useGeneratedKeys="true" keyProperty="id">
         insert into user(username, email, password, state, roll, created_at, modified_at)
         values (#{username}, #{email}, #{password}, 1, #{roll}, now(), now())
     </insert>
 
     <!-- store 테이블 추가 -->
-    <insert id="addStore" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
-        insert into store (dutyName, dutyAddr, dutyTel1, bn_reg_num, dutyTime1s, dutyTime1c, dutyTime2s,
+    <insert id="addpharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        insert into store (id, dutyName, dutyAddr, dutyTel1, bn_reg_num, dutyTime1s, dutyTime1c, dutyTime2s,
                            dutyTime2c, dutyTime3s, dutyTime3c, dutyTime4s, dutyTime4c, dutyTime5s, dutyTime5c,
                            dutyTime6s, dutyTime6c, dutyTime7s, dutyTime7c, dutyTime8s, dutyTime8c, postcode)
-        VALUES (#{dutyName}, #{dutyAddr}, #{dutyTel1}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c},
+        VALUES (#{id}, #{dutyName}, #{dutyAddr}, #{dutyTel1}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c},
                 #{dutyTime2s}, #{dutyTime2c}, #{dutyTime3s}, #{dutyTime3c}, #{dutyTime4s}, #{dutyTime4c}, #{dutyTime5s},
                 #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c}, #{postcode})
     </insert>

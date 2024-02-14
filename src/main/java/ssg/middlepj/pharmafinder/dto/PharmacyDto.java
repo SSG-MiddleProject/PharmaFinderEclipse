@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PharmacyDto {
+	private int id; // user 테이블에서 id 로 지정된 값
     private String dutyAddr; // 주소 (도로명주소)
     private String bnRegNum; // 사업자등록번호
     private String dutyName; // 약국명

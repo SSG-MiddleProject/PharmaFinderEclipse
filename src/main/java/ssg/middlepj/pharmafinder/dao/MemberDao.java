@@ -6,8 +6,9 @@ import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
 public interface MemberDao {
-    // 아이디 중복체크
+    // 중복체크
     int idcheck(String username);
+    int emailcheck(String email);
 
     // 회원가입
     int addmember(MemberDto mem);

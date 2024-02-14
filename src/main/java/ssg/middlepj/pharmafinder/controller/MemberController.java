@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 @Controller // 컨트롤러 사용
 public class MemberController {
@@ -27,6 +28,17 @@ public class MemberController {
 		boolean isIdDuplicate = service.idcheck(username);
 		// 결과에 따라 YES 또는 NO를 반환
 		return isIdDuplicate ? "NO" : "YES";
+	}
+	
+	// 이메일 중복 확인 메서드
+	@ResponseBody
+	@RequestMapping(value = "emailcheck.do", method = RequestMethod.POST, produces = "application/String; charset=utf-8")
+	public String emailcheck(@RequestParam("email") String email) {
+		// System.out.println("MemberController emailcheck " + new Date());
+		// DAO를 통해 아이디 중복 체크 수행
+		boolean isEmailDuplicate = service.emailcheck(email);
+		// 결과에 따라 YES 또는 NO를 반환
+		return isEmailDuplicate ? "NO" : "YES";
 	}
 
 	// 로그인페이지에서 회원가입 누르면 이동되는 회원가입선택하는페이지로 이동 메서드
@@ -69,60 +81,31 @@ public class MemberController {
 	}
 
 	@PostMapping("/pharmacyRegiAf.do") // 메서드가 처리할 요청 경로 지정
-	public String registerAfPharmacy(HttpServletRequest request, @ModelAttribute MemberDto mem,
+	public String registerAfPharmacy(HttpServletRequest request, RedirectAttributes redirectAttributes,
+			@ModelAttribute MemberDto mem,
 			@ModelAttribute PharmacyDto pharmacy) {
-
-		// 시간 필드 변환 로직 추가
-		convertPharmacyOperatingTimes(pharmacy);
 
 		mem.setState(1); // 활성화 상태로 설정
 		mem.setRoll(1); // 약국 유저로 설정
 
 		boolean memberAdded = service.addmember(mem);
-		if (memberAdded) {
-			boolean pharmacyAdded = service.addpharmacy(pharmacy);
-			if (pharmacyAdded) {
-				return "redirect:/login.do";
-			} else {
-				request.setAttribute("error", "약국등록에 실패하였습니다. 다시 시도해주세요.");
-				return "member/pharmacyRegi";
-			}
-		} else {
-			request.setAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요.");
-			return "member/pharmacyRegi";
-		}
-	}
+		if (!memberAdded) {
+			redirectAttributes.addFlashAttribute("error", "회원 정보 저장에 실패하였습니다.");
+            return "redirect:/member/pharmacyRegi";
+        }
+		
+		// 생성된 사용자 ID를 PharmacyDto에 설정
+        pharmacy.setId(mem.getId());
+        
+        // 약국정보저장
+		boolean pharmacyAdded = service.addpharmacy(pharmacy);
+		if (!pharmacyAdded) {
+            redirectAttributes.addFlashAttribute("error", "약국 정보 저장에 실패하였습니다.");
+            return "redirect:/member/pharmacyRegi";
+        }
 
-	private void convertPharmacyOperatingTimes(PharmacyDto pharmacy) {
-		pharmacy.setDutyTime1s(convertTimeFormat(pharmacy.getDutyTime1s()));
-		pharmacy.setDutyTime1c(convertTimeFormat(pharmacy.getDutyTime1c()));
-		pharmacy.setDutyTime2s(convertTimeFormat(pharmacy.getDutyTime2s()));
-		pharmacy.setDutyTime2c(convertTimeFormat(pharmacy.getDutyTime2c()));
-		pharmacy.setDutyTime3s(convertTimeFormat(pharmacy.getDutyTime3s()));
-		pharmacy.setDutyTime3c(convertTimeFormat(pharmacy.getDutyTime3c()));
-		pharmacy.setDutyTime4s(convertTimeFormat(pharmacy.getDutyTime4s()));
-		pharmacy.setDutyTime4c(convertTimeFormat(pharmacy.getDutyTime4c()));
-		pharmacy.setDutyTime5s(convertTimeFormat(pharmacy.getDutyTime5s()));
-		pharmacy.setDutyTime5c(convertTimeFormat(pharmacy.getDutyTime5c()));
-		pharmacy.setDutyTime6s(convertTimeFormat(pharmacy.getDutyTime6s()));
-		pharmacy.setDutyTime6c(convertTimeFormat(pharmacy.getDutyTime6c()));
-		pharmacy.setDutyTime7s(convertTimeFormat(pharmacy.getDutyTime7s()));
-		pharmacy.setDutyTime7c(convertTimeFormat(pharmacy.getDutyTime7c()));
-		pharmacy.setDutyTime8s(convertTimeFormat(pharmacy.getDutyTime8s()));
-		pharmacy.setDutyTime8c(convertTimeFormat(pharmacy.getDutyTime8c()));
-	}
-
-	private String convertTimeFormat(String timeStr) {
-		if (timeStr == null || timeStr.isEmpty()) {
-			return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-		}
-		String[] parts = timeStr.split(":");
-		if (parts.length < 2) {
-			return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-		}
-		// 시간과 분을 각각 두 자리 숫자로 포맷
-		return parts[0] + parts[1];
-	}
+        return "redirect:/login.do";
+    }
 
 	// 로그인 페이지 이동 메서드
 	@GetMapping(value = "login.do")
@@ -185,3 +168,41 @@ public class MemberController {
 	}
 
 }
+
+
+
+
+
+
+/*
+private void convertPharmacyOperatingTimes(PharmacyDto pharmacy) {
+	pharmacy.setDutyTime1s(convertTimeFormat(pharmacy.getDutyTime1s()));
+	pharmacy.setDutyTime1c(convertTimeFormat(pharmacy.getDutyTime1c()));
+	pharmacy.setDutyTime2s(convertTimeFormat(pharmacy.getDutyTime2s()));
+	pharmacy.setDutyTime2c(convertTimeFormat(pharmacy.getDutyTime2c()));
+	pharmacy.setDutyTime3s(convertTimeFormat(pharmacy.getDutyTime3s()));
+	pharmacy.setDutyTime3c(convertTimeFormat(pharmacy.getDutyTime3c()));
+	pharmacy.setDutyTime4s(convertTimeFormat(pharmacy.getDutyTime4s()));
+	pharmacy.setDutyTime4c(convertTimeFormat(pharmacy.getDutyTime4c()));
+	pharmacy.setDutyTime5s(convertTimeFormat(pharmacy.getDutyTime5s()));
+	pharmacy.setDutyTime5c(convertTimeFormat(pharmacy.getDutyTime5c()));
+	pharmacy.setDutyTime6s(convertTimeFormat(pharmacy.getDutyTime6s()));
+	pharmacy.setDutyTime6c(convertTimeFormat(pharmacy.getDutyTime6c()));
+	pharmacy.setDutyTime7s(convertTimeFormat(pharmacy.getDutyTime7s()));
+	pharmacy.setDutyTime7c(convertTimeFormat(pharmacy.getDutyTime7c()));
+	pharmacy.setDutyTime8s(convertTimeFormat(pharmacy.getDutyTime8s()));
+	pharmacy.setDutyTime8c(convertTimeFormat(pharmacy.getDutyTime8c()));
+}
+
+private String convertTimeFormat(String timeStr) {
+	if (timeStr == null || timeStr.isEmpty()) {
+		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
+	}
+	String[] parts = timeStr.split(":");
+	if (parts.length < 2) {
+		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
+	}
+	// 시간과 분을 각각 두 자리 숫자로 포맷
+	return parts[0] + parts[1];
+}
+*/

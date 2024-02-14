@@ -21,6 +21,12 @@ public class MemberServiceImpl implements MemberService {
         int count = dao.idcheck(username);
         return count > 0;
     }
+    
+    @Override
+    public boolean emailcheck(String email) {
+        int count = dao.emailcheck(email);
+        return count > 0;
+    }
 
     @Override
     public boolean addmember(MemberDto mem) {

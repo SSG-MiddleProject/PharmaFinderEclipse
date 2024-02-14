@@ -43,7 +43,7 @@
 <tr>
 	<th>상호</th>
 	<td>
-		<input type="text" name="dutyname" size="30">
+		<input type="text" name="dutyName" size="30">
 	</td>
 </tr>
 <tr>
