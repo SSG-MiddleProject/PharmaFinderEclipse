@@ -261,7 +261,7 @@
     const existNext = "<%=pagination.getExistNext()%>";
     const currentPage = parseInt("<%=currentPage%>");
     const lastPage = parseInt("<%=lastPage%>");
-    const markers = [];
+    const storeOverlay = [];
     let map;
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");
@@ -375,7 +375,7 @@
                     }
                 })
                 Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
-                    createMarker(value)
+                    createStoreOverlay(value)
                     const li = document.createElement('li')
                     li.className = "p-2"
                     li.style.borderBottom = "solid 1px"
@@ -424,13 +424,53 @@
         return rootP
     }
 
+    const createStoreOverlay = (pharmacy) => {
+        storeOverlay.push({
+            marker: createMarker(pharmacy),
+            infoWindow: createInfoWindow(pharmacy)
+        })
+    }
+
     const createMarker = (pharmacy) => {
         const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
             title: pharmacy["dutyName"],
             map
         });
-        markers.push(marker)
+        naver.maps.Event.addListener(marker, 'click', clickHandler(marker))
+        return marker
+    }
+
+    const clickHandler = (marker) => {
+        return () => {
+            storeOverlay.forEach((overlay) => {
+                overlay.infoWindow.close()
+            })
+            storeOverlay.forEach((overlay) => {
+                if (overlay.marker === marker) {
+                    overlay.infoWindow.open(map, marker)
+                }
+            })
+        }
+    }
+
+    const createInfoWindow = (pharmacy) => {
+        return new naver.maps.InfoWindow({
+            content: [
+                '<div style="padding: 1.2rem; min-width: 200px; text-align: center;">',
+                '<h4>' + pharmacy["dutyName"] + '</h4>',
+                '<p>' + pharmacy["dutyAddr"] + '</p>',
+                '<p>' + pharmacy["dutyTel1"] + '</p>',
+                '</div>'
+            ].join('')
+        });
+    }
+
+    const deleteMarkers = () => {
+        return storeOverlay.forEach((overlay) => {
+            overlay.marker.setMap(null)
+            overlay.infoWindow.close()
+        })
     }
 
     const handleDetailExtand = () => {
@@ -488,13 +528,6 @@
             }
             location.reload()
         }).catch((err) => console.error(err))
-    }
-
-    const deleteMarkers = () => {
-        for (let i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
-        markers.length = 0;
     }
 
     const mapOptions = {
