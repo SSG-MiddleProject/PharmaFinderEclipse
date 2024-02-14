@@ -38,7 +38,7 @@ public class PharmaInOutController {
 	@GetMapping(value = "/pharma-inout-calendar.do")
 	public String pharmaInOutCalendar(String syear, String smonth, Model model, HttpServletRequest request) {
 		System.out.println("pharmaInOutCalendar list()");
-
+		request.getSession().setAttribute("storeId", 9999);
 		int storeId = (int)request.getSession().getAttribute("storeId");
 		// 달력에 표시해줄 데이터
 		Calendar cal = Calendar.getInstance();
@@ -186,7 +186,7 @@ public class PharmaInOutController {
 		model.addAttribute("day", sday);
 		model.addAttribute("list", list);
 
-		return "pharma/inout/indetail.tiles";
+		return "pharma/inout/indetail";
 	}
 
 	@GetMapping(value = "/pharma-in-delete.do")
@@ -237,7 +237,7 @@ public class PharmaInOutController {
 		model.addAttribute("day", sday);
 		model.addAttribute("list", list);
 
-		return "pharma/inout/outdetail.tiles";
+		return "pharma/inout/outdetail";
 	}
 
 	@GetMapping(value = "/pharma-out-delete.do")
