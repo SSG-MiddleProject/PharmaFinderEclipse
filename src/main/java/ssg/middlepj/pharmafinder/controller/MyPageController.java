@@ -30,7 +30,7 @@ public class MyPageController {
 //    public String myPage(Model model, HttpSession session) {
 //        // 세션에서 사용자 정보 가져오기
 //        String username = (String) session.getAttribute("username");
-//        if (username == null) {
+//        if (username == null ) {
 //            // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
 //           
 //        	// return "redirect:/login.do";
