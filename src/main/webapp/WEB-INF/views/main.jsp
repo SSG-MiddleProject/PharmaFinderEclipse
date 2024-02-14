@@ -384,6 +384,11 @@
                     const a = document.createElement('a')
                     a.onclick = () => handlePharmacyDetail(value["dutyName"])
                     a.innerText = value["dutyName"].length > 15 ? value["dutyName"].substring(0, 15) + "..." : value["dutyName"]
+                    const span = document.createElement('span')
+                    span.innerText = value["price"] + "원" + " / " + value["qty"] + "개"
+                    span.style.float = "right"
+                    span.style.fontSize = "0.9rem"
+                    div.append(span)
                     const p = document.createElement('p')
                     p.innerText = value["dutyAddr"]
                     div.append(a)
