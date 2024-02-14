@@ -252,9 +252,11 @@
         openCollapse();
     }
     const openCollapse = () => {
+        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "visible";
     }
     const closeCollapse = () => {
+        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
@@ -409,7 +411,8 @@
                         const entpName = product.entpName;
                         const qty = product.qty;
                         const productId = product.id;
-                        // const price = product.price;
+                        const price = product.price;
+                        console.log(product);
 
                         const li = document.createElement('li');
                         li.className = "p-2";
@@ -430,11 +433,10 @@
                         entpNameSpan.style.color = "gray";
                         entpNameSpan.style.paddingLeft = "0.5rem";
 
-                        // // 단가
-                        // const priceSpan = document.createElement('span');
-                        // priceSpan.innerText = price + "원";
-                        // priceSpan.style.float = "right";
-                        // priceSpan.style.fontSize = "small";
+                        const priceSpan = document.createElement('span');
+                        priceSpan.innerText = price + "원";
+                        priceSpan.style.float = "right";
+                        priceSpan.style.fontSize = "small";
 
 
                         const qtySpan = document.createElement('span');
@@ -445,7 +447,7 @@
                         div.append(productNameA);
                         div.append(entpNameSpan);
                         div.append(qtySpan);
-                        // div.append(priceSpan);
+                        div.append(priceSpan);
 
                         li.append(div);
                         listDiv.append(li);
@@ -453,6 +455,23 @@
                     })
                 }
             })
+    }
+
+    const createMarker = (pharmacy) => {
+        const marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
+            title: pharmacy["dutyName"],
+            map
+        });
+        markers.push(marker);
+
+    }
+
+    const deleteMarkers = () => {
+        for(let i=0; i<markers.length; i++){
+            markers[i].setMap(null);
+        }
+        markers.length = 0;
     }
 
     const handleBookmark = (element, isBookmark) => {

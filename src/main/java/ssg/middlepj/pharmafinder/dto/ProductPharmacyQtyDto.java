@@ -7,4 +7,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ProductPharmacyQtyDto extends ProductDto {
     private Integer qty;
+    private Integer price;
 }

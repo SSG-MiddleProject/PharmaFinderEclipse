@@ -81,7 +81,7 @@
     </insert>
 
     <select id="selectProductByPharmacyId" resultMap="productResultMap" parameterType="Integer">
-        SELECT product.*, store_stock.quantity AS qty
+        SELECT product.*, store_stock.quantity AS qty, store_stock.price
         FROM store_stock
                  INNER JOIN product ON store_stock.product_id = product.id
         WHERE store_stock.store_id = #{storeId} AND store_stock.quantity > 0
