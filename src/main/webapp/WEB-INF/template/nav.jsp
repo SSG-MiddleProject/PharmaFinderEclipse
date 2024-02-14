@@ -64,9 +64,9 @@
 <div id="nav">
     <ul class="menu-list is-centered " id="nav-item">
         <li class="has-text-centered " id="logo">
-            <a href="<%="main.do"%>" class="is-unselectable">
-                <img src="${pageContext.request.contextPath}/resources/P.svg" alt="PharmaFinder Logo"
-                     style="width: 40%; height: 40%;"/>
+            <a href="${pageContext.request.contextPath}/" class="is-unselectable">
+                <img src="${pageContext.request.contextPath}/resources/logo.png" alt="PharmaFinder Logo"
+                     style="width: 100%; height: 100%;"/>
             </a>
         </li>
         <li class="has-text-centered">
