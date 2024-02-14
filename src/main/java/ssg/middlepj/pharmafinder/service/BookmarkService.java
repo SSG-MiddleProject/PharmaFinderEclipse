@@ -6,4 +6,8 @@ public interface BookmarkService {
     Boolean insertProductBookmark(BookmarkDto bookmarkDto);
 
     Boolean deleteProductBookmark(BookmarkDto bookmarkDto);
+
+    Boolean insertPharmacyBookmark(BookmarkDto bookmarkDto);
+
+    Boolean deletePharmacyBookmark(BookmarkDto bookmarkDto);
 }

@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PharmacyProductQtyDto extends PharmacyDto {
-    private Integer qty;
-    private Integer price;
+public class PharmacyResDto extends PharmacyDto {
+    private boolean isBookmark;
 }

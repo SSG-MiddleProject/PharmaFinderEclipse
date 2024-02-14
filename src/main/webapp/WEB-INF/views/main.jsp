@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.Pagination" %>
 <%@ page import="ssg.middlepj.pharmafinder.util.PaginationUtil" %>
 <%@ page import="java.util.List" %>
@@ -261,7 +262,7 @@
     const existNext = "<%=pagination.getExistNext()%>";
     const currentPage = parseInt("<%=currentPage%>");
     const lastPage = parseInt("<%=lastPage%>");
-    const markers = [];
+    const storeOverlay = [];
     let map;
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");
@@ -375,7 +376,7 @@
                     }
                 })
                 Object.entries(data["pharmaciesWithQty"]).forEach(([key, value]) => {
-                    createMarker(value)
+                    createStoreOverlay(value)
                     const li = document.createElement('li')
                     li.className = "p-2"
                     li.style.borderBottom = "solid 1px"
@@ -384,6 +385,11 @@
                     const a = document.createElement('a')
                     a.onclick = () => handlePharmacyDetail(value["dutyName"])
                     a.innerText = value["dutyName"].length > 15 ? value["dutyName"].substring(0, 15) + "..." : value["dutyName"]
+                    const span = document.createElement('span')
+                    span.innerText = value["price"] + "원" + " / " + value["qty"] + "개"
+                    span.style.float = "right"
+                    span.style.fontSize = "0.9rem"
+                    div.append(span)
                     const p = document.createElement('p')
                     p.innerText = value["dutyAddr"]
                     div.append(a)
@@ -424,13 +430,62 @@
         return rootP
     }
 
+    const createStoreOverlay = (pharmacy) => {
+        storeOverlay.push({
+            marker: createMarker(pharmacy),
+            infoWindow: createInfoWindow(pharmacy)
+        })
+    }
+
     const createMarker = (pharmacy) => {
         const marker = new naver.maps.Marker({
             position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
             title: pharmacy["dutyName"],
             map
         });
-        markers.push(marker)
+        naver.maps.Event.addListener(marker, 'mouseover', mouseoverHandler(marker))
+        naver.maps.Event.addListener(marker, 'click', clickHandler(marker))
+        return marker
+    }
+
+    const mouseoverHandler = (marker) => {
+        return () => {
+            storeOverlay.forEach((overlay) => {
+                overlay.infoWindow.close()
+            })
+            storeOverlay.forEach((overlay) => {
+                if (overlay.marker === marker) {
+                    overlay.infoWindow.open(map, marker)
+                }
+            })
+        }
+    }
+
+    const clickHandler = (marker) => {
+        return () => {
+            const panPos = marker.getPosition()
+            map.setZoom(15, false);
+            map.panTo(panPos.destinationPoint(270, 600))
+        }
+    }
+
+    const createInfoWindow = (pharmacy) => {
+        return new naver.maps.InfoWindow({
+            content: [
+                '<div style="padding: 1.2rem; min-width: 200px; text-align: center;">',
+                '<h4>' + pharmacy["dutyName"] + '</h4>',
+                '<p>' + pharmacy["dutyAddr"] + '</p>',
+                '<p>' + pharmacy["dutyTel1"] + '</p>',
+                '</div>'
+            ].join('')
+        });
+    }
+
+    const deleteMarkers = () => {
+        return storeOverlay.forEach((overlay) => {
+            overlay.marker.setMap(null)
+            overlay.infoWindow.close()
+        })
     }
 
     const handleDetailExtand = () => {
@@ -462,6 +517,10 @@
     }
 
     const handleBookmark = (element, isBookmark) => {
+        <c:if test="${empty sessionScope.member}">
+            alert("로그인이 필요한 서비스입니다.")
+            return location.href = "${pageContext.request.contextPath}/login.do"
+        </c:if>
         const productId = parseInt(element.getAttribute("value"))
         if (isBookmark === "true") {
             fetch('/bookmark/product.do?targetId=' + productId, {
@@ -488,13 +547,6 @@
             }
             location.reload()
         }).catch((err) => console.error(err))
-    }
-
-    const deleteMarkers = () => {
-        for (let i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
-        markers.length = 0;
     }
 
     const mapOptions = {

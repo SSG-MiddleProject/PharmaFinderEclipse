@@ -69,7 +69,7 @@
     </select>
 
     <select id="selectPharmacyProductQtyByProductId" resultType="ssg.middlepj.pharmafinder.dto.PharmacyProductQtyDto" parameterType="Integer" >
-        select store.*, store_stock.quantity as qty
+        select store.*, store_stock.quantity as qty, store_stock.price as price
         from store_stock,
              store
         where store_stock.store_id = store.id
