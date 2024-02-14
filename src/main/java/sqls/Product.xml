@@ -16,6 +16,9 @@
         <result property="depositMethodQes" column="deposit_method_qes" jdbcType="VARCHAR"/>
         <result property="itemImage" column="item_image" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap id="ProductResMap" type="ssg.middlepj.pharmafinder.dto.ProductResDto" extends="BaseResultMap">
+        <result property="isBookmark" column="is_bookmark" jdbcType="INTEGER"/>
+    </resultMap>
 
     <select id="selectProductById" resultMap="BaseResultMap" parameterType="int">
         select *
@@ -43,9 +46,9 @@
         </choose>
     </select>
 
-    <select id="selectProducts" resultMap="BaseResultMap" parameterType="ssg.middlepj.pharmafinder.dto.PaginationParam">
-        select *
-        from product
+    <select id="selectProducts" resultMap="ProductResMap" parameterType="ssg.middlepj.pharmafinder.dto.PaginationParam">
+        select p.*, IF(EXISTS(select * from user_bookmark_product ubp where ubp.product_id = p.id and ubp.user_id = #{userId}), true, false) as is_bookmark
+        from product p
         where
         <choose>
             <when test="searchType == 'id'">
@@ -61,6 +64,15 @@
                 efcy_qes like CONCAT('%', #{keyword}, '%')
             </when>
         </choose>
+        order by is_bookmark desc, p.item_name
         limit #{recordSize} offset #{offset}
+    </select>
+
+    <select id="selectPharmacyProductQtyByProductId" resultType="ssg.middlepj.pharmafinder.dto.PharmacyProductQtyDto" parameterType="Integer" >
+        select store.*, store_stock.quantity as qty, store_stock.price as price
+        from store_stock,
+             store
+        where store_stock.store_id = store.id
+            and store_stock.product_id = #{productId}
     </select>
 </mapper>
