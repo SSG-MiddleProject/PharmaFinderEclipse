@@ -518,6 +518,10 @@ for(int i=0; i<list.size(); i++){
 
 
     const handleBookmark = (element, isBookmark) => {
+        <c:if test="${empty sessionScope.member}">
+            alert("로그인이 필요한 서비스입니다.")
+            return location.href = "${pageContext.request.contextPath}/login.do"
+        </c:if>
         const pharmacyId = parseInt(element.getAttribute("value"))
         if (isBookmark === "true") {
             fetch('/bookmark/pharmacy.do?targetId=' + pharmacyId, {
