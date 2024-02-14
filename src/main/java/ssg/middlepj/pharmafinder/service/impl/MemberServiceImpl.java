@@ -61,4 +61,9 @@ public class MemberServiceImpl implements MemberService {
         // 이메일을 통해 아이디를 조회하는 DAO 메서드 호출
         return dao.findUsernameByEmail(email);
     }
+    
+    @Override
+    public void updateMember(MemberDto member) {
+        MemberDao.updateMember(member);    // DAO를 통해 데이터베이스 업데이트 실행
+    }
 }

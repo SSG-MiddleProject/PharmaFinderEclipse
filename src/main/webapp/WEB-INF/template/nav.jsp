@@ -7,6 +7,7 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
 <style>
 
     .menu-list {
@@ -98,25 +99,25 @@
                 <br>제품 관리
             </a>
         </li>
+        
+        
+        <c:choose>
+    <c:when test="${not empty sessionScope.username}">
+        <!-- 로그인 상태일 때 -->
         <li id="nav-bottom" class="has-text-centered py-2">
-            <a>
-                즐겨찾기
-            </a>
-            <a href="mypage.do">
-                마이페이지
-            </a>
-            <a>
-                설정
-            </a>
-            <a href="login.do">
-            로그인
-			</a>
-            <a href="regi.do">
-                로그아웃
-            </a>
-
+            <a href="mypage.do">마이페이지</a>
+        
+        
+            <a href="logout.do">로그아웃</a>
         </li>
-
+    </c:when>
+    <c:otherwise>
+        <!-- 로그인 상태가 아닐 때 -->
+        <li id="nav-bottom" class="has-text-centered py-2">
+            <a href="login.do">로그인</a>
+        </li>
+    </c:otherwise>
+</c:choose>
     </ul>
 
 </div>
