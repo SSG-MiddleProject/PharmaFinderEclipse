@@ -11,18 +11,18 @@
 
 	String formatedDate = year + "-" + twoMonth + "-" + twoDay;
 %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Search Modal</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 /* 스타일링을 위한 CSS */
-body {
-	font-family: Arial, sans-serif;
+#inwrite {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	itmes-align: center;
+	padding: 10px;
+}
+
+hr {
+	margin: 0;
 }
 
 #searchModal {
@@ -62,11 +62,11 @@ body {
 	border: solid 2px black;
 }
 </style>
-</head>
-<body>
-	<h1>입고추가</h1>
-	<input type="date" id="date" value="<%=formatedDate %>" readonly />
-	<button type="button" onclick="openSearchModal()">검색창 열기</button>
+<div id="inwrite">
+	<div >
+	<div style="height: 90%">
+			<p><%=formatedDate%></p>
+	<p class=" " style="padding-top: 20px; font-size: x-large; font-weight: bold">입고추가</p>
 	<!-- 검색 모달창 START-->
 	<div id="searchModal">
 		<!-- 실제창 -->
@@ -85,9 +85,13 @@ body {
 	</div>
 	<!-- 검색 모달창 -->
 	<!-- 약국제품 추가창 START -->
-	<div id="pharmaProductAddList"></div>
-	<button type="button" onclick="submitPharmaProductIn()" >입고등록</button>
+	<div id="pharmaProductAddList" style="display: grid; "></div>
 	<!-- 약국제품 추가창 END -->
+	</div>
+	<button type="button" class="button is-light" onclick="openSearchModal()">검색</button>
+	<button class="button is-light" type="button" style="align-self: end" onclick="submitPharmaProductIn()" >등록</button>
+
+	</div>
 
 	<script>
 		// JavaScript를 사용하여 모달창 열고 닫기
@@ -109,7 +113,7 @@ body {
 
 			if (searchType === "id") {
 				if(isNaN(keyword)){
-					alert("제품코드이므로 숫자입력바람");
+					alert("제품코드는 숫자만 입력 가능합니다.");
 					return;
 				}else{
 					productId = keyword;
@@ -176,7 +180,7 @@ body {
 					let productId = $(element).find(".productId").text();
 
 					if (json.productId == productId) {
-						alert("같은 제품 추가 불가");
+						alert("이미 추가된 제품입니다.");
 						return;
 					}
 				}
@@ -189,36 +193,45 @@ body {
 		function addPharmaProduct(jsonStr, container) {
 			let json = JSON.parse(jsonStr);
 			let addIndex = $(".add-pharma-product").length;
-			let productDiv = $("<div>");
+			let productDiv = $("<div style='width: 20rem; height: auto; '>");
+
 
 			productDiv.attr("id", addIndex + "addPharmaProductContainer");
 			productDiv.attr("class", "add-pharma-product");
 			productDiv.attr("data-object", jsonStr);
 
-			let productId = $("<span class='productId'>");
+			let productId = $("<span class='productId' style='font-size: small; color: darkgrey'>");
 			productId.text(json.productId);
+			productId.append($("<br>"));
+			productId.append($("</span>"))
 
-			let itemName = $("<span>");
+			let itemName = $("<span style='font-size: x-large' '>");
+
 			itemName.text(json.itemName);
+			itemName.append($("<br>"));
 
-			let closeIcon = $(`<a onclick="doCloseIcon(this)"><i class="far fa-times-circle"></i></a>`);
+			let closeIcon = $(`<span onclick="doCloseIcon(this)"><i class="fas fa-times-circle is-pulled-right"></i></span>`);
 
 			let hr = $("<hr>")
-			let plusIcon = $(`<a onclick="doPlus(this)"><i class="fas fa-plus-circle"></a>`);
-			let count = $("<span class='count'>1<span>");
-			let minusIcon = $(`<a onclick="doMinus(this)"><i class="fas fa-minus-circle"></a>`);
+			let br = $("<br>");
+			let openDiv = $("<div style='display: flex; '>");
+			let plusIcon = $(`<span onclick="doPlus(this)" > + </span>`);
+			let count = $("<span class='count'>1</span>");
+			let minusIcon = $(`<span onclick="doMinus(this)""> - </span>`);
 
-			let inputPrice = $(`<span class="input-price">`+ json.inputPrice + `</span>`)
+			let inputPrice = $(`<span class="input-price" style="align-items: end">`+ json.inputPrice + `</span>`)
 
+			productDiv.append(closeIcon);
+			productDiv.append(br);
 			productDiv.append(productId);
 			productDiv.append(itemName);
-			productDiv.append(closeIcon);
+			productDiv.append(inputPrice);
+			productDiv.append($("<span>원</span>"));
 			productDiv.append(hr);
+
 			productDiv.append(plusIcon);
 			productDiv.append(count);
 			productDiv.append(minusIcon);
-			productDiv.append(inputPrice);
-			productDiv.append($("<span>원</span>"));
 
 			container.append(productDiv);
 		}
@@ -278,7 +291,7 @@ body {
 				data: pharmaInDto,
 				success:function(data){
 					if(data.msg === "SUCCESS"){
-						alert("성공")
+						alert("등록 성공")
 
 						location.href = "/pharma-inout-calendar.do";
 					}else{
@@ -313,5 +326,5 @@ body {
 		    }).join('&');
 		}
 	</script>
-</body>
-</html>
+</div>
+
