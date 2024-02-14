@@ -52,9 +52,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<insert id="insert-store-stock" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto">
-		insert into store_stock(store_id, product_id, quantity)
-		values(#{storeId}, #{productId}, 0)
+		insert into store_stock(store_id, product_id, quantity, price)
+		values(#{storeId}, #{productId}, 0, #{outputPrice})
 	</insert>
+
+	<update id="update-store-stock-output-price" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto">
+		update store_stock
+		set price = #{outputPrice}
+		where store_id = #{storeId} and product_id = #{productId}
+	</update>
 
 	<update id="update-pharma-product" parameterType="ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto">
 		update store_product

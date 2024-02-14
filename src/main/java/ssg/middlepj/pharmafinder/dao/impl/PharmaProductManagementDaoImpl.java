@@ -47,8 +47,13 @@ public class PharmaProductManagementDaoImpl implements PharmaProductManagementDa
 	}
 
 	@Override
-	public int insertStoreStock(PharmaStoreStockDto dto) {
+	public int insertStoreStock(PharmaProductManagementDto dto) {
 		return session.insert(ns + "insert-store-stock", dto);
+	}
+
+	@Override
+	public int updateStoreStockOutputPrice(PharmaProductManagementDto dto) {
+		return session.update(ns + "update-store-stock-output-price", dto);
 	}
 
 

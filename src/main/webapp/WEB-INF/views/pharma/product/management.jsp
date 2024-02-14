@@ -44,18 +44,61 @@
             cursor: pointer;
         }
 
-        .pharma-products-container {
-            margin: 0 auto;
-            overflow: auto;
-            height: 300px
+        .wrapper{
+        	width: calc(100vw - 104px - 15px - 40px);
+        	height: 100vh;
+        	margin-left: 20px;
+        	display:flex;
+        	flex-direction: column;
         }
+
+        .main{
+			display:flex;
+			flex-direction:row;
+			justify-content: between;
+		}
+
+        .pharma-products-container {
+        	width:50%;
+        	margin-left: 200px;
+            overflow-y: auto;
+            max-height: calc(100vh - 116px - 40px);
+        }
+
+        .edit{
+        	padding-left:100px;
+        	width:40%;
+        }
+
+		.header{
+			padding-top:40px;
+			padding-bottom:40px;
+			text-align:center;
+		}
+
+
+
     </style>
 </head>
 
 <body>
+	<div class="wrapper">
+	<div class="header">
+		<h1 class="title">제품 관리</h1>
+	</div>
     <!-- 리스트 구역 START -->
+    <div class="main">
     <div class="pharma-products-container">
-        <table class="table" id="pharma-products">
+        <table class="table" id="pharma-products" width="100%" height="100%">
+        <colgroup>
+		    <col style="width: 5%;">
+		    <col style="width: 15%;">
+		    <col style="width: 30%;">
+		    <col style="width: 15%;">
+		    <col style="width: 15%;">
+		    <col style="width: 20%;">
+		    <col style="width: 5%;">
+  		</colgroup>
             <thead>
                 <tr>
                     <td>id</td>
@@ -90,35 +133,15 @@
                         <td>
                             <%=item.getCreatedAt().substring(0, 10)%>
                         </td>
-                        <td><button type="button"
+                        <td><button class="button is-primary is-outlined" type="button"
                                 onclick="updatePharmaProduct(<%=item.getId()%>)">수정</button></td>
                     </tr>
                     <% } } %>
             </tbody>
         </table>
     </div>
-    <hr />
-    <!-- 리스트 구역 END -->
-
-    <!-- 검색 모달창 START-->
-    <div id="searchModal">
-    <!-- 실제창 -->
-        <div class="modal-contents">
-            <span class="close" onclick="closeSearchModal()">&times;</span>
-            <h2>검색</h2>
-            <input type="text" id="keyword" placeholder="검색어를 입력하세요"> <select id="searchType"
-                class="form-control" style="width: auto;">
-                <option value="id">제품코드</option>
-                <option value="itemName">제품명</option>
-            </select>
-            <button onclick="performSearch()">검색</button>
-            <div id="result"></div>
-        </div>
-        <!-- 실제창 END -->
-    </div>
-    <!-- 검색 모달창 -->
-
-    <!-- 제품 추가창 -->
+        <!-- 제품 추가창 -->
+    <div class="edit">
     <form>
     	<div class="field is-grouped">
     		<label for="insertId" class="label" style="width:20%;margin-right:2%">제품코드</label>
@@ -148,9 +171,31 @@
         	<input type="text" id="insertVAT" class="input" style="width:20%" />
         </div>
         <div class="control">
-        	<button type="button" class="button is-link" id="registerProduct" onclick="registerPharmaProduct()">제품등록</button>
+        	<button type="button" class="button is-info is-outlined" id="registerProduct" onclick="registerPharmaProduct()" style="margin-top:10px">제품등록</button>
         </div>
     </form>
+    </div>
+    </div>
+    <!-- 리스트 구역 END -->
+
+    <!-- 검색 모달창 START-->
+    <div id="searchModal">
+    <!-- 실제창 -->
+        <div class="modal-contents">
+            <span class="close" onclick="closeSearchModal()">&times;</span>
+            <h2>검색</h2>
+            <input type="text" id="keyword" placeholder="검색어를 입력하세요"> <select id="searchType"
+                class="form-control" style="width: auto;">
+                <option value="id">제품코드</option>
+                <option value="itemName">제품명</option>
+            </select>
+            <button onclick="performSearch()">검색</button>
+            <div id="result"></div>
+        </div>
+        <!-- 실제창 END -->
+    </div>
+    <!-- 검색 모달창 -->
+    </div>
     <!--  -->
 
     <script>
@@ -181,6 +226,17 @@
 
           // 실제 검색 로직은 여기에 추가
           function performSearch() {
+				if($("keyword").val() == ''){
+					alert("검색 키워드 입력해주세요.");
+				}
+
+        		if($("#searchType").val() === "id"){
+        			if(isNaN($("keyword").val())){
+        				alert("제품코드는 숫자입니다.");
+        				return;
+        			}
+        		}
+
               $.ajax({
                   url: "./pharma-product-common-search.do",
                   type: "get",
@@ -314,7 +370,7 @@
                 let inputPrice = $("<td>" + item.inputPrice + "</td>");
                 let outputPrice = $("<td>" + item.outputPrice + "</td>");
                 let createdAt = $("<td>" + item.createdAt.substring(0, 10) + "</td>");
-                let btnDelete = $("<td><button type='button' onclick='updatePharmaProduct(" + item.id + ")' >수정</button></td>");
+                let btnDelete = $("<td><button class='button is-primary is-outlined' type='button' onclick='updatePharmaProduct(" + item.id + ")' >수정</button></td>");
                 row.append(id);
                 row.append(productId);
                 row.append(itemName);

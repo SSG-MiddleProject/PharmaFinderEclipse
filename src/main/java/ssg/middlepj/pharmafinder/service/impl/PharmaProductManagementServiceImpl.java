@@ -39,14 +39,15 @@ public class PharmaProductManagementServiceImpl implements PharmaProductManageme
 	@Override
 	public boolean registerPharmaProduct(PharmaProductManagementDto dto) {
 
-		dao.insertStoreStock(new PharmaStoreStockDto(dto.getStoreId(), dto.getProductId()));
-
-		return dao.insertPharmaProduct(dto) > 0;
+		return dao.insertPharmaProduct(dto) > 0 && dao.insertStoreStock(dto) > 0;
 	}
 
 	@Override
 	public boolean updatePharmaProduct(PharmaProductManagementDto dto) {
-		return dao.updatePharmaProduct(dto) > 0;
+		int updateProductCnt = dao.updatePharmaProduct(dto);
+		int updatestoreProductCnt = dao.updateStoreStockOutputPrice(dto);
+
+		return updateProductCnt > 0 && updatestoreProductCnt > 0;
 	}
 
 	@Override
