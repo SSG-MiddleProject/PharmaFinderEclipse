@@ -1,4 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ssg.middlepj.pharmafinder.dto.PharmacyResDto" %>
+
 <%@ page import="java.util.List" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.util.Properties" %>
@@ -24,7 +26,7 @@
     String keyword = "";
     Integer currentPage = pagination.getPaginationParam().getPage();
     Integer lastPage = pagination.getTotalPageCount();
-    if(request.getParameter("QN") != null) keyword = request.getParameter("QN");
+    if (request.getParameter("QN") != null) keyword = request.getParameter("QN");
     else keyword = "";
 
 %>
@@ -212,8 +214,28 @@
     const currentPage = parseInt("<%=currentPage%>");
     const lastPage = parseInt("<%=lastPage%>");
     const markers = [];
+    const infoWindows = [];
+
     let map;
     let keyword = "<%=keyword%>"
+
+    let mylist = [];
+    let loop = 0;
+
+    <%
+for(int i=0; i<list.size(); i++){
+  %>
+    mylist[loop] = {
+        number: "<%=list.get(i).getId()%>",
+        lat: "<%=list.get(i).getWgs84Lat()%>",
+        lng: "<%=list.get(i).getWgs84Lon()%>",
+        name: "<%=list.get(i).getDutyName()%>",
+        addr: "<%=list.get(i).getDutyAddr()%>"
+    };
+    loop++;
+    <%
+  }
+  %>
 
     const handleSearch = () => {
         const keyword = document.querySelector('input[name="keyword"]').value;
@@ -252,11 +274,9 @@
         openCollapse();
     }
     const openCollapse = () => {
-        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "visible";
     }
     const closeCollapse = () => {
-        deleteMarkers()
         document.getElementById("container-collapse").style.visibility = "hidden";
     }
 
@@ -412,7 +432,6 @@
                         const qty = product.qty;
                         const productId = product.id;
                         const price = product.price;
-                        console.log(product);
 
                         const li = document.createElement('li');
                         li.className = "p-2";
@@ -457,22 +476,46 @@
             })
     }
 
-    const createMarker = (pharmacy) => {
-        const marker = new naver.maps.Marker({
-            position: new naver.maps.LatLng(parseFloat(pharmacy["wgs84Lat"]), parseFloat(pharmacy["wgs84Lon"])),
-            title: pharmacy["dutyName"],
-            map
-        });
-        markers.push(marker);
 
-    }
+    const createMarker = () => {
+        for (let i = 0; i < mylist.length; i++) {
+            const marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(parseFloat(mylist[i].lat), parseFloat(mylist[i].lng)),
+                title: mylist[i].name,
+                addr: mylist[i].addr,
+                map
+            });
+            const infoWindow = new naver.maps.InfoWindow({
+                content: [
+                    '<div style="padding: 1.2rem; min-width: 200px; text-align: center;">',
+                    '<h4>' + mylist[i].name + '</h4>',
+                    '<p>' + mylist[i].addr + '</p>',
+                    '</div>'
+                ].join('')
+            });
+            naver.maps.Event.addListener(marker, 'click', function () {
+                map.setZoom(15, false);
+                const panPos = new naver.maps.LatLng(parseFloat(mylist[i].lat), parseFloat(mylist[i].lng) - 0.005);
+                map.panTo(panPos);
+                handlePharmacy(mylist[i].number);
+                openCollapse();
+            });
+            naver.maps.Event.addListener(marker, 'mouseover', overHandler(marker));
 
-    const deleteMarkers = () => {
-        for(let i=0; i<markers.length; i++){
-            markers[i].setMap(null);
+            markers.push(marker);
+            infoWindows.push(infoWindow);
         }
-        markers.length = 0;
     }
+
+    const overHandler = (marker) => {
+        return function () {
+            infoWindows.forEach((infoWindow) => {
+                infoWindow.close();
+            })
+            infoWindows[markers.indexOf(marker)].open(map, marker);
+        }
+    }
+
 
     const handleBookmark = (element, isBookmark) => {
         const pharmacyId = parseInt(element.getAttribute("value"))
@@ -529,6 +572,7 @@
             alert('geolocation not supported');
         }
         handleCurrentPageNum()
+        createMarker()
     })
 
 
