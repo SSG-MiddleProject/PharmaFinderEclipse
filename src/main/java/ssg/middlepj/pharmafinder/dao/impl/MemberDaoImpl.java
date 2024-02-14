@@ -65,5 +65,15 @@ public class MemberDaoImpl implements MemberDao {
     	int updatedRows = session.update(ns + "updateTemporaryPassword", paramMap);
     	return updatedRows > 0;
     }
+    
+    @Override
+    public boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("temporaryPassword", encryptedTempPassword);
+        paramMap.put("newPassword", encryptedNewPassword);
+        int updatedRows = session.update(ns + "updatePasswordWithTemporary", paramMap);
+        return updatedRows > 0;
+    }
 
 }

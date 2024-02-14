@@ -33,6 +33,13 @@
         and email = #{email}
     </update>
     
+    <update id="updatePasswordWithTemporary" parameterType="map">
+	    UPDATE user
+	    SET password = #{newPassword}
+	    WHERE username = #{username}
+	    AND password = #{temporaryPassword}
+	</update>
+    
     <select id="emailcheck" parameterType="String" resultType="Integer">
         select count(*)
         from user

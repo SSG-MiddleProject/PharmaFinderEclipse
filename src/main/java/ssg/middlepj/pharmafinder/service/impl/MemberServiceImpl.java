@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
 	// 이메일과 유저 로그인id로 비밀번호 찾기
 	@Override
-	public String updatePassword(String username, String email) throws NoSuchAlgorithmException {
+	public String findPassword(String username, String email) throws NoSuchAlgorithmException {
 		
 		// 아이디와 이메일을 기준으로 임시 비밀번호 생성
 		String temporaryPassword = generateTemporaryPassword();
@@ -114,5 +114,15 @@ public class MemberServiceImpl implements MemberService {
 		// 임시 비밀번호를 포함하는 이메일 전송 로직 구현
 		// 이메일 전송 기능에 대한 구현은 프로젝트의 이메일 전송 방식에 따라 다를 수 있음
 	}
+	
+	@Override
+    public boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword) throws NoSuchAlgorithmException {
+        // 임시 비밀번호 암호화
+        String encryptedTempPassword = encryptStringBySHA256(temporaryPassword);
+        // 새로운 비밀번호 암호화
+        String encryptedNewPassword = encryptStringBySHA256(newPassword);
+
+        return dao.updatePasswordWithTemporary(username, encryptedTempPassword, encryptedNewPassword);
+    }
 
 }

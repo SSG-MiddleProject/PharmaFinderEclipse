@@ -230,15 +230,44 @@ public class MemberController {
 	    }
 	    
 	    // 아이디와 이메일을 통해 비밀번호 재설정 및 임시 비밀번호 이메일 전송 시도
-	    String temporaryPassword = service.updatePassword(username.trim(), email.trim());
+	    String temporaryPassword = service.findPassword(username.trim(), email.trim());
 	    if (temporaryPassword != null) {
 	        // 임시 비밀번호 발급 및 이메일 전송 성공
 	        model.addAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다: " + temporaryPassword);
-	        return "member/login";
+	        System.out.println("temporaryPassword: " + temporaryPassword);
+	        return "member/updateOriginPassword";
 	    } else {
 	        // 아이디 또는 이메일 주소가 일치하지 않음
 	        model.addAttribute("error", "제공된 정보와 일치하는 계정이 없습니다.");
 	        return "member/findPassword";
+	    }
+	}
+	
+	@PostMapping("/updatePasswordProcess.do")
+	public String updatePasswordProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
+	    String username = request.getParameter("username");
+	    String temporaryPassword = request.getParameter("temporaryPassword");
+	    String newPassword = request.getParameter("newPassword");
+	    String confirmPassword = request.getParameter("confirmPassword");
+
+	    // 입력값 검증 (생략)
+	    // 새로운 비밀번호와 비밀번호 확인이 일치하는지 검사
+	    if (!newPassword.equals(confirmPassword)) {
+	        model.addAttribute("error", "새로운 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+	        return "member/updateOriginPassword";
+	    }
+
+	    // 임시 비밀번호와 새로운 비밀번호를 처리하는 서비스 메서드 호출
+	    boolean updateResult = service.updatePasswordWithTemporary(username, temporaryPassword, newPassword);
+	    
+	    if (updateResult) {
+	        // 비밀번호 변경 성공
+	        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
+	        return "member/login";
+	    } else {
+	        // 비밀번호 변경 실패
+	        model.addAttribute("error", "비밀번호 변경에 실패하였습니다.");
+	        return "member/updateOriginPassword";
 	    }
 	}
 	

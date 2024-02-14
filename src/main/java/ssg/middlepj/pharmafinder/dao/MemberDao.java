@@ -23,5 +23,7 @@ public interface MemberDao {
 	
     // 비밀번호찾기
     boolean updateTemporaryPassword(String username, String email, String temporaryPassword);
+	
+    boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword);
 
 }
