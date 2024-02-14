@@ -74,7 +74,7 @@ $(document).ready(function () {
 	// 이메일 중복 체크
 	$("#email").keyup(function() {
 	    var inputEmail = $(this).val().trim();
-	    
+
 	    if(inputEmail !== "") {
 	        $.ajax({
 	            url: "emailcheck.do",
@@ -98,9 +98,9 @@ $(document).ready(function () {
 	        $("#emailcheck").text(""); // 입력값이 없을 때 메시지를 비움
 	    }
 	});
-	
+
 	$("#regibtn").click(function () {
-		
+
 		// 빈칸 검사(id, password)
 		if($("#username").val().trim() === "") {
 		    alert("아이디를 입력해주세요.");

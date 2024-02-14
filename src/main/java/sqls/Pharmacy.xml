@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Pharmacy">
+    <resultMap id="pharmacyResultMap" type="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        <id property="dutyName" column="dutyName" jdbcType="VARCHAR"/>
+        <result property="dutyAddr" column="dutyAddr" jdbcType="VARCHAR"/>
+        <result property="dutyTel1" column="dutyTel1" jdbcType="VARCHAR"/>
+        <result property="dutyTime1c" column="dutyTime1c" jdbcType="VARCHAR"/>
+        <result property="dutyTime1s" column="dutyTime1s" jdbcType="VARCHAR"/>
+        <result property="dutyTime2c" column="dutyTime2c" jdbcType="VARCHAR"/>
+        <result property="dutyTime2s" column="dutyTime2s" jdbcType="VARCHAR"/>
+        <result property="dutyTime3c" column="dutyTime3c" jdbcType="VARCHAR"/>
+        <result property="dutyTime3s" column="dutyTime3s" jdbcType="VARCHAR"/>
+        <result property="dutyTime4c" column="dutyTime4c" jdbcType="VARCHAR"/>
+        <result property="dutyTime4s" column="dutyTime4s" jdbcType="VARCHAR"/>
+        <result property="dutyTime5c" column="dutyTime5c" jdbcType="VARCHAR"/>
+        <result property="dutyTime5s" column="dutyTime5s" jdbcType="VARCHAR"/>
+        <result property="dutyTime6c" column="dutyTime6c" jdbcType="VARCHAR"/>
+        <result property="dutyTime6s" column="dutyTime6s" jdbcType="VARCHAR"/>
+        <result property="dutyTime7c" column="dutyTime7c" jdbcType="VARCHAR"/>
+        <result property="dutyTime7s" column="dutyTime7s" jdbcType="VARCHAR"/>
+        <result property="dutyTime8c" column="dutyTime8c" jdbcType="VARCHAR"/>
+        <result property="dutyTime8s" column="dutyTime8s" jdbcType="VARCHAR"/>
+        <result property="hpid" column="hpid" jdbcType="VARCHAR"/>
+        <result property="wgs84Lon" column="wgs84Lon" jdbcType="DECIMAL"/>
+        <result property="wgs84Lat" column="wgs84Lat" jdbcType="DECIMAL"/>
+    </resultMap>
+    <resultMap id="productResultMap" type="ssg.middlepj.pharmafinder.dto.ProductPharmacyQtyDto">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="entpName" column="entp_name" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="qty" column="qty" jdbcType="INTEGER"/>
+
+    </resultMap>
+    <resultMap id="pharmacyResDto" type="ssg.middlepj.pharmafinder.dto.PharmacyResDto" extends="pharmacyResultMap">
+        <result property="isBookmark" column="is_bookmark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="countPharmacyList" resultType="int" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
+        SELECT COUNT(*)
+        FROM store
+        WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
+          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
+            AND dutyName LIKE CONCAT('%', #{QN}, '%')
+    </select>
+
+    <select id="selectPharmaciesByDB" resultMap="pharmacyResDto"
+            parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
+        SELECT s.*,
+               IF(EXISTS(select *
+                         from user_bookmark_store ubs
+                         where ubs.store_id = s.id
+                           and ubs.user_id = #{userId}), true, false)
+                   as is_bookmark
+        FROM store s
+        WHERE dutyAddr LIKE CONCAT('%', #{Q0}, '%')
+          AND dutyAddr LIKE CONCAT('%', #{Q1}, '%')
+          AND dutyName LIKE CONCAT('%', #{QN}, '%')
+        order by is_bookmark desc, dutyName
+        limit #{recordSize} offset #{offset}
+
+    </select>
+
+    <select id="selectPharmacybyDB" resultMap="pharmacyResultMap"
+            parameterType="ssg.middlepj.pharmafinder.dto.PharmacyParam">
+        SELECT *
+        FROM store
+        WHERE id = #{storeId}
+    </select>
+
+    <insert id="insertPharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
+        insert into store (dutyName, dutyAddr, dutyTel1, dutyTime1c, dutyTime1s, dutyTime2c, dutyTime2s, dutyTime3c,
+                           dutyTime3s, dutyTime4c, dutyTime4s, dutyTime5c, dutyTime5s, dutyTime6c, dutyTime6s,
+                           dutyTime7c, dutyTime7s, dutyTime8c, dutyTime8s, hpid, wgs84Lon, wgs84Lat)
+        values (#{dutyName}, #{dutyAddr}, #{dutyTel1}, #{dutyTime1c}, #{dutyTime1s}, #{dutyTime2c}, #{dutyTime2s},
+                #{dutyTime3c}, #{dutyTime3s}, #{dutyTime4c}, #{dutyTime4s}, #{dutyTime5c}, #{dutyTime5s}, #{dutyTime6c},
+                #{dutyTime6s}, #{dutyTime7c}, #{dutyTime7s}, #{dutyTime8c}, #{dutyTime8s}, #{hpid}, #{wgs84Lon},
+                #{wgs84Lat})
+    </insert>
+
+    <select id="selectProductByPharmacyId" resultMap="productResultMap" parameterType="Integer">
+        SELECT product.*, store_stock.quantity AS qty, store_stock.price
+        FROM store_stock
+                 INNER JOIN product ON store_stock.product_id = product.id
+        WHERE store_stock.store_id = #{storeId} AND store_stock.quantity > 0
+    </select>
+
+</mapper>

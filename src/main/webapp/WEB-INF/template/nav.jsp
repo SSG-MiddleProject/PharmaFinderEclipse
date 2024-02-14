@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kimjinsun
-  Date: 2/1/24
-  Time: 1:51 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -70,57 +63,56 @@
             </a>
         </li>
         <li class="has-text-centered">
-            <a href="<%="main.do"%>">
+            <a href="${pageContext.request.contextPath}/">
                 <span class="icon pb-1"><i class="fas fa-pills"></i></span>
                 제품 검색
             </a>
         </li>
         <li class="has-text-centered">
-            <a href="<%="pharmacy.do"%>" class="" style="flex-direction: column; align-items: center;">
+            <a href="${pageContext.request.contextPath}/pharmacy.do"
+               style="flex-direction: column; align-items: center;">
                 <span class="icon pb-1"><i class="fas fa-hospital"></i></span>
                 약국 검색
             </a>
         </li>
-        <li class="has-text-centered">
-            <a href="#" class="">
-                <span class="icon pb-1"><i class="fas fa-list"></i></span>
-                <br>재고 조회
-            </a>
-        </li>
-        <li class="has-text-centered">
-            <a href="#" class="">
-                <span class="icon pb-1"><i class="fas fa-calendar"></i></span>
-                입출고<br>내역
-            </a>
-        </li>
-        <li class="has-text-centered">
-            <a href="#" class="">
-                <span class="icon pb-1"><i class="fas fa-cubes"></i></span>
-                <br>제품 관리
-            </a>
-        </li>
+        <c:if test="${not empty sessionScope.member.storeId && not empty sessionScope.member.id}">
+            <li class="has-text-centered">
+                <a href="${pageContext.request.contextPath}/pharma-inventory-inquiry.do" class="">
+                    <span class="icon pb-1"><i class="fas fa-list"></i></span>
+                    <br>재고 조회
+                </a>
+            </li>
+            <li class="has-text-centered">
+                <a href="${pageContext.request.contextPath}/pharma-inout-calendar.do" class="">
+                    <span class="icon pb-1"><i class="fas fa-calendar"></i></span>
+                    입출고<br>내역
+                </a>
+            </li>
+            <li class="has-text-centered">
+                <a href="${pageContext.request.contextPath}/pharma-inout-calendar.do" class="">
+                    <span class="icon pb-1"><i class="fas fa-cubes"></i></span>
+                    <br>제품 관리
+                </a>
+            </li>
+        </c:if>
+
         <li id="nav-bottom" class="has-text-centered py-2">
-            <a>
-                즐겨찾기
-            </a>
-            <a href="mypage.do">
-                마이페이지
-            </a>
-            <a>
-                설정
-            </a>
-            <a href="login.do">
-            	로그인
-			</a>
-            <a href="logout.do">
-                로그아웃
-            </a>
-
+            <c:if test="${not empty sessionScope.member.id}">
+                <a>
+                    즐겨찾기
+                </a>
+                <a href="${pageContext.request.contextPath}/mypage.do">
+                    마이페이지
+                </a>
+                <a href="${pageContext.request.contextPath}/logout.do">
+                    로그아웃
+                </a>
+            </c:if>
+            <c:if test="${empty sessionScope.member.id}">
+                <a href="${pageContext.request.contextPath}/login.do">
+                    로그인
+                </a>
+            </c:if>
         </li>
-
     </ul>
-
 </div>
-
-
-
