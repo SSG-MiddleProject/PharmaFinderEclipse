@@ -9,7 +9,7 @@
 
 <h1>비밀번호 찾기</h1>
 
-<form action="findPassword.do" method="post">
+<form action="findPasswordAf.do" method="post">
     <label for="username">아이디:</label>
     <input type="text" id="username" name="username" required><br><br>
     <label for="email">이메일:</label>

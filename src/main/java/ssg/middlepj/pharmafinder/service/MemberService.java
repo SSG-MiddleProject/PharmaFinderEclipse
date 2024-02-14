@@ -1,5 +1,7 @@
 package ssg.middlepj.pharmafinder.service;
 
+import java.security.NoSuchAlgorithmException;
+
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
@@ -15,11 +17,10 @@ public interface MemberService {
 
     MemberDto login(String username, String password);    // 로그인하기
 
-    String findPassword(String username, String email); // 비밀번호 찾기 메서드 추가
-
     String findUsernameByEmail(String email);    //이메일로 유저아이디 찾기
 
-	static void updateMember(MemberDto member) {	//회원 정보 업데이트 메서드
-		
-	}
+	String findPassword(String username, String email) throws NoSuchAlgorithmException; // 비밀번호 찾기 메서드 추가
+	
+	boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword) throws NoSuchAlgorithmException;
+
 }

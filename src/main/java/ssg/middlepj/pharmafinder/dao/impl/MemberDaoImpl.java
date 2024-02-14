@@ -47,20 +47,33 @@ public class MemberDaoImpl implements MemberDao {
         // 여기서는 Map<String, String>으로 변경하여 처리합니다.
         return session.selectOne(ns + "login", paramMap);
     }
-
-    // 비밀번호 찾기
-    @Override
-    public String findPassword(String username, String email) {
-        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("username", username);
-        paramMap.put("email", email);
-        return session.selectOne(ns + "findPassword", paramMap);
-    }
-
+    
     // 이메일로 아이디 찾기
     @Override
     public String findUsernameByEmail(String email) {
         // 이메일을 통해 아이디를 조회하는 쿼리를 실행하는 부분
         return session.selectOne(ns + "findUsernameByEmail", email);
     }
+
+    // 비밀번호 찾기
+    @Override
+    public boolean updateTemporaryPassword(String username, String email, String temporaryPassword) {
+    	Map<String, Object> paramMap = new HashMap<>();
+    	paramMap.put("username", username);
+        paramMap.put("email", email);
+        paramMap.put("temporaryPassword", temporaryPassword);
+    	int updatedRows = session.update(ns + "updateTemporaryPassword", paramMap);
+    	return updatedRows > 0;
+    }
+    
+    @Override
+    public boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("username", username);
+        paramMap.put("temporaryPassword", encryptedTempPassword);
+        paramMap.put("newPassword", encryptedNewPassword);
+        int updatedRows = session.update(ns + "updatePasswordWithTemporary", paramMap);
+        return updatedRows > 0;
+    }
+
 }

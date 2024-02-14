@@ -1,10 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	<% System.out.println("ë¡œê·¸ì¸"); %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>·Î±×ÀÎ ÆäÀÌÁö</title>
+<meta charset="UTF-8">
+<title>ë¡œê·¸ì¸ í˜ì´ì§€</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -99,31 +100,34 @@ body {
 <body>
 
 <div class="center">
-
 <div class="login-container">
-
 	<h2 class="login-title">PharmaFinder</h2>
 	
 	<p align="center">Login</p>
+	
+	<!-- ë¡œê·¸ì¸ ì‹¤íŒ¨ ì‹œ ì—ëŸ¬ ë©”ì‹œì§€ ì¶œë ¥ -->
+        <% if (request.getAttribute("error") != null) { %>
+            <p style="color: red;">
+            <%= request.getAttribute("error") %></p>
+        <% } %>
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
 		<input type="text" id="username" name="username" size=20 placeholder="example@test.com">
 		<input type="password" name="password" placeholder="Password">
 		<input type="checkbox" id="saveId" name="saveId">
-		<label for="saveId">¾ÆÀÌµğ ÀúÀå</label><br/><br/>
+		<label for="saveUsername">ì•„ì´ë”” ì €ì¥</label><br/><br/>
 		<input type="submit" value="login">
 	</form>
 	<br/>
 	<div class="login-links">
-		<a href="#">¾ÆÀÌµğ/ºñ¹Ğ¹øÈ£ Ã£±â</a>
-		<form action="">
+		<a href="findUsername.do">ì•„ì´ë”” ì°¾ê¸° / </a>
+		<a href="findPassword.do">ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸°</a>
 		<div>
 			<p class="mb-0">
-				È¸¿øÀÌ ¾Æ´Ï½Å°¡¿ä?<a href="regiSelect.do" class="text-white-50 fw-bold">È¸¿ø°¡ÀÔ</a><br/>
+				íšŒì›ì´ ì•„ë‹ˆì‹ ê°€ìš”?<a href="regiSelect.do" class="text-white-50 fw-bold">íšŒì›ê°€ì…</a><br/>
 			</p>
 		</div>
-		</form>
 	</div>
 
 </div>
@@ -132,31 +136,23 @@ body {
 
 <script type="text/javascript">
 $(document).ready(function() {
-    // ÆäÀÌÁö ·Îµå ½Ã, ÀúÀåµÈ ¾ÆÀÌµğ°¡ ÀÖ´ÂÁö È®ÀÎÇÏ°í ¾ÆÀÌµğ ÀÔ·Â ÇÊµå¿¡ ¼³Á¤
+    // í˜ì´ì§€ ë¡œë“œ ì‹œ, ì €ì¥ëœ ì•„ì´ë””ê°€ ìˆëŠ”ì§€ í™•ì¸í•˜ê³  ì•„ì´ë”” ì…ë ¥ í•„ë“œì— ì„¤ì •
     var savedUsername = localStorage.getItem("savedUsername");
     if (savedUsername) {
         $("#username").val(savedUsername);
-        $("#saveId").prop("checked", true);
+        $("#saveUsername").prop("checked", true);
     }
     
-    // ¾ÆÀÌµğ ÀúÀå Ã¼Å©¹Ú½º ÀÌº¥Æ® ¸®½º³Ê
-    $("#saveId").change(function() {
+    // ì•„ì´ë”” ì €ì¥ ì²´í¬ë°•ìŠ¤ ì´ë²¤íŠ¸ ë¦¬ìŠ¤ë„ˆ
+    $("#saveUsername").change(function() {
         if ($(this).is(":checked")) {
-            // Ã¼Å©µÇ¾úÀ» ¶§, ¾ÆÀÌµğ¸¦ ·ÎÄÃ ½ºÅä¸®Áö¿¡ ÀúÀå
+            // ì²´í¬ë˜ì—ˆì„ ë•Œ, ì•„ì´ë””ë¥¼ ë¡œì»¬ ìŠ¤í† ë¦¬ì§€ì— ì €ì¥
             localStorage.setItem("savedUsername", $("#username").val());
         } else {
-            // Ã¼Å© ÇØÁ¦µÇ¾úÀ» ¶§, ·ÎÄÃ ½ºÅä¸®Áö¿¡¼­ ¾ÆÀÌµğ »èÁ¦
+            // ì²´í¬ í•´ì œë˜ì—ˆì„ ë•Œ, ë¡œì»¬ ìŠ¤í† ë¦¬ì§€ì—ì„œ ì•„ì´ë”” ì‚­ì œ
             localStorage.removeItem("savedUsername");
         }
     });
-
-    // ¼­¹ö¿¡¼­ ¹Ş¾Æ¿Â roll °ª¿¡ µû¶ó ÆäÀÌÁö ¸®µğ·º¼Ç ¼öÇà
-    var roll = "<%= request.getAttribute("roll") %>";
-    if (roll === "1") {
-        window.location.href = "regi.do"; // ¾à±¹ÀÏ¹İ ÆäÀÌÁö·Î ¸®µğ·º¼Ç
-    } else if (roll === "2") {
-        window.location.href = "userregi.do"; // ÀÏ¹İ À¯Àú ÆäÀÌÁö·Î ¸®µğ·º¼Ç
-    }
 });
 </script>
 
