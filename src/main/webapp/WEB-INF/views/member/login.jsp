@@ -136,14 +136,11 @@ body {
 <script type="text/javascript">
 $(document).ready(function() {
     // 페이지 로드 시, 저장된 아이디가 있는지 확인하고 아이디 입력 필드에 설정
-    var savedUsername = localStorage.getItem("savedUsername");
-    if (savedUsername) {
-        $("#username").val(savedUsername);
-        $("#saveUsername").prop("checked", true);
-    }
+    var savedUsername = localStorage.getItem("savedUsername") || ''; // // 수정: undefined 대신 빈 문자열 설정
+    $("#username").val(savedUsername);
     
     // 아이디 저장 체크박스 이벤트 리스너
-    $("#saveUsername").change(function() {
+    $("#saveId").change(function() { // 수정: 체크박스의 ID를 saveId로 변경
         if ($(this).is(":checked")) {
             // 체크되었을 때, 아이디를 로컬 스토리지에 저장
             localStorage.setItem("savedUsername", $("#username").val());
