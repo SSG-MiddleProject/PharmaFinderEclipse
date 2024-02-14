@@ -45,7 +45,7 @@ public class PharmaInOutCalendarUtil {
 	public static String inputCalWrite(int year, int month, int day) {
 		String str = "";
 
-		String img = "<i class='fas fa-file-signature' style='color: #0000ff;' title='입고'></i>";
+		String img = "<i class='fas fa-file-signature' style='color: #93c5fd;' title='입고'></i>";
 		str = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='w' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
@@ -55,7 +55,7 @@ public class PharmaInOutCalendarUtil {
 	public static String outputCalWrite(int year, int month, int day) {
 		String str = "";
 
-		String img = "<i class='fas fa-file-signature' style='color: #ff0000;' title='출고'></i>";
+		String img = "<i class='fas fa-file-signature' style='color: #fb7185;' title='출고'></i>";
 		str = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='w' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d'>%s</a>", year, month, day, img);
 
 		return str;
@@ -107,7 +107,7 @@ public class PharmaInOutCalendarUtil {
 			PharmaInDto inDto = (PharmaInDto)inoutDtoes[0];
 
 			String appendStr = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='r' data-inout='in' data-syear='%d' data-smonth='%d' data-sday='%d' data-id='%d'>%s</a>",
-					year, month, day, inDto.getId(), "<i class='fas fa-file-download fa-3x' style='color: #0000ff'></i>");
+					year, month, day, inDto.getId(), "<i class='fas fa-file-download fa-3x' style='color: #93c5fd'></i>");
 
 			str += appendStr;
 		}
@@ -120,7 +120,7 @@ public class PharmaInOutCalendarUtil {
 			PharmaOutDto outDto = (PharmaOutDto)inoutDtoes[1];
 
 			String appendStr = String.format("<a class='js-modal-trigger' data-target='modal' data-rw='r' data-inout='out' data-syear='%d' data-smonth='%d' data-sday='%d' data-id='%d'>%s</a>",
-												year, month, day, outDto.getId(), "<i class='fas fa-file-upload fa-3x' style='color: #ff0000'></i>");
+												year, month, day, outDto.getId(), "<i class='fas fa-file-upload fa-3x' style='color: #fb7185'></i>");
 			str += appendStr;
 		}
 
