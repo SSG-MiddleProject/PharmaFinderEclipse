@@ -1,17 +1,26 @@
 package ssg.middlepj.pharmafinder.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 import ssg.middlepj.pharmafinder.service.MemberService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller // 컨트롤러 사용
 public class MemberController {
@@ -48,6 +57,29 @@ public class MemberController {
 		return "member/regiSelect";
 	}
 
+	// 비밀번호 암호화,복호화 처리 메서드 추가
+	 // 입력 문자열을 SHA-256으로 암호화하여 해시 값을 반환하는 메서드
+    private String encryptStringBySHA256(String text) throws NoSuchAlgorithmException {
+       // SHA-256 알고리즘의 인스턴스 생성
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        // 입력 문자열의 바이트 배열을 업데이트하여 해시 값을 계산
+        md.update(text.getBytes());
+      // 계산된 해시 값을 16진수 문자열로 변환하여 반환
+        return bytesToHex(md.digest());
+    }
+
+    // 바이트 배열을 16진수 문자열로 변환하는 메서드
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+           // 바이트 값을 16진수 문자열로 변환하여 StringBuilder에 추가
+            builder.append(String.format("%02x", b));
+        }
+        // StringBuilder의 내용을 문자열로 반환
+        return builder.toString();
+    }
+
+	
 	// 회원가입(일반 유저) 페이지 이동 메서드
 	@GetMapping("/userRegi.do")
 	public String registerUser() {
@@ -57,9 +89,14 @@ public class MemberController {
 
 	// 회원가입 처리 메서드
 	@PostMapping("/userRegiAf.do")
-	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem) {
+	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem) throws NoSuchAlgorithmException {
 		mem.setState(1); // 활성화 상태로 설정
 		mem.setRoll(2); // 일반 유저로 설정
+		
+		String rawPassword = mem.getPassword();
+        String encryptedPassword = encryptStringBySHA256(rawPassword);
+        
+        mem.setPassword(encryptedPassword);
 
 		// 회원가입 처리
 		boolean registerResult = service.addmember(mem);
@@ -83,10 +120,16 @@ public class MemberController {
 	@PostMapping("/pharmacyRegiAf.do") // 메서드가 처리할 요청 경로 지정
 	public String registerAfPharmacy(HttpServletRequest request, RedirectAttributes redirectAttributes,
 			@ModelAttribute MemberDto mem,
-			@ModelAttribute PharmacyDto pharmacy) {
+			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
 
 		mem.setState(1); // 활성화 상태로 설정
 		mem.setRoll(1); // 약국 유저로 설정
+		
+		String rawPassword = mem.getPassword();
+	    String encryptedPassword = encryptStringBySHA256(rawPassword);
+
+	    mem.setPassword(encryptedPassword);
+
 
 		boolean memberAdded = service.addmember(mem);
 		if (!memberAdded) {
@@ -116,29 +159,22 @@ public class MemberController {
 
 	// 로그인 처리 메서드
 	@PostMapping("/loginAf.do")
-	public String loginProcess(HttpServletRequest request, Model model) {
+	public String loginProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
 		System.out.println("Controller login");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		
+		String encryptedPassword = encryptStringBySHA256(password);
 
 		// 로그인 시도 후 MemberDto 객체 반환
-		MemberDto loginResult = service.login(username, password);
+		MemberDto loginResult = service.login(username, encryptedPassword);
 		
 		if (loginResult != null) {
 			HttpSession session = request.getSession();
 			
 			// 사용자 기본 정보 세션에 저장
-	        session.setAttribute("id", loginResult.getId());
-	        session.setAttribute("username", loginResult.getUsername());
-	        session.setAttribute("roll", loginResult.getRoll());
-
-	        // 약국 유저의 경우 storeId도 세션에 저장
-	        if (loginResult.getRoll() == 1) {
-	            session.setAttribute("storeId", loginResult.getStoreId());
-	        }
-	        
-	        System.out.println("test" + session.getAttribute("id"));
-	        
+			session.setAttribute("member", loginResult);			
+			
 	        // 메인 페이지로 이동
 			return "redirect:/main.do";
 		} else {
@@ -182,7 +218,7 @@ public class MemberController {
 
 	// 비밀번호 찾기 처리
 	@PostMapping("/findPasswordAf.do")
-	public String findPasswordProcess(HttpServletRequest request, Model model) {
+	public String findPasswordProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
 		// HttpServletRequest를 사용하여 아이디(username)와 이메일(email) 파라미터를 직접 추출
 	    String username = request.getParameter("username");
 	    String email = request.getParameter("email");
@@ -192,17 +228,17 @@ public class MemberController {
 	        model.addAttribute("error", "아이디와 이메일 주소를 모두 입력해주세요.");
 	        return "member/findPassword"; // 입력이 잘못된 경우, 비밀번호 찾기 페이지로 다시 이동
 	    }
-
+	    
 	    // 아이디와 이메일을 통해 비밀번호 재설정 및 임시 비밀번호 이메일 전송 시도
-	    boolean result = service.updatePassword(username.trim(), email.trim());
-	    if (result) {
+	    String temporaryPassword = service.updatePassword(username.trim(), email.trim());
+	    if (temporaryPassword != null) {
 	        // 임시 비밀번호 발급 및 이메일 전송 성공
-	        model.addAttribute("message", "임시 비밀번호를 이메일로 전송했습니다. 이메일을 확인해주세요.");
-	        return "member/login"; // 성공 메시지와 함께 로그인 페이지로 이동
+	        model.addAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다: " + temporaryPassword);
+	        return "member/login";
 	    } else {
 	        // 아이디 또는 이메일 주소가 일치하지 않음
 	        model.addAttribute("error", "제공된 정보와 일치하는 계정이 없습니다.");
-	        return "member/findPassword"; // 실패 메시지와 함께 비밀번호 찾기 페이지로 다시 이동
+	        return "member/findPassword";
 	    }
 	}
 	
