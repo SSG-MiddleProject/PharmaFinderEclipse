@@ -22,6 +22,17 @@
         where username = #{username}
     </select>
     
+    <select id="findUsernameByEmail" parameterType="string" resultType="string">
+        select username from user where email = #{email}
+    </select>
+    
+    <update id="updateTemporaryPassword" parameterType="map">
+        update user
+        set password = #{temporaryPassword}
+        where username = #{username} 
+        and email = #{email}
+    </update>
+    
     <select id="emailcheck" parameterType="String" resultType="Integer">
         select count(*)
         from user

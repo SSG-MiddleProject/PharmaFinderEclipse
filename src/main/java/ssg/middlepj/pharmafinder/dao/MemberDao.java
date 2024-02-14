@@ -18,10 +18,10 @@ public interface MemberDao {
     // boolean login(Map<String, String> paramMap); // 인자를 두 개로 변경
 	MemberDto login(Map<String, String> paramMap);
 	
-    // 비밀번호찾기
-    String findPassword(String username, String email); // 비밀번호 찾기 메서드 추가
-
-    // 아이디찾기
+	// 아이디찾기 (이메일로 찾기)
     String findUsernameByEmail(String email);
 	
+    // 비밀번호찾기
+    boolean updateTemporaryPassword(String username, String email, String temporaryPassword);
+
 }

@@ -9,9 +9,14 @@
 
 <h1>아이디 찾기</h1>
 
-<form action="findUsername.do" method="post">
+<% String errorMessage = (String) request.getAttribute("error");
+   if (errorMessage != null) { %>
+    <div class="error"><%= errorMessage %></div>
+<% } %>
+
+<form action="findUsernameAf.do" method="post">
     <label for="email">이메일:</label>
-    <input type="email" id="email" name="email" required><br><br>
+    <input type="email" id="email" name="email" required><br>
     <input type="submit" value="아이디 찾기">
 </form>
 

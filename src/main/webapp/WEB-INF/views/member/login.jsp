@@ -126,14 +126,13 @@ body {
 	</form>
 	<br/>
 	<div class="login-links">
-		<a href="#">아이디/비밀번호 찾기</a>
-		<form action="">
+		<a href="findUsername.do">아이디 찾기 / </a>
+		<a href="findPassword.do">비밀번호 찾기</a>
 		<div>
 			<p class="mb-0">
 				회원이 아니신가요?<a href="regiSelect.do" class="text-white-50 fw-bold">회원가입</a><br/>
 			</p>
 		</div>
-		</form>
 	</div>
 
 </div>

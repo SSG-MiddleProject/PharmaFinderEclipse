@@ -148,37 +148,71 @@ public class MemberController {
 	}
 
 	// 아이디 찾기 페이지로 이동
-	@GetMapping("/findUsernamePage")
-	public String findUsernamePage() {
-		return "findUsername";
+	@GetMapping("/findUsername.do")
+	public String findUsernameByEmail() {
+		return "member/findUsername";
 	}
 
 	// 비밀번호 찾기 페이지로 이동
-	@GetMapping("/findPasswordPage")
+	@GetMapping("/findPassword.do")
 	public String findPasswordPage() {
-		return "findPassword";
+		return "member/findPassword";
 	}
 
 	// 아이디 찾기 처리
-	@PostMapping("/findUsername")
-	public String findUsername(@RequestParam("email") String email, Model model) {
-		// 이메일을 통해 아이디를 조회하여 모델에 추가
-		String username = service.findUsernameByEmail(email);
-		model.addAttribute("username", username);
-		return "showUsername";
+	@PostMapping("/findUsernameAf.do")
+	public String findUsernameProcess(HttpServletRequest request, Model model) {
+		// HttpServletRequest를 사용하여 이메일 파라미터를 직접 추출
+	    String email = request.getParameter("email");
+	    if (email == null || email.trim().isEmpty()) {
+	        model.addAttribute("error", "이메일 주소를 입력해주세요.");
+	        return "member/findUsername"; // 입력이 잘못된 경우, 아이디 찾기 페이지로 다시 이동
+	    }
+	    
+	    // 이메일을 통해 아이디를 조회하여 모델에 추가
+	    String username = service.findUsernameByEmail(email.trim());
+		if (username != null) {
+	        model.addAttribute("username", username);
+	        return "member/showUsername"; // 아이디 보여주는 페이지로 이동
+	    } else {
+	        model.addAttribute("error", "해당 이메일로 등록된 아이디가 없습니다.");
+	        return "member/findUsername"; // 아이디 찾기 페이지로 이동
+	    }
 	}
 
 	// 비밀번호 찾기 처리
-	@PostMapping("/findPassword")
-	public String findPassword(@RequestParam("username") String username, @RequestParam("email") String email,
-			Model model) {
-		// 아이디와 이메일을 통해 비밀번호를 재설정하고, 임시 비밀번호를 이메일로 전송하거나, 새로운 비밀번호를 설정할 수 있는 페이지로 이동
-		String newPassword = service.findPassword(username, email);
+	@PostMapping("/findPasswordAf.do")
+	public String findPasswordProcess(HttpServletRequest request, Model model) {
+		// HttpServletRequest를 사용하여 아이디(username)와 이메일(email) 파라미터를 직접 추출
+	    String username = request.getParameter("username");
+	    String email = request.getParameter("email");
+	    
+	    // 입력값 검증
+	    if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+	        model.addAttribute("error", "아이디와 이메일 주소를 모두 입력해주세요.");
+	        return "member/findPassword"; // 입력이 잘못된 경우, 비밀번호 찾기 페이지로 다시 이동
+	    }
+
+	    // 아이디와 이메일을 통해 비밀번호 재설정 및 임시 비밀번호 이메일 전송 시도
+	    boolean result = service.updatePassword(username.trim(), email.trim());
+	    if (result) {
+	        // 임시 비밀번호 발급 및 이메일 전송 성공
+	        model.addAttribute("message", "임시 비밀번호를 이메일로 전송했습니다. 이메일을 확인해주세요.");
+	        return "member/login"; // 성공 메시지와 함께 로그인 페이지로 이동
+	    } else {
+	        // 아이디 또는 이메일 주소가 일치하지 않음
+	        model.addAttribute("error", "제공된 정보와 일치하는 계정이 없습니다.");
+	        return "member/findPassword"; // 실패 메시지와 함께 비밀번호 찾기 페이지로 다시 이동
+	    }
+	}
+	
+		/*
 		model.addAttribute("newPassword", newPassword);
 		return "showPassword";
+		*/
 	}
 
-}
+
 
 
 
