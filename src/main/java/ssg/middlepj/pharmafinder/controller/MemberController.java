@@ -275,14 +275,19 @@ public class MemberController {
 		model.addAttribute("newPassword", newPassword);
 		return "showPassword";
 		*/
+	
+
+	//로그아웃 처리 메서드
+	@GetMapping("/logout.do")
+	public String logout(HttpServletRequest request) {
+	 // 현재 세션을 가져와서 세션을 무효화
+	 HttpSession session = request.getSession(false); // 현재 세션을 가져오되, 없으면 새로 생성하지 않음
+	 if (session != null) {
+	     session.invalidate(); // 세션 무효화
+	 }
+	 return "member/logout"; // 로그인 페이지로 리다이렉트
 	}
-
-
-
-
-
-
-
+}
 
 /*
 private void convertPharmacyOperatingTimes(PharmacyDto pharmacy) {

@@ -110,9 +110,9 @@
                 설정
             </a>
             <a href="login.do">
-            로그인
+            	로그인
 			</a>
-            <a href="regi.do">
+            <a href="logout.do">
                 로그아웃
             </a>
 
