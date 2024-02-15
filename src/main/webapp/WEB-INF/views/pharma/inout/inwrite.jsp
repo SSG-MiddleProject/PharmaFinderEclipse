@@ -67,38 +67,42 @@
 
 <div id="inwrite">
     <div>
-        <div style="height: 90%; width: 100vw">
+        <div style="height: 90%; width: 85vw">
             <p><%=formatedDate%>
             </p>
-            <p class=" " style="padding-top: 20px; font-size: x-large; font-weight: bold">입고추가</p>
-            <table class='table' style='width: 80%'> <thead><tr><th>제품코드</th><th>제품명</th><th>입고가</th><th>수량</th><th>삭제</th></tr></thead>
+            <p class=" " style="padding-top: 20px; padding-bottom: 10px; font-size: x-large; font-weight: bold">입고 등록</p>
+            <table class='table' style='width: 100%; text-align: center; '> <thead><tr><th style="text-align: center;">제품코드</th><th style="text-align: center;">제품명</th><th style="text-align: center;">입고가</th><th style="text-align: center;" colspan="3">수량</th><th style="text-align: center;">삭제</th></tr></thead>
 
             <!-- 검색 모달창 START-->
             <div id="searchModal">
                 <!-- 실제창 -->
                 <div class="modal-contents">
                     <span class="close" onclick="closeSearchModal()">&times;</span>
-                    <h2>검색</h2>
-                    <input type="text" id="keyword" placeholder="검색어를 입력하세요"/>
+                    <h2 style="padding-bottom: 1rem; font-size: large">제품 검색</h2>
+                    <input style="width: 50%" class="input" type="text" id="keyword" placeholder="검색어를 입력하세요"/>
+                    <div class="select">
                     <select id="searchType" class="form-control" style="width: auto">
                         <option value="id">제품코드</option>
                         <option value="itemName">제품명</option>
                     </select>
-                    <button onclick="performSearch()">검색</button>
+                    </div>
+                    <button class="button is-gray" onclick="performSearch()">검색</button>
                     <div id="result"></div>
                 </div>
                 <!-- 실제창 END -->
             </div>
             <!-- 검색 모달창 -->
             <!-- 약국제품 추가창 START -->
-                <tbody id="pharmaProductAddList" class="pharma-tbody"></tbody>
+                <tbody id="pharmaProductAddList" class="pharma-tbody">
+                    <tr><td colspan="7" id="table-text">등록된 제품이 없습니다.</td> </tr>
+                </tbody>
             </table>
 <%--            <div id="pharmaProductAddList" style="display: grid; "></div>--%>
             <!-- 약국제품 추가창 END -->
         </div>
 
 
-        <button type="button" class="button is-light" onclick="openSearchModal()">검색</button>
+        <button type="button" class="button is-light" onclick="openSearchModal()">추가</button>
         	<button class="button is-light" type="button" style="align-self: end" onclick="submitPharmaProductIn()" >등록</button>
 
     </div>
@@ -144,7 +148,7 @@
                         let table = $(`<table class="table"></table>`);
 
                         $("#result").append(table);
-                        let rowHeader = $(`<thead><tr><th>제품코드</th><th>제품명</th><th>비고</th></tr></thead>`);
+                        let rowHeader = $(`<thead><tr><th style="text-align: center">제품코드</th><th style="text-align: center">제품명</th><th style="text-align: center">비고</th></tr></thead>`);
 
                         $("#result > table").append(rowHeader);
                         for (let i = 0; i < data.length; i++) {
@@ -156,7 +160,7 @@
                             let newItemNameTd = $("<td>"
                                 + data[i].itemName + "</td>");
                             let newBtnTd = $("<td>");
-                            let newBtn = $("<button type='selectionProduct(this)'>선택</button>");
+                            let newBtn = $("<button class='button is-gray' type='selectionProduct(this)'>선택</button>");
                             $(newBtn).attr("data-object", jsonStr);
                             $(newBtn).attr("onclick",
                                 "selectionProduct(this)");
@@ -204,35 +208,32 @@
             let json = JSON.parse(jsonStr);
             let addIndex = $(".add-pharma-product").length;
 
-            // let table = $("<table class='table' style='width: 100%'> <thead><tr><th>제품코드</th><th>제품명</th><th>입고가</th><th>수량</th><th>삭제</th></tr></thead>");
-
+            document.getElementById("table-text").style.display = "none";
             let tbody = $(".pharma-tbody");
 
             let productId = $("<td>");
             productId.text(json.productId);
-            productId.append($("<br>"));
             productId.append($("</td>"))
 
             let itemName = $("<td>");
             itemName.text(json.itemName);
-            itemName.append($("<br>"));
+            let inputPrice = $(`<td class="input-price" style="align-items: end">` + json.inputPrice + `원</td>`)
 
-            let closeIcon = $(`<td onclick="doCloseIcon(this)"><i class="fas fa-times-circle is-pulled-right"></i></td>`);
+            let closeIcon = $(`<td onclick="doCloseIcon(this)"><i class="fas fa-times-circle "></i></td>`);
 
             let hr = $("<hr>")
             let br = $("<br>");
             let openDiv = $("<div style='display: flex; '>");
 
-            let plusIcon = $(`<td><div><i class="fas fa-plus-circle" onclick="doPlus(this)"></i>`);
-            let count = $("<p class='count'>1</p>");
-            let minusIcon = $(`<i class="fas fa-minus-circle" onclick="doMinus(this)"></i></div></td>`);
+            let plusIcon = $(`<td onclick="doPlus(this)"><a class="fas fa-plus-circle"></a></td>`);
+            let count = $("<td class='count'>1</td>");
+            let minusIcon = $(`<td onclick="doMinus(this)"><a class="fas fa-minus-circle" ></a></td>`);
 
 
             // let plusIcon = $(`<td onclick="doPlus(this)" > + </td>`);
             // let count = $("<td class='count'>1</td>");
             // let minusIcon = $(`<td onclick="doMinus(this)""> - </td>`);
 
-            let inputPrice = $(`<td class="input-price" style="align-items: end">` + json.inputPrice + `원</td>`)
 
             tbody.append($("<tr>"));
             tbody.append(productId);
