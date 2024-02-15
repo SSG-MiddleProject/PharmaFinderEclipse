@@ -5,14 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입 선택페이지</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 <style type="text/css">
 /* General styling */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
     background-color: #f9f9f9;
+    text-align: center;
 }
 
 .center{
@@ -23,36 +23,47 @@ body {
 }
 
 .container {
-    max-width: 600px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    width: 80%;
+    height: 100%;
     background-color: #f9f9f9;
 }
 
-.title {
+.regi-title {
     font-weight: 800;
     font-size: 48px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    margin-top: 30px;
+}
+
+.regi-title-sub {
+    font-weight: 400;
+    font-size: x-large;
+    text-align: center;
+    margin-top: 0;
 }
 
 .btn-container {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    height: 55%;
 }
 
 .btn {
+    width: 40%;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #dbdbdb;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-weight: bold;
 }
 
@@ -62,9 +73,10 @@ body {
 
 /* Login text */
 .login-text {
+    margin-top: 0;
     text-align: center;
-    margin-top: 30px;
     transition: color 0.3s ease;
+
 }
 
 .login-text a {
@@ -76,6 +88,11 @@ body {
     color: #0056b3;
 }
 
+i {
+    font-size: 17rem;
+    margin-bottom: 10px;
+}
+
 </style>
 
 </head>
@@ -83,11 +100,11 @@ body {
 
 <div class="center">
 <div class="container">
-    <h2 class="title">PharmaFinder</h2>
-    <p class="login-text">회원가입 선택</p>
+    <p class="regi-title">PharmaFinder</p>
+    <p class="regi-title-sub">Register</p>
     <div class="btn-container">
-        <a href="userRegi.do" class="btn">사용자 등록</a>
-        <a href="pharmacyRegi.do" class="btn">약국직원 등록</a>
+        <a href="userRegi.do" class="btn"><i class="fa fa-user"></i><p>사용자 등록</p></a>
+        <a href="pharmacyRegi.do" class="btn"><i class="fa fa-pills"></i>약국직원 등록</a>
     </div>
     <div class="login-text">
         이미 계정이 있으신가요? <a href="login.do">로그인</a>
