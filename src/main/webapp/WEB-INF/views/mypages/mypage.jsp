@@ -8,8 +8,8 @@
     /* 나의 회원정보 수정 버튼 */
     .my-button {
         position: absolute;
-        top:15px;
-        left: 500px; /* 오른쪽에서 60px 떨어진 곳에 위치 */
+        top:40px;
+        left: 600px; 
         width: auto; /* 너비를 텍스트에 맞게 자동 조정 */
         height: 40px; /* 버튼의 높이 조정 */
         font-family: 'Inter';
@@ -30,7 +30,10 @@
     }
 
     .user-greeting {
-         margin-bottom: 20px;
+    		position: absolute;
+    		top: 20px;
+    		left: 80px;
+         	margin-bottom: 20px;
             font-family: 'Inter', sans-serif;
             font-weight: bold; /* 글씨 굵기를 굵게 */
             font-size: 48px; /* 기본 글씨 크기의 3배 */

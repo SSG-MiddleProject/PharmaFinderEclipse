@@ -87,7 +87,7 @@
                 <table>
                     <tr>
                         <th>아이디</th>
-                        <td><input type="text" name="username" value="<%=loginedMember.getUsername()%>" readonly></td>
+                        <td><input type="text" id="username" name="username" value="<%=loginedMember.getUsername()%>" readonly></td>
                     </tr>
                     <tr>
                         <th>이메일</th>

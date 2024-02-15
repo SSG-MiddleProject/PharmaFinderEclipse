@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class MemberDto {
     private int id;
     private Integer storeId;
-    private String username;
+    private String username;	//실제아이디
     private String email;
     private String password;
     private int state;
