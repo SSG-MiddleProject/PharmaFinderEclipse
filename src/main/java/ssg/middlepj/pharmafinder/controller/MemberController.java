@@ -142,11 +142,13 @@ public class MemberController {
 
 		System.out.println("MemberController pharmacyRegiAf " + new Date());
 		
+		/*
 		// 입력 값 검증
 	    if (!isInputValid(mem, pharmacy)) {
 	        redirectAttributes.addFlashAttribute("errorMessage", "입력 형식이 올바르지 않습니다.");
 	        return "redirect:/pharmacyRegi.do";
 	    }
+	    */
 	    
 		try {
 			mem.setState(1); // 활성화 상태로 설정
