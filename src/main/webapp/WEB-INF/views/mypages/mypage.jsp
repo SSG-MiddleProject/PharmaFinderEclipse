@@ -4,58 +4,61 @@
 <html>
 <head>
     <title>마이 페이지</title>
-    <style type="text/css">
-    .nav-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 200px; /* 네비게이션 바의 너비 */
-        height: 100%;
-        background-color: #007bff;
-        color: white;
-        display: flex;
-        flex-direction: column; /* 링크들을 수직으로 정렬 */
-        padding: 1rem;
-        box-shadow: 2px 0 4px rgba(0,0,0,.1);
-    }
-    
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* 왼쪽 정렬 */
-    }
-    
-    .nav-links a {
-        color: white;
-        text-decoration: none;
-        margin: 10px 0;
-    }
+    <style>
+    	/* 나의 회원가입수정버튼 */
+.my-button {
+    position: absolute;
+    width: auto; /* 너비를 텍스트에 맞게 자동 조정 */
+    height: 40px; /* 버튼의 높이 조정 */
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    color: #FFFFFF;
+}
+    	
+        .user-greeting {
+            margin-bottom: 20px;
+        }
 
-    .nav-logo img {
-        width: 80%; /* 로고 이미지 크기 조정 */
-        height: auto;
-        margin-bottom: 20px; /* 로고와 링크 사이의 간격 */
-    }
+        .links {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #eee;
+        }
     </style>
 </head>
 <body>
-    <div class="nav-bar">
-        <div class="nav-logo">
-            <a href="${pageContext.request.contextPath}/">
-                <img src="${pageContext.request.contextPath}/resources/logo.png" alt="로고" />
-            </a>
+    <c:if test="${not empty memberDto}">
+        <div class="user-greeting">
+            <h1>${memberDto.username}님, 안녕하세요</h1>
         </div>
-        <div class="nav-links">
-            <a href="${pageContext.request.contextPath}/bookmark/list.do">즐겨찾기</a>
-            <a href="${pageContext.request.contextPath}/userupdate.do">회원정보수정</a>
-            <!-- 추가적으로 필요한 링크들을 여기에 추가하세요 -->
-            <a href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
-        </div>
-    </div>
+    </c:if>
 
-    <div class="mypage-container">
-    <h2 class="mypage-title">마이 페이지</h2>
-    <!-- 마이 페이지의 내용이 여기에 들어갑니다 -->
-</div>
+    <div class="links">
+    <a href="${pageContext.request.contextPath}/userupdate.do" class="button my-button">회원정보수정</a>
+	</div>
+
+    <div class="bookmark-list">
+        <c:if test="${not empty bookmarks}">
+            <ul>
+                <c:forEach items="${bookmarks}" var="bookmark">
+                    <li>${bookmark.targetName}</li>
+                </c:forEach>
+            </ul>
+        </c:if>
+    </div>
 </body>
 </html>

@@ -78,4 +78,17 @@ public class BookmarkController {
         }
 
     }
+    @GetMapping("bookmark.do")
+    public String getBookmarks(Model model, HttpSession session) {
+        // 세션에서 사용자 정보 가져오기
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+            return "redirect:/login.do";
+        }
+
+        // 마이페이지 즐겨찾기 JSP로 포워딩
+        return "mypages/bookmarkpage.tiles";
+    }
+    
 }

@@ -6,7 +6,7 @@
     <ul>
         <c:forEach items="${bookmarks}" var="bookmark">
             <!-- 약국정보표시 --> <!-- 제품 정보표시 -->
-            <li>${bookmark.targetName} </li>
+            <li>${bookmark.gettargetName} </li>
         </c:forEach>
     </ul>
 
