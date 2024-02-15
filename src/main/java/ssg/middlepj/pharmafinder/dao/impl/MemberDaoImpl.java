@@ -33,8 +33,17 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int addpharmacy(PharmacyDto pharmacy) {
-        return session.insert(ns + "addpharmacy", pharmacy);
+    public boolean addpharmacy(PharmacyDto pharmacy) {
+        int result = session.insert(ns + "addpharmacy", pharmacy);
+        return result > 0;
+    }
+    
+    @Override
+    public void updateMemberStoreId(int memberId, int storeId) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("memberId", memberId);
+        params.put("storeId", storeId);
+        session.update(ns + "updateMemberStoreId", params);
     }
 
     @Override
@@ -74,6 +83,11 @@ public class MemberDaoImpl implements MemberDao {
         paramMap.put("newPassword", encryptedNewPassword);
         int updatedRows = session.update(ns + "updatePasswordWithTemporary", paramMap);
         return updatedRows > 0;
+    }
+    
+    @Override
+    public MemberDto findMemberByUsername(String username) {
+        return session.selectOne(ns + ".findMemberByUsername", username);
     }
 
 }

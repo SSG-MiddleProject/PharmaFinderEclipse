@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,15 +90,31 @@ public class MemberController {
 
 	// 회원가입 처리 메서드
 	@PostMapping("/userRegiAf.do")
-	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem) throws NoSuchAlgorithmException {
-		mem.setState(1); // 활성화 상태로 설정
-		mem.setRoll(2); // 일반 유저로 설정
-		
-		String rawPassword = mem.getPassword();
-        String encryptedPassword = encryptStringBySHA256(rawPassword);
-        
-        mem.setPassword(encryptedPassword);
+	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
+	    try {
+	        mem.setState(1); // 활성화 상태로 설정
+	        mem.setRoll(2); // 일반 유저로 설정
 
+	        String rawPassword = mem.getPassword();
+	        String encryptedPassword = encryptStringBySHA256(rawPassword);
+	        mem.setPassword(encryptedPassword);
+
+	        // 회원가입 처리
+	        service.addmember(mem);
+	        redirectAttributes.addFlashAttribute("success", "등록되었습니다");
+	        return "redirect:/login.do"; // 회원가입 성공 시 로그인 페이지로 리다이렉트
+	    } catch (DuplicateKeyException e) {
+	        // 중복 이메일이나 다른 키 관련 예외 처리
+	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일입니다");
+	        return "redirect:/userRegi.do"; // 에러 메시지와 함께 회원가입 페이지로 리다이렉트
+	    } catch (Exception e) {
+	        // 기타 예외 처리
+	        redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요");
+	        return "redirect:/userRegi.do";
+	    }
+	}
+
+        /*
 		// 회원가입 처리
 		boolean registerResult = service.addmember(mem);
 		if (registerResult) {
@@ -108,7 +125,7 @@ public class MemberController {
 			request.setAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요.");
 			return "member/userRegi"; // 회원가입 페이지로 이동
 		}
-	}
+		*/
 
 	// 회원가입(약국) 페이지 이동 메서드
 	@GetMapping("/pharmacyRegi.do")
@@ -119,18 +136,37 @@ public class MemberController {
 
 	@PostMapping("/pharmacyRegiAf.do") // 메서드가 처리할 요청 경로 지정
 	public String registerAfPharmacy(HttpServletRequest request, RedirectAttributes redirectAttributes,
-			@ModelAttribute MemberDto mem,
+			@ModelAttribute MemberDto mem, 
 			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
 
-		mem.setState(1); // 활성화 상태로 설정
-		mem.setRoll(1); // 약국 유저로 설정
-		
-		String rawPassword = mem.getPassword();
-	    String encryptedPassword = encryptStringBySHA256(rawPassword);
+		try {
+			mem.setState(1); // 활성화 상태로 설정
+			mem.setRoll(1); // 약국 유저로 설정
+			
+			String rawPassword = mem.getPassword();
+		    String encryptedPassword = encryptStringBySHA256(rawPassword);
+		    mem.setPassword(encryptedPassword);
+		    
+		    // 회원 정보와 약국 정보를 동시에 저장
+	        boolean registrationResult = service.registerPharmacy(mem, pharmacy);
+	        
+		    if (registrationResult) {
+	            redirectAttributes.addFlashAttribute("successMessage", "회원가입되었습니다.");
+	            return "redirect:/login.do";
+	        } else {
+	            redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다.");
+	            return "redirect:/pharmacyRegi.do";
+	        }
+	    } catch (DuplicateKeyException e) {
+	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일입니다.");
+	        return "redirect:/pharmacyRegi.do";
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요.");
+	        return "redirect:/pharmacyRegi.do";
+	    }
+	}
 
-	    mem.setPassword(encryptedPassword);
-
-
+		/*
 		boolean memberAdded = service.addmember(mem);
 		if (!memberAdded) {
 			redirectAttributes.addFlashAttribute("error", "회원 정보 저장에 실패하였습니다.");
@@ -149,6 +185,7 @@ public class MemberController {
 
         return "redirect:/login.do";
     }
+    */
 
 	// 로그인 페이지 이동 메서드
 	@GetMapping(value = "login.do")
@@ -160,7 +197,6 @@ public class MemberController {
 	// 로그인 처리 메서드
 	@PostMapping("/loginAf.do")
 	public String loginProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
-		System.out.println("Controller login");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
