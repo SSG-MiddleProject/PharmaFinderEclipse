@@ -2,6 +2,7 @@ package util;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import ssg.middlepj.pharmafinder.dto.PharmaInDto;
 import ssg.middlepj.pharmafinder.dto.PharmaInOutDto;
@@ -63,13 +64,24 @@ public class PharmaInOutCalendarUtil {
 
 	// 일별 일정을 모두 볼 수 있는 bbsdaylist.jsp로 이동되도록 하는 함수
 	public static String daylist(int year, int month, int day) {
+		LocalDate ld = LocalDate.now();
 		String str = "";
 
-		str += String.format(
-				"&nbsp;<a href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>",
-				toDashYYYYMMdd(year,month,day));
+		if (year == ld.getYear() && month == ld.getMonthValue() && day == ld.getDayOfMonth()) {
+			str += "<a class='day is-today' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>";
+		} else {
+			str += "<a class='day' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>";
+		}
 		str += String.format("%2d", day);
 		str += "</b></a>";
+
+//		str += String.format(
+//				"&nbsp;<a href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>",
+//				toDashYYYYMMdd(year,month,day));
+//		str += String.format("%2d", day);
+//		str += "</b></a>";
+
+
 
 		return str;
 	}

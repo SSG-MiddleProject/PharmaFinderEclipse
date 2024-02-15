@@ -45,6 +45,20 @@
 
     }
 
+    .day {
+        width: 1.6rem;
+        height: 1.6rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        border-radius: 50%;
+    }
+
+    .is-today {
+        background-color: #6ee7b7;
+    }
+
 </style>
 
 <div id="full">
@@ -123,7 +137,7 @@
 
                         for (int i = 1; i <= lastday; i++) {
                     %>
-                    <td style="color:#3c3c3c;padding-top:5px">
+                    <td style="color:#3c3c3c;padding-top:5px;padding-left:5px">
                         <table>
                             <col width='30px'/>
                             <col width='30px'/>
