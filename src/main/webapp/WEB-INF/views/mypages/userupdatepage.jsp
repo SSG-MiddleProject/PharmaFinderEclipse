@@ -1,3 +1,4 @@
+<%@page import="ssg.middlepj.pharmafinder.dto.MemberDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="javax.servlet.http.HttpSession"%>
@@ -10,14 +11,12 @@
     <h1>회원정보 수정 페이지</h1>
     <form action="userUpdateAf.do" method="post">
         <% 
-            HttpSession sessionobj = request.getSession(false);
-            if (sessionobj != null && sessionobj.getAttribute("username") != null) {
-                String username = (String) sessionobj.getAttribute("username");
+        MemberDto loginedMember = (MemberDto) session.getAttribute("member");
         %>
             <table>
                 <tr>
                     <th>아이디</th>
-                    <td><input type="text" name="username" value="<%= username %>" readonly></td>
+                    <td><input type="text" name="username" value="<%=loginedMember.getUsername()%>" readonly></td>
                 </tr>
                 <tr>
                     <th>이메일</th>
@@ -30,12 +29,7 @@
             </table>
             <br>
             <input type="submit" value="수정 완료">
-        <% 
-            } else {
-                // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리다이렉트
-                response.sendRedirect("login.do");
-            }
-        %>
+       
     </form>
 </body>
 </html>

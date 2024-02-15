@@ -26,7 +26,9 @@ public class MyPageController {
 
     @Autowired
     MyPageService service;
-
+    
+ //   @Autowired
+ //   MemberService service;
     @GetMapping("/mypage.do")
     public String mypage() {
         System.out.println("MemberController mypage " + new Date());
@@ -82,44 +84,6 @@ public class MyPageController {
         return "mypages/bookmarkpage";
     }
     
-    @GetMapping("/userupdate.do")
-    public String userupdate(HttpSession session, HttpServletResponse response) throws IOException {
-        // 세션에서 사용자 정보 확인
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            // 사용자가 로그인하지 않았으면 로그인 페이지로 리다이렉트
-        	response.sendRedirect("/login.do");
-            return null;
-        }
-        System.out.println("MemberController userupdate " + new Date());
-        // 로그인한 사용자라면 회원정보수정 페이지로 이동
-        return "mypages/userupdatepage";
-    }
-
-
-    @PostMapping("/userUpdateAf.do")
-    public String updateUser(HttpServletRequest request, RedirectAttributes redirectAttributes, MemberDto member) {
-        HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
-
-        if (username == null) {
-            // 로그인되어 있지 않은 경우, 로그인 페이지로 리다이렉트
-            return "redirect:/login.do";
-        }
-
-        try {
-            // 회원 정보 업데이트 처리
-//            MemberService.updateMember(member);
-            // 성공 메시지 추가
-            redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
-        } catch (Exception e) {
-            // 실패 메시지 추가
-            redirectAttributes.addFlashAttribute("message", "회원 정보 업데이트에 실패하였습니다.");
-            e.printStackTrace();
-        }
-
-        // 마이 페이지로 리다이렉트
-        return "redirect:/mypage.do";
-    }
+    
 }
 

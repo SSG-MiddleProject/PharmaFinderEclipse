@@ -74,4 +74,11 @@
                 #{dutyTime2s}, #{dutyTime2c}, #{dutyTime3s}, #{dutyTime3c}, #{dutyTime4s}, #{dutyTime4c}, #{dutyTime5s},
                 #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c}, #{postcode})
     </insert>
+    
+    <update id="updateMember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
+    update user
+    set email = #{email},
+        password = #{password}
+    where username = #{username}
+	</update>
 </mapper>

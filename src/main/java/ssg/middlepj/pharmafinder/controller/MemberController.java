@@ -1,9 +1,12 @@
 package ssg.middlepj.pharmafinder.controller;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -271,14 +274,64 @@ public class MemberController {
 	    }
 	}
 	
+	
+	
+	
+	
 		/*
 		model.addAttribute("newPassword", newPassword);
 		return "showPassword";
 		*/
+	@GetMapping("/userupdate.do")
+    public String userupdate(HttpSession session, HttpServletResponse response) throws IOException {
+        // 세션에서 사용자 정보 확인
+		MemberDto loginedMember = (MemberDto) session.getAttribute("member");
+	    
+	    if (loginedMember == null) {
+	    	// 로그인된 사용자 정보가 없으면 로그인 페이지로 리다이렉트
+	        return "redirect:/login.do";
+	    
+        }
+        System.out.println("MemberController userupdate " + new Date());
+        
+        //
+        
+        // 로그인한 사용자라면 회원정보수정 페이지로 이동
+        return "mypages/userupdatepage";
+    }
+
+
+	@PostMapping("/userUpdateAf.do")
+	public String updateUser(@ModelAttribute MemberDto member, HttpSession session, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
+	    MemberDto loginedMember = (MemberDto) session.getAttribute("member");
+	    System.out.println(loginedMember);
+	    
+	 // 이메일 중복 체크
+	    boolean isEmailDuplicate = service.emailcheck(member.getEmail());
+	    if (isEmailDuplicate && !member.getEmail().equals(loginedMember.getEmail())) {
+	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일 주소입니다.");
+	        return "redirect:/userupdate.do";
+	    }
+	    
+	    
+	    // 비밀번호 암호화 처리
+	    if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+	        String encryptedPassword = encryptStringBySHA256(member.getPassword());
+	        member.setPassword(encryptedPassword);
+	    }
+
+	    // 회원 정보 업데이트 처리
+	    boolean updateSuccess = service.updateMember(member);
+	    if (updateSuccess) {
+	        redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+	    } else {
+	        redirectAttributes.addFlashAttribute("error", "회원 정보 업데이트에 실패하였습니다.");
+	    }
+
+	    return "redirect:/mypage.do";
 	}
 
-
-
+}
 
 
 

@@ -76,4 +76,9 @@ public class MemberDaoImpl implements MemberDao {
         return updatedRows > 0;
     }
 
+	@Override
+	public int updateMember(MemberDto member) {
+		 return session.update("Member.updateMember", member);
+	}
+
 }
