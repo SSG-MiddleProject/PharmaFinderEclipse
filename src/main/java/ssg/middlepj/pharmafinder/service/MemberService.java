@@ -23,4 +23,8 @@ public interface MemberService {
 	
 	boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword) throws NoSuchAlgorithmException;
 
+	MemberDto getMemberInfoByUsername(String username);
+
+	boolean registerPharmacy(MemberDto member, PharmacyDto pharmacy) throws NoSuchAlgorithmException;
+
 }

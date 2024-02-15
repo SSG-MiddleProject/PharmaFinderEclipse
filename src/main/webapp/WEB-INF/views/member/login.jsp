@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<% System.out.println("로그인"); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>로그인 페이지</title>
+<title>Login</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -25,7 +24,7 @@ body {
 }
 
 /* Login container */
-.login-container {
+.container {
     max-width: 600px;
     padding: 20px;
     border: 1px solid #ccc;
@@ -34,7 +33,7 @@ body {
 }
 
 /* PharmaFinder Login */
-.login-title {
+.title {
     font-weight: 800;
     font-size: 48px;
     text-align: center;
@@ -100,8 +99,8 @@ body {
 <body>
 
 <div class="center">
-<div class="login-container">
-	<h2 class="login-title">PharmaFinder</h2>
+<div class="container">
+	<h1 class="title">PharmaFinder</h1>
 	
 	<p align="center">Login</p>
 	
@@ -113,11 +112,11 @@ body {
 
 	
 	<form class="login-form" action="loginAf.do" method="post">
-		<input type="text" id="username" name="username" size=20 placeholder="example@test.com">
-		<input type="password" name="password" placeholder="Password">
+		<input type="text" id="username" name="username" size=20 placeholder="Id" required>
+		<input type="password" name="password" placeholder="Password" required>
 		<input type="checkbox" id="saveId" name="saveId">
 		<label for="saveUsername">아이디 저장</label><br/><br/>
-		<input type="submit" value="login">
+		<input type="submit" value="로그인">
 	</form>
 	<br/>
 	<div class="login-links">
@@ -137,14 +136,11 @@ body {
 <script type="text/javascript">
 $(document).ready(function() {
     // 페이지 로드 시, 저장된 아이디가 있는지 확인하고 아이디 입력 필드에 설정
-    var savedUsername = localStorage.getItem("savedUsername");
-    if (savedUsername) {
-        $("#username").val(savedUsername);
-        $("#saveUsername").prop("checked", true);
-    }
+    var savedUsername = localStorage.getItem("savedUsername") || ''; // // 수정: undefined 대신 빈 문자열 설정
+    $("#username").val(savedUsername);
     
     // 아이디 저장 체크박스 이벤트 리스너
-    $("#saveUsername").change(function() {
+    $("#saveId").change(function() { // 수정: 체크박스의 ID를 saveId로 변경
         if ($(this).is(":checked")) {
             // 체크되었을 때, 아이디를 로컬 스토리지에 저장
             localStorage.setItem("savedUsername", $("#username").val());
