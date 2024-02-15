@@ -30,13 +30,19 @@
 	margin-bottom: 1.5em;
 }
 
+.main{
+	overflow-y:auto;
+	max-height:calc(100vh - 400px)
+}
+
 </style>
 </head>
 <body>
 <div class="wrapper">
-<div class="main">
+<div class="inner-wrapper">
 <h1 class="title">재고 조회</h1>
 <input type="date" value="${currentDate}" class="input" style="width:20%" onchange="inquiry(this)" >
+<div class="main">
 <table class="table">
 <thead>
 	<tr>
@@ -57,6 +63,7 @@
 	%>
 </tbody>
 </table>
+</div>
 
 <form action="/pharma-inventory-inquiry.do">
 	<input type="hidden" name="currentDate" value="${currentDate}"/>
@@ -77,7 +84,7 @@
       <button class="button is-primary" type="submit">검색</button>
   </p>
 </div>
-
+</div>
 
 </form>
 </div>
