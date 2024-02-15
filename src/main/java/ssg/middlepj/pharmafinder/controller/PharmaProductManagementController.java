@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import message.ResultMsg;
+import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementDto;
 import ssg.middlepj.pharmafinder.dto.PharmaProductManagementParam;
 import ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto;
@@ -27,7 +28,7 @@ public class PharmaProductManagementController {
 	public String productManagement(Model model, HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController productManagement()");
 
-		int storeId = (int)request.getSession().getAttribute("storeId");
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
 
 		model.addAttribute("list", list);
@@ -40,7 +41,7 @@ public class PharmaProductManagementController {
 	public List<PharmaProductWithProductDto> selectPharmaProducts(HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController selectPharmaProducts()");
 
-		int storeId = (int)request.getSession().getAttribute("storeId");
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(new PharmaProductManagementParam(storeId));
 
 		return list;
@@ -51,7 +52,7 @@ public class PharmaProductManagementController {
 	public List<PharmaProductWithProductDto> selectSpecificPharmaProducts(PharmaProductManagementParam param ,HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController selectSpecificPharmaProducts()");
 
-		int storeId = (int)request.getSession().getAttribute("storeId");
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
 
 		param.setStoreId(storeId);
 		List<PharmaProductWithProductDto> list = service.selectPharmaProducts(param);
@@ -66,7 +67,7 @@ public class PharmaProductManagementController {
 	public ResultMsg pharmaProductRegister(PharmaProductManagementDto dto, HttpServletRequest request) {
 		System.out.println("PharmaProductManagementController pharmaProductRegister()");
 
-		int storeId = (int)request.getSession().getAttribute("storeId");
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
 		PharmaProductManagementParam param = new PharmaProductManagementParam(storeId, dto.getProductId(), null);
 
 		boolean isDuplication = service.isDuplicationPharmaProduct(param);
