@@ -7,7 +7,7 @@ import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
 public interface MemberDao {
     // 중복체크
-    int idcheck(String username);
+    int usernamecheck(String username);
     int emailcheck(String email);
 
     // 회원가입
@@ -28,7 +28,7 @@ public interface MemberDao {
     boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword);
 	
     MemberDto findMemberByUsername(String username);
-	
-    
 
+    //회원정보 수정
+    int updateMember(MemberDto member);
 }
