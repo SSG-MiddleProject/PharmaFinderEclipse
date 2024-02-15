@@ -36,6 +36,14 @@ body {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* PharmaFinder Register */
+.title {
+    font-weight: 800;
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .form-group {
 	margin-bottom: 15px;
 }
@@ -75,7 +83,8 @@ input[type="submit"]:hover {
 
 <div class="center">
 	<div class="container">
-		<h2 style="text-align: center; margin-bottom: 20px;">회원가입(약국)</h2>
+		<h1 class="title">PharmaFinder</h1>
+		<p align="center">회원가입</p>
 		<form action="pharmacyRegiAf.do" method="post" id="regiForm">
 			<div class="form-group">
 				<label for="username"></label>

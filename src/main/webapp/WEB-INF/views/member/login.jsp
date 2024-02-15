@@ -102,7 +102,7 @@ body {
 <div class="container">
 	<h1 class="title">PharmaFinder</h1>
 	
-	<p align="center">Login</p>
+	<p align="center">로그인</p>
 	
 	<!-- 로그인 실패 시 에러 메시지 출력 -->
         <% if (request.getAttribute("error") != null) { %>
