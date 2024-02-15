@@ -141,14 +141,6 @@ public class MemberController {
 			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
 
 		System.out.println("MemberController pharmacyRegiAf " + new Date());
-		
-		/*
-		// 입력 값 검증
-	    if (!isInputValid(mem, pharmacy)) {
-	        redirectAttributes.addFlashAttribute("errorMessage", "입력 형식이 올바르지 않습니다.");
-	        return "redirect:/pharmacyRegi.do";
-	    }
-	    */
 	    
 		try {
 			mem.setState(1); // 활성화 상태로 설정
@@ -172,17 +164,6 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("errorMessage", "회원가입 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
 	        return "redirect:/pharmacyRegi.do";
 	    }
-	}
-	
-	private boolean isInputValid(MemberDto mem, PharmacyDto pharmacy) {
-	    if (mem.getUsername() == null || mem.getUsername().isEmpty() ||
-	        !mem.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$") ||
-	        mem.getPassword().length() < 15) {
-	        return false;
-	    }
-	    // PharmacyDto에 대한 추가적인 검증 로직을 여기에 구현할 수 있습니다.
-	    // 예: pharmacy.getDutyName()이 null이거나 비어있지 않은지 검사
-	    return true;
 	}
 
 		/*
