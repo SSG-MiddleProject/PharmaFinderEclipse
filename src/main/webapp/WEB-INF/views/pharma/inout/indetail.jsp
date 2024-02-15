@@ -30,7 +30,7 @@
 		<th class="has-text-centered">입고 id</th><th class="has-text-centered">제품코드</th><th class="has-text-centered">제품명</th><th class="has-text-centered">수량</th><th class="has-text-centered">입고단가</th>
 	</tr>
 </thead>
-<tbody style="height: 28rem">
+<tbody>
 <%
 	for(int i = 0; i < list.size(); i++){
 		PharmaInDetailDto dto = list.get(i);
@@ -47,7 +47,9 @@
 %>
 </tbody>
 </table>
+	<div style="position: absolute; bottom: 10px; left: 44%">
 <button class="button" type="submit">삭제</button>
 <button class="button" type="button">수정</button>
+	</div>
 </form>
 </div>

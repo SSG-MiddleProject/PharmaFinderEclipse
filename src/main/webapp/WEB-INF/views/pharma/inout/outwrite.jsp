@@ -66,8 +66,8 @@
 </style>
 
 <div id="outwrite">
-    <div>
-        <div style="height: 90%; width: 85vw">
+    <div style="width: 100%; height: 90%">
+        <div style="height: 100%; width: 100%">
             <p><%=formatedDate%>
             </p>
             <p class=" " style="padding-top: 20px; padding-bottom: 10px; font-size: x-large; font-weight: bold">
@@ -89,13 +89,15 @@
                     <!-- 실제창 -->
                     <div class="modal-contents">
                         <span class="close" onclick="closeSearchModal()">&times;</span>
-                        <h2>검색</h2>
-                        <input type="text" id="keyword" placeholder="검색어를 입력하세요"/>
-                        <select id="searchType" class="form-control" style="width: auto">
-                            <option value="id">제품코드</option>
-                            <option value="itemName">제품명</option>
-                        </select>
-                        <button onclick="performSearch()">검색</button>
+                        <h2 style="padding-bottom: 1rem; font-size: large">제품 검색</h2>
+                        <input style="width: 50%" class="input" type="text" id="keyword" placeholder="검색어를 입력하세요"/>
+                        <div class="select">
+                            <select id="searchType" class="form-control" style="width: auto">
+                                <option value="id">제품코드</option>
+                                <option value="itemName">제품명</option>
+                            </select>
+                        </div>
+                        <button class="button is-gray" onclick="performSearch()">검색</button>
                         <div id="result"></div>
                     </div>
                     <!-- 실제창 END -->

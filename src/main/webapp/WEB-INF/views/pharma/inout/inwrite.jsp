@@ -66,8 +66,8 @@
 
 
 <div id="inwrite">
-    <div>
-        <div style="height: 90%; width: 85vw">
+    <div style="width: 100%; height: 90%">
+        <div style="height: 100%; width: 100%">
             <p><%=formatedDate%>
             </p>
             <p class=" " style="padding-top: 20px; padding-bottom: 10px; font-size: x-large; font-weight: bold">입고 등록</p>
