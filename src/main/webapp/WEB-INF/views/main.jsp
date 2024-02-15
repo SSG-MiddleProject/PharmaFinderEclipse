@@ -83,7 +83,7 @@
     }
 
     #container-collapse {
-        padding: 0.5rem 0.5rem;
+        padding: 1rem 1rem;
         position: absolute;
         left: calc(1px + 28rem);
         top: 0;
