@@ -113,7 +113,13 @@
 $(document).ready(function() {
     $("#checkEmailBtn").click(function() {
         var email = $("#email").val();
-        if(email) {
+        // 이메일 형식을 검증하는 정규 표현식
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // 이메일 형식 검증
+        if (!emailPattern.test(email)) {
+            $("#emailMessage").text("유효하지 않은 이메일 형식입니다.").css("color", "red");
+        } else {
             $.ajax({
                 url: "/emailcheck.do",
                 type: "POST",
@@ -121,7 +127,7 @@ $(document).ready(function() {
                 success: function(data) {
                     var message = $("#emailMessage");
                     if(data.trim() === "YES") {
-                        message.text("사용 가능한 이메일입니다.").css("color", "green");
+                        message.text("사용 가능한 이메일입니다.").css("color", "blue");
                     } else {
                         message.text("이미 사용 중인 이메일입니다.").css("color", "red");
                     }
@@ -130,9 +136,8 @@ $(document).ready(function() {
                     alert("이메일 중복 체크 중 오류가 발생했습니다.");
                 }
             });
-        } else {
-            alert("이메일을 입력해주세요.");
         }
     });
 });
 </script>
+
