@@ -10,8 +10,6 @@ public class BookmarkDto {
     public BookmarkDto() {
     }
 
-    public BookmarkDto(int userId, Integer targetId) {
-    	this.userId = userId;
-    	this.targetId = targetId;
+    public BookmarkDto(int id, Integer targetId) {
     }
 }
