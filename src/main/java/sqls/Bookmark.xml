@@ -31,7 +31,10 @@
           and store_id = #{targetId}
     </delete>
     
-    <select id="getBookmarksByUserId" parameterType="java.lang.Integer" resultType="ssg.middlepj.pharmafinder.dto.BookmarkDto">
-    SELECT * FROM user_bookmark_store WHERE user_id = #{userId}
+    <select id="getStoreBookmarksByUserId" parameterType="java.lang.Integer" resultType="ssg.middlepj.pharmafinder.dto.BookmarkResDto">
+        select ubs.store_id as 'storeId', ubs.user_id as 'userId', store.dutyName as 'targetName'
+        from user_bookmark_store ubs
+                 inner join store on store.id = ubs.store_id
+        where ubs.user_id = #{userId}
 	</select>
 </mapper>

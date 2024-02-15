@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ssg.middlepj.pharmafinder.dao.impl.BookmarkDaoImpl;
 import ssg.middlepj.pharmafinder.dto.BookmarkDto;
+import ssg.middlepj.pharmafinder.dto.BookmarkResDto;
 import ssg.middlepj.pharmafinder.service.BookmarkService;
 
 @Service
@@ -38,8 +39,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
 	@Override
-	public List<BookmarkDto> getBookmarksByUserId(Integer userId) {
+	public List<BookmarkResDto> getStoreBookmarksByUserId(Integer userId) {
 		// DAO를 통해 북마크 목록 조회
-		return bookmarkDao.getBookmarksByUserId(userId);
+		return bookmarkDao.getStoreBookmarksByUserId(userId);
 	}
 }

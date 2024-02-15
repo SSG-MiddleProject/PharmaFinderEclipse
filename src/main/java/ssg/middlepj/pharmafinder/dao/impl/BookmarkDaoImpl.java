@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ssg.middlepj.pharmafinder.dao.BookmarkDao;
 import ssg.middlepj.pharmafinder.dto.BookmarkDto;
+import ssg.middlepj.pharmafinder.dto.BookmarkResDto;
 
 @Repository
 public class BookmarkDaoImpl implements BookmarkDao {
@@ -39,7 +40,7 @@ public class BookmarkDaoImpl implements BookmarkDao {
         return sqlSession.delete(ns + "deletePharmacyBookmark", bookmarkDto) > 0;
     }
 
-	public List<BookmarkDto> getBookmarksByUserId(Integer userId) {
-		 return sqlSession.selectList("Bookmark.getBookmarksByUserId", userId);
+	public List<BookmarkResDto> getStoreBookmarksByUserId(Integer userId) {
+		 return sqlSession.selectList(ns+"getStoreBookmarksByUserId", userId);
 	}
 }
