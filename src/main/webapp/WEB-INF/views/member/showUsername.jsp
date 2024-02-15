@@ -31,6 +31,14 @@ body {
     text-align: center;
 }
 
+/* Title */
+.title {
+	font-weight: 800;
+	font-size: 48px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
 strong {
     color: #007bff;
 }
@@ -57,7 +65,10 @@ a:hover {
 
 <div class="center">
     <div class="container">
-        <h2>아이디 찾기 결과</h2>
+
+		<h1 class="title">PharmaFinder</h1>
+		<p align="center">아이디 찾기 결과</p>
+
         <p>귀하의 아이디는 <strong>${username}</strong> 입니다.</p>
         <a href="login.do">로그인 페이지로 돌아가기</a>
     </div>
