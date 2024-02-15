@@ -24,7 +24,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
+	/* height: 100vh; */
 }
 
 .container {
@@ -119,54 +119,55 @@ input[type="submit"]:hover {
             <div class="form-group">
                 <label for="sample4_detailAddress"></label>
                 <input type="text" id="sample4_detailAddress" name="detailAddress" placeholder="상세주소">
+            </div>
             <div class="form-group">
 		    <label for="dutyTime1s">월요일:</label>
 		    <input type="time" name="dutyTime1s" id="dutyTime1s" value="09:00" required>
 		    ~
 		    <input type="time" name="dutyTime1c" id="dutyTime1c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime2s">화요일:</label>
-		    <input type="time" name="dutyTime2s" id="dutyTime2s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime2c" id="dutyTime2c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime3s">수요일:</label>
-		    <input type="time" name="dutyTime3s" id="dutyTime3s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime3c" id="dutyTime3c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime4s">목요일:</label>
-		    <input type="time" name="dutyTime4s" id="dutyTime4s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime4c" id="dutyTime4c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime5s">금요일:</label>
-		    <input type="time" name="dutyTime5s" id="dutyTime5s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime5c" id="dutyTime5c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime6s">토요일:</label>
-		    <input type="time" name="dutyTime6s" id="dutyTime6s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime6c" id="dutyTime6c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime7s">일요일:</label>
-		    <input type="time" name="dutyTime7s" id="dutyTime7s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime7c" id="dutyTime7c" value="18:00" required>
-		</div>
-		<div class="form-group">
-		    <label for="dutyTime8s">공휴일:</label>
-		    <input type="time" name="dutyTime8s" id="dutyTime8s" value="09:00" required>
-		    ~
-		    <input type="time" name="dutyTime8c" id="dutyTime8c" value="18:00" required>
-		</div>  
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime2s">화요일:</label>
+			    <input type="time" name="dutyTime2s" id="dutyTime2s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime2c" id="dutyTime2c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime3s">수요일:</label>
+			    <input type="time" name="dutyTime3s" id="dutyTime3s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime3c" id="dutyTime3c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime4s">목요일:</label>
+			    <input type="time" name="dutyTime4s" id="dutyTime4s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime4c" id="dutyTime4c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime5s">금요일:</label>
+			    <input type="time" name="dutyTime5s" id="dutyTime5s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime5c" id="dutyTime5c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime6s">토요일:</label>
+			    <input type="time" name="dutyTime6s" id="dutyTime6s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime6c" id="dutyTime6c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime7s">일요일:</label>
+			    <input type="time" name="dutyTime7s" id="dutyTime7s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime7c" id="dutyTime7c" value="18:00" required>
+			</div>
+			<div class="form-group">
+			    <label for="dutyTime8s">공휴일:</label>
+			    <input type="time" name="dutyTime8s" id="dutyTime8s" value="09:00" required>
+			    ~
+			    <input type="time" name="dutyTime8c" id="dutyTime8c" value="18:00" required>
+			</div>  
 			<input type="submit" value="회원가입">
 		</form>
 	</div>

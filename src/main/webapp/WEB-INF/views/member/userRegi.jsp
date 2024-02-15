@@ -91,7 +91,42 @@ input[type="submit"]:hover {
 			</form>
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+	    $('form').submit(function(event) {
+	        var username = $('#username').val().trim();
+	        var email = $('#email').val().trim();
+	        var password = $('#password').val();
+	        var idPattern = /^[a-z0-9]+$/; // 영어 소문자와 숫자만 허용
+	        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 형식
+	        var passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/; // 영어 대소문자, 숫자, 특수문자 포함
+	
+	        if (!idPattern.test(username)) {
+	            alert("아이디는 영어 소문자와 숫자만 사용 가능합니다.");
+	            event.preventDefault(); // 폼 제출 중단
+	            return false;
+	        }
+	
+	        if (!emailPattern.test(email)) {
+	            alert("유효하지 않은 이메일 형식입니다.");
+	            event.preventDefault(); // 폼 제출 중단
+	            return false;
+	        }
+	
+	        if (!passwordPattern.test(password)) {
+	            alert("비밀번호는 영어 대/소문자, 숫자, 특수문자를 모두 포함해야 합니다.");
+	            event.preventDefault(); // 폼 제출 중단
+	            return false;
+	        }
+	
+	        // 모든 검사를 통과했을 때
+	        return true;
+	    });
+	});
+	</script>
 
+<!-- 
 	<script type="text/javascript">
 	// 아이디 중복체크
 	$(document).ready(function() {
@@ -174,6 +209,6 @@ input[type="submit"]:hover {
 	});
 });
 </script>
-
+ -->
 </body>
 </html>
