@@ -24,4 +24,14 @@ public class BookmarkServiceImpl implements BookmarkService {
     public Boolean deleteProductBookmark(BookmarkDto bookmarkDto) {
         return bookmarkDao.deleteProductBookmark(bookmarkDto);
     }
+
+    @Override
+    public Boolean insertPharmacyBookmark(BookmarkDto bookmarkDto) {
+        return bookmarkDao.insertPharmacyBookmark(bookmarkDto);
+    }
+
+    @Override
+    public Boolean deletePharmacyBookmark(BookmarkDto bookmarkDto) {
+        return bookmarkDao.deletePharmacyBookmark(bookmarkDto);
+    }
 }

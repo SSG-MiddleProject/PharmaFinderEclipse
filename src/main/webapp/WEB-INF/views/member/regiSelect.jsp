@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>х╦©Ь╟║ют ╪╠ецфДюлаЖ</title>
+<meta charset="UTF-8">
+<title>М ▄Л⌡░Й╟─Л·┘ Л└═М┐²М▌≤Л²╢Л╖─</title>
 
 <style type="text/css">
 /* General styling */
@@ -90,8 +90,8 @@ body {
     <h2 class="title">PharmaFinder</h2>
     <p>Register</p>
     <div class="btn-container">
-        <a href="userregi.do" class="btn">юо╧щ╟М╟╢ х╦©Ь╟║ют</a>
-        <a href="regi.do" class="btn">╬Ю╠╧ х╦©Ь╟║ют</a>
+        <a href="userRegi.do" class="btn">Л²╪К╟≤ЙЁ═Й╟² М ▄Л⌡░Й╟─Л·┘</a>
+        <a href="pharmacyRegi.do" class="btn">Л∙╫Й╣╜ М ▄Л⌡░Й╟─Л·┘</a>
     </div>
 </div>
 
