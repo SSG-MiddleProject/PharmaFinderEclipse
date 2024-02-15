@@ -65,7 +65,7 @@ input[type="submit"]:hover {
 	background-color: #0056b3;
 }
 
-#idcheck, #emailcheck {
+#usernamecheck, #emailcheck {
 	font-size: 12px;
 }
 </style>
@@ -80,7 +80,7 @@ input[type="submit"]:hover {
 			<div class="form-group">
 				<label for="username"></label>
 				<input type="text" name="username" id="username" placeholder="아이디를 입력해주세요" required>
-				<p id="idcheck"></p>
+				<p id="usernamecheck"></p>
 			</div>
 			<div class="form-group">
 				<label for="email"></label>
@@ -209,25 +209,25 @@ input[type="submit"]:hover {
 	        var idPattern = /^[a-z0-9]+$/; // 영어 소문자와 숫자만 허용
 	        
 	        if (!idPattern.test(inputId)) {
-	            $("#idcheck").css("color", "#ff0000");
-	            $("#idcheck").text("아이디는 영어 소문자와 숫자만 사용 가능합니다.");
+	            $("#usernamecheck").css("color", "#ff0000");
+	            $("#usernamecheck").text("아이디는 영어 소문자와 숫자만 사용 가능합니다.");
 	            return;
 	        }
 
 			if (inputId !== "") {
 				$.ajax({
-					url : "idcheck.do", // 요청 경로
+					url : "usernamecheck.do", // 요청 경로
 					type : "post",
 					data : {
 						"username" : inputId
 					}, // 서버로 보낼 데이터
 					success : function(msg) {
 						if (msg.trim() === "YES") {
-							$("#idcheck").css("color", "#0000ff");
-							$("#idcheck").text("사용할 수 있는 아이디입니다");
+							$("#usernamecheck").css("color", "#0000ff");
+							$("#usernamecheck").text("사용할 수 있는 아이디입니다");
 						} else {
-							$("#idcheck").css("color", "#ff0000");
-							$("#idcheck").text("사용중인 아이디입니다");
+							$("#usernamecheck").css("color", "#ff0000");
+							$("#usernamecheck").text("사용중인 아이디입니다");
 							$("#username").val("");
 						}
 					},
@@ -236,7 +236,7 @@ input[type="submit"]:hover {
 					}
 				});
 			} else {
-				$("#idcheck").text(""); // 입력값이 없을 때 메시지를 비움
+				$("#usernamecheck").text(""); // 입력값이 없을 때 메시지를 비움
 			}
 		});
 		

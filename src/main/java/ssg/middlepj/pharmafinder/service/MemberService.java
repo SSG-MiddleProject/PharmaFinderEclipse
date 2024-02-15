@@ -11,7 +11,7 @@ public interface MemberService {
 
 	boolean addpharmacy(PharmacyDto pharmacy);
 
-    boolean idcheck(String username);
+    boolean usernamecheck(String username);
     
     boolean emailcheck(String email);
 

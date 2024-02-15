@@ -19,8 +19,8 @@ public class MemberDaoImpl implements MemberDao {
 
     String ns = "Member.";
 
-    public int idcheck(String username) {
-        return session.selectOne(ns + "idcheck", username);
+    public int usernamecheck(String username) {
+        return session.selectOne(ns + "usernamecheck", username);
     }
     
     public int emailcheck(String email) {

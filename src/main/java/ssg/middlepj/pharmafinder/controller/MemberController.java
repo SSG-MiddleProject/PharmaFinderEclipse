@@ -32,11 +32,10 @@ public class MemberController {
 
 	// 아이디 중복 확인 메서드
 	@ResponseBody
-	@RequestMapping(value = "idcheck.do", method = RequestMethod.POST, produces = "application/String; charset=utf-8")
-	public String idcheck(@RequestParam("username") String username) {
-		// System.out.println("MemberController idcheck " + new Date());
+	@RequestMapping(value = "usernamecheck.do", method = RequestMethod.POST, produces = "application/String; charset=utf-8")
+	public String usernamecheck(@RequestParam("username") String username) {
 		// DAO를 통해 아이디 중복 체크 수행
-		boolean isIdDuplicate = service.idcheck(username);
+		boolean isIdDuplicate = service.usernamecheck(username);
 		// 결과에 따라 YES 또는 NO를 반환
 		return isIdDuplicate ? "NO" : "YES";
 	}
