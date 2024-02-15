@@ -299,6 +299,9 @@ public class MemberController {
         // 로그인한 사용자라면 회원정보수정 페이지로 이동
         return "mypages/userupdatepage";
     }
+	
+	
+	
 
 
 	@PostMapping("/userUpdateAf.do")
