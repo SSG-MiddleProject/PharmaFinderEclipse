@@ -206,6 +206,7 @@ public class MemberController {
 		String password = request.getParameter("password");
 		
 		String encryptedPassword = encryptStringBySHA256(password);
+		System.out.println(encryptedPassword);
 
 		// 로그인 시도 후 MemberDto 객체 반환
 		MemberDto loginResult = service.login(username, encryptedPassword);
@@ -344,31 +345,31 @@ public class MemberController {
     @PostMapping("/userUpdateAf.do")
     public String updateUser(@ModelAttribute MemberDto member, HttpSession session, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
         MemberDto loginedMember = (MemberDto) session.getAttribute("member");
-        System.out.println(loginedMember);
-
-        // 이메일 중복 체크
-        boolean isEmailDuplicate = service.emailcheck(member.getEmail());
-        if (isEmailDuplicate && !member.getEmail().equals(loginedMember.getEmail())) {
-            redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일 주소입니다.");
-            return "redirect:/userupdate.do";
-        }
-
-
-        // 비밀번호 암호화 처리
-        if (member.getPassword() != null && !member.getPassword().isEmpty()) {
-            String encryptedPassword = encryptStringBySHA256(member.getPassword());
-            member.setPassword(encryptedPassword);
-        }
-
-        // 회원 정보 업데이트 처리
-        boolean updateSuccess = service.updateMember(member);
-        if (updateSuccess) {
-            redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+        if (!service.emailcheck(member.getEmail()) || member.getEmail().equals(loginedMember.getEmail())) {
+            // 이메일 중복 체크: 새 이메일이 기존 이메일과 같거나 중복되지 않는 경우 업데이트 진행
+            if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+                // 비밀번호 암호화
+                String encryptedPassword = encryptStringBySHA256(member.getPassword());
+                member.setPassword(encryptedPassword);
+                System.out.println(encryptedPassword);
+                // 회원 정보 업데이트 처리
+                boolean updateSuccess = service.updateMember(member);
+                if (updateSuccess) {
+                    // 업데이트 성공 메시지
+                    redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+                    
+                    // 세션에 저장된 사용자 정보 업데이트
+                    loginedMember.setPassword(encryptedPassword); // 새로운 비밀번호로 업데이트
+                    session.setAttribute("member", loginedMember); // 세션 업데이트
+                } else {
+                    // 업데이트 실패 에러 메시지
+                    redirectAttributes.addFlashAttribute("error", "회원 정보 업데이트에 실패하였습니다.");
+                }
+            }
         } else {
-            redirectAttributes.addFlashAttribute("error", "회원 정보 업데이트에 실패하였습니다.");
+            // 이메일 중복 에러 메시지
+            redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일 주소입니다.");
         }
-
         return "redirect:/mypage.do";
     }
-
 }

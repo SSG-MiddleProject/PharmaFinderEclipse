@@ -18,18 +18,31 @@ import java.util.List;
 @Controller
 public class MyPageController {
 
-    private final MyPageService myPageService;
     private final BookmarkService bookmarkService;
-    private final MemberService memberService;
+    private final MyPageService myPageService; // 추가된 MyPageService
 
     @Autowired
-    public MyPageController(MyPageService myPageService, BookmarkService bookmarkService, MemberService memberService) {
-        this.myPageService = myPageService;
+    public MyPageController(BookmarkService bookmarkService, MyPageService myPageService) {
         this.bookmarkService = bookmarkService;
-        this.memberService = memberService;
+        this.myPageService = myPageService; // 초기화
     }
-
     @GetMapping("/mypage.do")
+    public String myPage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        MemberDto memberDto = (MemberDto) session.getAttribute("member");
+        if (memberDto == null) {
+            return "redirect:/login.do"; // 로그인 페이지로 리다이렉션
+        } else {
+            model.addAttribute("memberDto", memberDto);
+            List<BookmarkResDto> bookmarks = bookmarkService.getStoreBookmarksByUserId(memberDto.getId());
+            model.addAttribute("bookmarks", bookmarks);
+            // 여기서 추가적인 정보를 model에 추가할 수 있습니다.
+            return "mypages/mypage.tiles"; // mypage.jsp로 이동 (mypage.jsp는 마이 페이지를 위한 실제 뷰 파일명으로 교체해야 함)
+        }
+        }
+    
+    
+    @GetMapping("/setting.do")
     public String mypage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
@@ -40,7 +53,7 @@ public class MyPageController {
             List<BookmarkResDto> bookmarks = bookmarkService.getStoreBookmarksByUserId(memberDto.getId());
             model.addAttribute("bookmarks", bookmarks);
             System.out.println("MemberController mypage " + new Date());
-            return "mypages/mypage.tiles";
+            return "mypages/userupdatepage.tiles";
         }
     }
 }

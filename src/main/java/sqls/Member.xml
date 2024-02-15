@@ -83,9 +83,12 @@
                 #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c}, #{postcode}, #{wgs84Lon}, #{wgs84Lat})
     </insert>
 
-    <update id="updateMemberStoreId">
-	    UPDATE user
-	    SET store_id = #{storeId}
-	    WHERE id = #{memberId}
+    <update id="updateMember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
+    UPDATE user
+    SET
+        email = #{email},
+        password = #{password}
+        <!-- 필요한 추가 필드를 여기에 추가하세요 -->
+    WHERE username = #{username}
 	</update>
 </mapper>
