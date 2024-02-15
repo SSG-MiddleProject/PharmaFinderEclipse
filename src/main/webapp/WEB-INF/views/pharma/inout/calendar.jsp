@@ -56,7 +56,10 @@
     }
 
     .is-today {
-        background-color: #6ee7b7;
+        background-color: #475569;
+        b {
+            color: white;
+        }
     }
 
 </style>
