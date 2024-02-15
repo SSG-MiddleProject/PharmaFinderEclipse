@@ -68,9 +68,9 @@ public class PharmaInOutCalendarUtil {
 		String str = "";
 
 		if (year == ld.getYear() && month == ld.getMonthValue() && day == ld.getDayOfMonth()) {
-			str += "<a class='day is-today' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>";
+			str += String.format("<a class='day is-today' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>", toDashYYYYMMdd(year, month, day));
 		} else {
-			str += "<a class='day' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>";
+			str += String.format("<a class='day' href='/pharma-inventory-inquiry.do?currentDate=%s' style='color:#333;text-decoration:none'><b>", toDashYYYYMMdd(year, month, day));
 		}
 		str += String.format("%2d", day);
 		str += "</b></a>";
