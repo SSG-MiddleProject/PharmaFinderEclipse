@@ -86,6 +86,6 @@
     <update id="updateMemberStoreId">
 	    UPDATE user
 	    SET store_id = #{storeId}
-	    WHERE id = #{id}
+	    WHERE id = #{memberId}
 	</update>
 </mapper>
