@@ -263,6 +263,7 @@
     const currentPage = parseInt("<%=currentPage%>");
     const lastPage = parseInt("<%=lastPage%>");
     const storeOverlay = [];
+    const member = "<%=session.getAttribute("member")%>";
     let map;
     let keyword = "<%=keyword%>"
     let choice = document.getElementById("searchType");
@@ -517,10 +518,10 @@
     }
 
     const handleBookmark = (element, isBookmark) => {
-        <c:if test="${empty sessionScope.member}">
+        if (member === "null" ) {
             alert("로그인이 필요한 서비스입니다.")
             return location.href = "${pageContext.request.contextPath}/login.do"
-        </c:if>
+        }
         const productId = parseInt(element.getAttribute("value"))
         if (isBookmark === "true") {
             fetch('/bookmark/product.do?targetId=' + productId, {
