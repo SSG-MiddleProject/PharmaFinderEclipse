@@ -18,18 +18,14 @@ import java.util.List;
 @Controller
 public class MyPageController {
 
-    private final MyPageService myPageService;
     private final BookmarkService bookmarkService;
-    private final MemberService memberService;
 
     @Autowired
-    public MyPageController(MyPageService myPageService, BookmarkService bookmarkService, MemberService memberService) {
-        this.myPageService = myPageService;
+    public MyPageController(BookmarkService bookmarkService) {
         this.bookmarkService = bookmarkService;
-        this.memberService = memberService;
     }
 
-    @GetMapping("/mypage.do")
+    @GetMapping("/setting.do")
     public String mypage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         MemberDto memberDto = (MemberDto) session.getAttribute("member");
@@ -40,7 +36,7 @@ public class MyPageController {
             List<BookmarkResDto> bookmarks = bookmarkService.getStoreBookmarksByUserId(memberDto.getId());
             model.addAttribute("bookmarks", bookmarks);
             System.out.println("MemberController mypage " + new Date());
-            return "mypages/mypage.tiles";
+            return "mypages/userupdatepage.tiles";
         }
     }
 }
