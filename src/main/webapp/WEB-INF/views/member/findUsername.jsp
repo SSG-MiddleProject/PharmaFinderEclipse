@@ -60,6 +60,12 @@ body {
 .form input[type="submit"]:hover {
 	background-color: #0056b3;
 }
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-size: 12px; /* Set font size to 12px */
+}
 </style>
 </head>
 <body>
@@ -68,20 +74,18 @@ body {
 	<div class="container">
 		<h1 class="title">PharmaFinder</h1>
 		<p align="center">아이디 찾기</p>
-
+		
+	<form class="form" action="findUsernameAf.do" method="post">
+		<label for="email"></label> 
+		<input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required><br> 
 		<%
 		String errorMessage = (String) request.getAttribute("error");
 		if (errorMessage != null) {
 		%>
-		<div style="color: red;"><%=errorMessage%></div>
+		<div class="error-message"><%=errorMessage%></div>
 		<%
 		}
-		%>
-
-	<form class="form" action="findUsernameAf.do" method="post">
-		<label for="email"></label> 
-		<input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required><br> 
-		<input type="submit" value="아이디 찾기">
+		%>		<input type="submit" value="아이디 찾기">
 	</form>
 
 	</div>
