@@ -87,21 +87,5 @@ body {
 	</div>
 </div>
 
-<script>
-$(document).ready(function() {
-    $('form').on('submit', function(e) {
-        var email = $('#email').val();
-
-        // 이메일 입력값 검증 후 폼 제출
-        if (email.trim() === '') {
-            alert('이메일을 입력해주세요.');
-            e.preventDefault(); // 이메일이 비어있다면 폼 제출 중단
-        } else {
-            this.submit(); // 이메일이 입력되었다면 폼 제출 실행
-        }
-    });
-});
-</script>
-
 </body>
 </html>
