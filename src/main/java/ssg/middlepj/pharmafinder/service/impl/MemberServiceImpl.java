@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import ssg.middlepj.pharmafinder.dao.MemberDao;
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
@@ -20,8 +23,8 @@ public class MemberServiceImpl implements MemberService {
 	MemberDao dao;
 
 	@Override
-	public boolean idcheck(String username) {
-		int count = dao.idcheck(username);
+	public boolean usernamecheck(String username) {
+		int count = dao.usernamecheck(username);
 		return count > 0;
 	}
 
@@ -39,8 +42,47 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean addpharmacy(PharmacyDto pharmacy) {
-		int count = dao.addpharmacy(pharmacy);
-		return count > 0;
+		boolean isAdded = dao.addpharmacy(pharmacy);
+		// MyBatis 설정에 의해, addpharmacy 실행 후 pharmacy 객체의 id 필드가 자동으로 업데이트됩니다.
+		return isAdded;
+	}
+	
+	@Override
+	@Transactional
+	// 회원 정보와 약국 정보를 동시에 저장하는 메소드
+	public boolean registerPharmacy(MemberDto member, PharmacyDto pharmacy) throws NoSuchAlgorithmException {
+		try {
+	        // Member 정보 저장
+	        if (!addmember(member)) {
+	            return false;
+	        }
+
+	        // Pharmacy 정보 저장
+	        if (!addpharmacy(pharmacy)) {
+	            return false;
+	        }
+
+	        // Pharmacy 정보 저장 후 pharmacy 객체의 id가 정상적으로 설정되었는지 확인
+	        if (pharmacy.getId() != 0) {
+	            updateMemberStoreId(member.getId(), pharmacy.getId());
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } catch (DataAccessException e) {
+	        // 데이터베이스 액세스 중 발생한 예외 처리
+	        // 로깅 등의 예외 처리 로직 구현
+	        return false;
+	    } catch (Exception e) {
+	        // 기타 예외 처리
+	        // 로깅 등의 예외 처리 로직 구현
+	        return false;
+	    }
+	}
+
+	// PharmacyDto의 id를 MemberDto의 storeId에 설정
+	private void updateMemberStoreId(int memberId, int storeId) {
+		dao.updateMemberStoreId(memberId, storeId);
 	}
 
 	@Override
@@ -50,6 +92,12 @@ public class MemberServiceImpl implements MemberService {
 		paramMap.put("password", password);
 		// DAO의 수정된 login 메서드 호출
 		return dao.login(paramMap);
+	}
+
+	// dao를 통해 사용자 정보 조회
+	@Override
+	public MemberDto getMemberInfoByUsername(String username) {
+		return dao.findMemberByUsername(username);
 	}
 
 	// 이메일로 유저아이디 찾기
@@ -62,7 +110,7 @@ public class MemberServiceImpl implements MemberService {
 	// 이메일과 유저 로그인id로 비밀번호 찾기
 	@Override
 	public String findPassword(String username, String email) throws NoSuchAlgorithmException {
-		
+
 		// 아이디와 이메일을 기준으로 임시 비밀번호 생성
 		String temporaryPassword = generateTemporaryPassword();
 
@@ -84,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
 
 	// 입력 문자열을 SHA-256으로 암호화하여 해시 값을 반환하는 메서드
 	private String encryptStringBySHA256(String text) throws NoSuchAlgorithmException {
-		
+
 		// SHA-256 알고리즘의 인스턴스 생성
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
 		// 입력 문자열의 바이트 배열을 업데이트하여 해시 값을 계산
@@ -95,7 +143,7 @@ public class MemberServiceImpl implements MemberService {
 
 	// 바이트 배열을 16진수 문자열로 변환하는 메서드
 	private String bytesToHex(byte[] bytes) {
-		
+
 		StringBuilder builder = new StringBuilder();
 		for (byte b : bytes) {
 			// 바이트 값을 16진수 문자열로 변환하여 StringBuilder에 추가
@@ -114,16 +162,17 @@ public class MemberServiceImpl implements MemberService {
 		// 임시 비밀번호를 포함하는 이메일 전송 로직 구현
 		// 이메일 전송 기능에 대한 구현은 프로젝트의 이메일 전송 방식에 따라 다를 수 있음
 	}
-	
-	@Override
-    public boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword) throws NoSuchAlgorithmException {
-        // 임시 비밀번호 암호화
-        String encryptedTempPassword = encryptStringBySHA256(temporaryPassword);
-        // 새로운 비밀번호 암호화
-        String encryptedNewPassword = encryptStringBySHA256(newPassword);
 
-        return dao.updatePasswordWithTemporary(username, encryptedTempPassword, encryptedNewPassword);
-    }
+	@Override
+	public boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword)
+			throws NoSuchAlgorithmException {
+		// 임시 비밀번호 암호화
+		String encryptedTempPassword = encryptStringBySHA256(temporaryPassword);
+		// 새로운 비밀번호 암호화
+		String encryptedNewPassword = encryptStringBySHA256(newPassword);
+
+		return dao.updatePasswordWithTemporary(username, encryptedTempPassword, encryptedNewPassword);
+	}
 
 	@Override
 	public boolean updateMember(MemberDto member) throws NoSuchAlgorithmException {

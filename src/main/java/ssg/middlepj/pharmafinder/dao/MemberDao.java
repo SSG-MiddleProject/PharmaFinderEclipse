@@ -7,12 +7,13 @@ import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
 public interface MemberDao {
     // 중복체크
-    int idcheck(String username);
+    int usernamecheck(String username);
     int emailcheck(String email);
 
     // 회원가입
     int addmember(MemberDto mem);
-	int addpharmacy(PharmacyDto pharmacy);    // 약국 추가정보
+	boolean addpharmacy(PharmacyDto pharmacy);    // 약국 추가정보
+	void updateMemberStoreId(int memberId, int storeId);
 
     // 로그인
     // boolean login(Map<String, String> paramMap); // 인자를 두 개로 변경
@@ -26,6 +27,8 @@ public interface MemberDao {
 	
     boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword);
 	
+    MemberDto findMemberByUsername(String username);
+
     //회원정보 수정
     int updateMember(MemberDto member);
 }

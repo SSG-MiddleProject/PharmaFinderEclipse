@@ -11,7 +11,7 @@ public interface MemberService {
 
 	boolean addpharmacy(PharmacyDto pharmacy);	// 약추가
 
-    boolean idcheck(String username);	// 아이디 중복체크
+    boolean usernamecheck(String username);
     
     boolean emailcheck(String email);	// 이메일 중복체크
 
@@ -22,6 +22,10 @@ public interface MemberService {
 	String findPassword(String username, String email) throws NoSuchAlgorithmException; // 비밀번호 찾기 메서드 추가
 	
 	boolean updatePasswordWithTemporary(String username, String temporaryPassword, String newPassword) throws NoSuchAlgorithmException;
-	
+
+	MemberDto getMemberInfoByUsername(String username);
+
+	boolean registerPharmacy(MemberDto member, PharmacyDto pharmacy) throws NoSuchAlgorithmException;
+
 	boolean updateMember(MemberDto member) throws NoSuchAlgorithmException;	// 회원 정보 업데이트 메서드
 }

@@ -16,7 +16,7 @@
         <result property="modifiedAt" column="modified_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="idcheck" parameterType="String" resultType="Integer">
+    <select id="usernamecheck" parameterType="String" resultType="Integer">
         select count(*)
         from user
         where username = #{username}
@@ -51,8 +51,16 @@
         select id, store_id as 'storeId', username, email, state, roll, created_at as 'createdAt', modified_at as 'modifiedAt'
         from user
         where username = #{username}
+        	and password = #{password}
     </select>
-    
+
+    <!-- 사용자 정보 조회 -->
+	<select id="findMemberByUsername" parameterType="string" resultMap="BaseResultMap">
+	    SELECT id, username, email, password, state, roll, created_at AS createdAt, modified_at AS modifiedAt
+	    FROM user
+	    WHERE username = #{username}
+	</select>
+
     <!--
     	email unique key 체크 / notnull 체크안됨 -> 한명은 null값으로 가입가능 그뒤는 안됨
     	밑에방법은 내가 일반사용자용으로만 가입시킬때 그리고 약국 관리자로 사용할때 따로 insert문을 두개 만들어야함
@@ -61,24 +69,23 @@
     	values(#{storeId}, #{username}, #{email}, #{password}, 1, ${roll}, now(), now())
    	-->
     <insert id="addmember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto" useGeneratedKeys="true" keyProperty="id">
-        insert into user(id, username, email, password, state, roll)
-        values (#{id}, #{username}, #{email}, #{password}, 1, #{roll})
+        insert into user(store_id, username, email, password, state, roll)
+        values (#{storeId}, #{username}, #{email}, #{password}, 1, #{roll})
     </insert>
 
     <!-- store 테이블 추가 -->
-    <insert id="addpharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto">
-        insert into store (id, dutyName, dutyAddr, dutyTel1, bn_reg_num, dutyTime1s, dutyTime1c, dutyTime2s,
+    <insert id="addpharmacy" parameterType="ssg.middlepj.pharmafinder.dto.PharmacyDto" useGeneratedKeys="true" keyProperty="id">
+        insert into store (dutyName, dutyAddr, dutyTel1, bn_reg_num, dutyTime1s, dutyTime1c, dutyTime2s,
                            dutyTime2c, dutyTime3s, dutyTime3c, dutyTime4s, dutyTime4c, dutyTime5s, dutyTime5c,
                            dutyTime6s, dutyTime6c, dutyTime7s, dutyTime7c, dutyTime8s, dutyTime8c, postcode)
-        VALUES (#{id}, #{dutyName}, #{dutyAddr}, #{dutyTel1}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c},
+        VALUES (#{dutyName}, #{dutyAddr}, #{dutyTel1}, #{bnRegNum}, #{dutyTime1s}, #{dutyTime1c},
                 #{dutyTime2s}, #{dutyTime2c}, #{dutyTime3s}, #{dutyTime3c}, #{dutyTime4s}, #{dutyTime4c}, #{dutyTime5s},
                 #{dutyTime5c}, #{dutyTime6s}, #{dutyTime6c}, #{dutyTime7s}, #{dutyTime7c}, #{dutyTime8s}, #{dutyTime8c}, #{postcode})
     </insert>
-    
-    <update id="updateMember" parameterType="ssg.middlepj.pharmafinder.dto.MemberDto">
-    update user
-    set email = #{email},
-        password = #{password}
-    where username = #{username}
+
+    <update id="updateMemberStoreId">
+	    UPDATE user
+	    SET store_id = #{storeId}
+	    WHERE id = #{memberId}
 	</update>
 </mapper>

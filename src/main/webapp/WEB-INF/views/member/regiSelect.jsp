@@ -5,80 +5,92 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입 선택페이지</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 <style type="text/css">
 /* General styling */
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
     background-color: #f9f9f9;
+    text-align: center;
 }
 
-.container {
-    position: relative;
-    width: 100%;
-    max-width: 1440px;
-    height: 100vh;
+.center{
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    height: 100vh;
 }
 
-.title {
-    font-family: 'Inter';
-    font-style: normal;
+.container {
+    width: 80%;
+    height: 100%;
+    background-color: #f9f9f9;
+}
+
+.regi-title {
     font-weight: 800;
     font-size: 48px;
-    line-height: 58px;
     text-align: center;
-    color: #000000;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    margin-top: 30px;
+}
+
+.regi-title-sub {
+    font-weight: 400;
+    font-size: x-large;
+    text-align: center;
+    margin-top: 0;
 }
 
 .btn-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 40px;
+    height: 55%;
 }
 
 .btn {
-    position: relative;
-    width: 300px;
-    height: 70px;
-    background: #FFFFFF;
-    border: 2px solid #000000;
-    border-radius: 10px;
+    width: 40%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dbdbdb;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 20px;
-    text-decoration: none;
-    color: #000000;
-    font-family: 'Inter';
-    font-style: normal;
     font-weight: bold;
-    font-size: 24px;
-    line-height: 29px;
-    transition: all 0.3s ease;
 }
 
 .btn:hover {
-    background: #000000;
-    color: #FFFFFF;
+    background-color: #0056b3;
 }
 
 /* Login text */
 .login-text {
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 29px;
+    margin-top: 0;
     text-align: center;
-    color: #989898;
-    margin-top: 30px;
+    transition: color 0.3s ease;
+
+}
+
+.login-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    color: #0056b3;
+}
+
+i {
+    font-size: 17rem;
+    margin-bottom: 10px;
 }
 
 </style>
@@ -86,13 +98,18 @@ body {
 </head>
 <body>
 
+<div class="center">
 <div class="container">
-    <h2 class="title">PharmaFinder</h2>
-    <p>Register</p>
+    <p class="regi-title">PharmaFinder</p>
+    <p class="regi-title-sub">Register</p>
     <div class="btn-container">
-        <a href="userRegi.do" class="btn">일반고객 회원가입</a>
-        <a href="pharmacyRegi.do" class="btn">약국 회원가입</a>
+        <a href="userRegi.do" class="btn"><i class="fa fa-user"></i><p>사용자 등록</p></a>
+        <a href="pharmacyRegi.do" class="btn"><i class="fa fa-pills"></i>약국직원 등록</a>
     </div>
+    <div class="login-text">
+        이미 계정이 있으신가요? <a href="login.do">로그인</a>
+    </div>
+</div>
 </div>
 
 </body>

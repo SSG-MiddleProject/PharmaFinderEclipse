@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,11 +34,10 @@ public class MemberController {
 
 	// 아이디 중복 확인 메서드
 	@ResponseBody
-	@RequestMapping(value = "idcheck.do", method = RequestMethod.POST, produces = "application/String; charset=utf-8")
-	public String idcheck(@RequestParam("username") String username) {
-		// System.out.println("MemberController idcheck " + new Date());
+	@RequestMapping(value = "usernamecheck.do", method = RequestMethod.POST, produces = "application/String; charset=utf-8")
+	public String usernamecheck(@RequestParam("username") String username) {
 		// DAO를 통해 아이디 중복 체크 수행
-		boolean isIdDuplicate = service.idcheck(username);
+		boolean isIdDuplicate = service.usernamecheck(username);
 		// 결과에 따라 YES 또는 NO를 반환
 		return isIdDuplicate ? "NO" : "YES";
 	}
@@ -92,15 +92,31 @@ public class MemberController {
 
 	// 회원가입 처리 메서드
 	@PostMapping("/userRegiAf.do")
-	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem) throws NoSuchAlgorithmException {
-		mem.setState(1); // 활성화 상태로 설정
-		mem.setRoll(2); // 일반 유저로 설정
-		
-		String rawPassword = mem.getPassword();
-        String encryptedPassword = encryptStringBySHA256(rawPassword);
-        
-        mem.setPassword(encryptedPassword);
+	public String registerAfUser(HttpServletRequest request, @ModelAttribute MemberDto mem, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
+	    try {
+	        mem.setState(1); // 활성화 상태로 설정
+	        mem.setRoll(2); // 일반 유저로 설정
 
+	        String rawPassword = mem.getPassword();
+	        String encryptedPassword = encryptStringBySHA256(rawPassword);
+	        mem.setPassword(encryptedPassword);
+
+	        // 회원가입 처리
+	        service.addmember(mem);
+	        redirectAttributes.addFlashAttribute("success", "등록되었습니다");
+	        return "redirect:/login.do"; // 회원가입 성공 시 로그인 페이지로 리다이렉트
+	    } catch (DuplicateKeyException e) {
+	        // 중복 이메일이나 다른 키 관련 예외 처리
+	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일입니다");
+	        return "redirect:/userRegi.do"; // 에러 메시지와 함께 회원가입 페이지로 리다이렉트
+	    } catch (Exception e) {
+	        // 기타 예외 처리
+	        redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요");
+	        return "redirect:/userRegi.do";
+	    }
+	}
+
+        /*
 		// 회원가입 처리
 		boolean registerResult = service.addmember(mem);
 		if (registerResult) {
@@ -111,12 +127,12 @@ public class MemberController {
 			request.setAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요.");
 			return "member/userRegi"; // 회원가입 페이지로 이동
 		}
-	}
+		*/
 
 	// 회원가입(약국) 페이지 이동 메서드
 	@GetMapping("/pharmacyRegi.do")
 	public String registerPharmacy() {
-		// System.out.println("MemberController pharmacyRegi " + new Date());
+		System.out.println("MemberController pharmacyRegi " + new Date());
 		return "member/pharmacyRegi";
 	}
 
@@ -125,15 +141,33 @@ public class MemberController {
 			@ModelAttribute MemberDto mem,
 			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
 
-		mem.setState(1); // 활성화 상태로 설정
-		mem.setRoll(1); // 약국 유저로 설정
-		
-		String rawPassword = mem.getPassword();
-	    String encryptedPassword = encryptStringBySHA256(rawPassword);
+		System.out.println("MemberController pharmacyRegiAf " + new Date());
 
-	    mem.setPassword(encryptedPassword);
+		try {
+			mem.setState(1); // 활성화 상태로 설정
+			mem.setRoll(1); // 약국 유저로 설정
 
+			String rawPassword = mem.getPassword();
+		    String encryptedPassword = encryptStringBySHA256(rawPassword);
+		    mem.setPassword(encryptedPassword);
 
+		    // 회원 정보와 약국 정보를 동시에 저장
+	        boolean registrationResult = service.registerPharmacy(mem, pharmacy);
+
+	        if (registrationResult) {
+	        	redirectAttributes.addFlashAttribute("successMessage", "회원가입되었습니다.");
+	            return "redirect:/login.do";
+	        } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패하였습니다.");
+	            return "redirect:/pharmacyRegi.do";
+	        }
+	    } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "회원가입 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
+	        return "redirect:/pharmacyRegi.do";
+	    }
+	}
+
+		/*
 		boolean memberAdded = service.addmember(mem);
 		if (!memberAdded) {
 			redirectAttributes.addFlashAttribute("error", "회원 정보 저장에 실패하였습니다.");
@@ -152,18 +186,18 @@ public class MemberController {
 
         return "redirect:/login.do";
     }
+    */
 
 	// 로그인 페이지 이동 메서드
 	@GetMapping(value = "login.do")
 	public String login() {
-		 System.out.println("MemberController login");
+		System.out.println("MemberController login");
 		return "member/login";
 	}
 
 	// 로그인 처리 메서드
 	@PostMapping("/loginAf.do")
 	public String loginProcess(HttpServletRequest request, Model model) throws NoSuchAlgorithmException {
-		System.out.println("Controller login");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
@@ -273,102 +307,64 @@ public class MemberController {
 	        return "member/updateOriginPassword";
 	    }
 	}
-	
-	
-	
-	
-	
-		/*
-		model.addAttribute("newPassword", newPassword);
-		return "showPassword";
-		*/
-	@GetMapping("/userupdate.do")
+
+	//로그아웃 처리 메서드
+	@GetMapping("/logout.do")
+	public String logout(HttpServletRequest request) {
+	 // 현재 세션을 가져와서 세션을 무효화
+	 HttpSession session = request.getSession(false); // 현재 세션을 가져오되, 없으면 새로 생성하지 않음
+	 if (session != null) {
+	     session.invalidate(); // 세션 무효화
+	 }
+	 return "redirect:/main.do"; // 메인 페이지로 리다이렉트
+	}
+
+    @GetMapping("/userupdate.do")
     public String userupdate(HttpSession session, HttpServletResponse response) throws IOException {
         // 세션에서 사용자 정보 확인
-		MemberDto loginedMember = (MemberDto) session.getAttribute("member");
-	    
-	    if (loginedMember == null) {
-	    	// 로그인된 사용자 정보가 없으면 로그인 페이지로 리다이렉트
-	        return "redirect:/login.do";
-	    
+        MemberDto loginedMember = (MemberDto) session.getAttribute("member");
+
+        if (loginedMember == null) {
+            // 로그인된 사용자 정보가 없으면 로그인 페이지로 리다이렉트
+            return "redirect:/login.do";
+
         }
         System.out.println("MemberController userupdate " + new Date());
-        
+
         //
-        
+
         // 로그인한 사용자라면 회원정보수정 페이지로 이동
         return "mypages/userupdatepage";
     }
-	
-	
-	
+
+    @PostMapping("/userUpdateAf.do")
+    public String updateUser(@ModelAttribute MemberDto member, HttpSession session, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
+        MemberDto loginedMember = (MemberDto) session.getAttribute("member");
+        System.out.println(loginedMember);
+
+        // 이메일 중복 체크
+        boolean isEmailDuplicate = service.emailcheck(member.getEmail());
+        if (isEmailDuplicate && !member.getEmail().equals(loginedMember.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일 주소입니다.");
+            return "redirect:/userupdate.do";
+        }
 
 
-	@PostMapping("/userUpdateAf.do")
-	public String updateUser(@ModelAttribute MemberDto member, HttpSession session, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
-	    MemberDto loginedMember = (MemberDto) session.getAttribute("member");
-	    System.out.println(loginedMember);
-	    
-	 // 이메일 중복 체크
-	    boolean isEmailDuplicate = service.emailcheck(member.getEmail());
-	    if (isEmailDuplicate && !member.getEmail().equals(loginedMember.getEmail())) {
-	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일 주소입니다.");
-	        return "redirect:/userupdate.do";
-	    }
-	    
-	    
-	    // 비밀번호 암호화 처리
-	    if (member.getPassword() != null && !member.getPassword().isEmpty()) {
-	        String encryptedPassword = encryptStringBySHA256(member.getPassword());
-	        member.setPassword(encryptedPassword);
-	    }
+        // 비밀번호 암호화 처리
+        if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+            String encryptedPassword = encryptStringBySHA256(member.getPassword());
+            member.setPassword(encryptedPassword);
+        }
 
-	    // 회원 정보 업데이트 처리
-	    boolean updateSuccess = service.updateMember(member);
-	    if (updateSuccess) {
-	        redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
-	    } else {
-	        redirectAttributes.addFlashAttribute("error", "회원 정보 업데이트에 실패하였습니다.");
-	    }
+        // 회원 정보 업데이트 처리
+        boolean updateSuccess = service.updateMember(member);
+        if (updateSuccess) {
+            redirectAttributes.addFlashAttribute("message", "회원 정보가 성공적으로 업데이트되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "회원 정보 업데이트에 실패하였습니다.");
+        }
 
-	    return "redirect:/mypage.do";
-	}
+        return "redirect:/mypage.do";
+    }
 
 }
-
-
-
-
-
-/*
-private void convertPharmacyOperatingTimes(PharmacyDto pharmacy) {
-	pharmacy.setDutyTime1s(convertTimeFormat(pharmacy.getDutyTime1s()));
-	pharmacy.setDutyTime1c(convertTimeFormat(pharmacy.getDutyTime1c()));
-	pharmacy.setDutyTime2s(convertTimeFormat(pharmacy.getDutyTime2s()));
-	pharmacy.setDutyTime2c(convertTimeFormat(pharmacy.getDutyTime2c()));
-	pharmacy.setDutyTime3s(convertTimeFormat(pharmacy.getDutyTime3s()));
-	pharmacy.setDutyTime3c(convertTimeFormat(pharmacy.getDutyTime3c()));
-	pharmacy.setDutyTime4s(convertTimeFormat(pharmacy.getDutyTime4s()));
-	pharmacy.setDutyTime4c(convertTimeFormat(pharmacy.getDutyTime4c()));
-	pharmacy.setDutyTime5s(convertTimeFormat(pharmacy.getDutyTime5s()));
-	pharmacy.setDutyTime5c(convertTimeFormat(pharmacy.getDutyTime5c()));
-	pharmacy.setDutyTime6s(convertTimeFormat(pharmacy.getDutyTime6s()));
-	pharmacy.setDutyTime6c(convertTimeFormat(pharmacy.getDutyTime6c()));
-	pharmacy.setDutyTime7s(convertTimeFormat(pharmacy.getDutyTime7s()));
-	pharmacy.setDutyTime7c(convertTimeFormat(pharmacy.getDutyTime7c()));
-	pharmacy.setDutyTime8s(convertTimeFormat(pharmacy.getDutyTime8s()));
-	pharmacy.setDutyTime8c(convertTimeFormat(pharmacy.getDutyTime8c()));
-}
-
-private String convertTimeFormat(String timeStr) {
-	if (timeStr == null || timeStr.isEmpty()) {
-		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-	}
-	String[] parts = timeStr.split(":");
-	if (parts.length < 2) {
-		return "0000"; // 기본값 혹은 예외 처리에 따라 변경 가능
-	}
-	// 시간과 분을 각각 두 자리 숫자로 포맷
-	return parts[0] + parts[1];
-}
-*/
