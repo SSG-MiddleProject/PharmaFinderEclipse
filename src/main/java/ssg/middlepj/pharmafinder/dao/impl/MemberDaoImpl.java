@@ -90,4 +90,9 @@ public class MemberDaoImpl implements MemberDao {
         return session.selectOne(ns + ".findMemberByUsername", username);
     }
 
+	@Override
+	public int updateMember(MemberDto member) {
+		 return session.update("Member.updateMember", member);
+	}
+
 }
