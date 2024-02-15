@@ -1,330 +1,343 @@
-<%@page import="util.PharmaInOutCalendarUtil"%>
+<%@page import="util.PharmaInOutCalendarUtil" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8" %>
 <%
-	String year = (String)request.getAttribute("year");
-	String month = (String)request.getAttribute("month");
-	String day = (String)request.getAttribute("day");
+    String year = (String) request.getAttribute("year");
+    String month = (String) request.getAttribute("month");
+    String day = (String) request.getAttribute("day");
 
-	String twoMonth = PharmaInOutCalendarUtil.two(month);
-	String twoDay = PharmaInOutCalendarUtil.two(day);
+    String twoMonth = PharmaInOutCalendarUtil.two(month);
+    String twoDay = PharmaInOutCalendarUtil.two(day);
 
-	String formatedDate = year + "-" + twoMonth + "-" + twoDay;
+    String formatedDate = year + "-" + twoMonth + "-" + twoDay;
 %>
 <style>
-/* 스타일링을 위한 CSS */
-#inwrite {
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	itmes-align: center;
-	padding: 10px;
-}
+    /* 스타일링을 위한 CSS */
+    #inwrite {
+        height: 100%;
 
-hr {
-	margin: 0;
-}
+        display: flex;
+        justify-content: center;
+        itmes-align: center;
+        padding: 10px;
+    }
 
-#searchModal {
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
-	justify-content: center;
-	align-items: center;
-	z-index: 1;
-}
+    hr {
+        margin: 0;
+    }
 
-.modal-contents {
-	background: #fff;
-	padding: 20px;
-	border-radius: 5px;
-	max-width: 80%;
-	max-height: 60%;
-	overflow: auto;
-}
+    #searchModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+    }
 
-.close {
-	float: right;
-	cursor: pointer;
-}
+    .modal-contents {
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 80%;
+        max-height: 60%;
+        overflow: auto;
+    }
 
-.pharma-products-container {
-	margin: auto;
-	overflow: auto;
-	height: 1000px;
-}
+    .close {
+        float: right;
+        cursor: pointer;
+    }
 
-.add-pharma-product {
-	border: solid 2px black;
-}
+    .pharma-products-container {
+        margin: auto;
+        overflow: auto;
+        height: 1000px;
+    }
+
+    .add-pharma-product {
+        /*border: solid 2px black;*/
+    }
 </style>
+
+
 <div id="inwrite">
-	<div >
-	<div style="height: 90%">
-			<p><%=formatedDate%></p>
-	<p class=" " style="padding-top: 20px; font-size: x-large; font-weight: bold">입고추가</p>
-	<!-- 검색 모달창 START-->
-	<div id="searchModal">
-		<!-- 실제창 -->
-		<div class="modal-contents">
-			<span class="close" onclick="closeSearchModal()">&times;</span>
-			<h2>검색</h2>
-			<input type="text" id="keyword" placeholder="검색어를 입력하세요" />
-			<select id="searchType" class="form-control" style="width: auto">
-				<option value="id">제품코드</option>
-				<option value="itemName">제품명</option>
-			</select>
-			<button onclick="performSearch()">검색</button>
-			<div id="result"></div>
-		</div>
-		<!-- 실제창 END -->
-	</div>
-	<!-- 검색 모달창 -->
-	<!-- 약국제품 추가창 START -->
-	<div id="pharmaProductAddList" style="display: grid; "></div>
-	<!-- 약국제품 추가창 END -->
-	</div>
-	<button type="button" class="button is-light" onclick="openSearchModal()">검색</button>
-	<button class="button is-light" type="button" style="align-self: end" onclick="submitPharmaProductIn()" >등록</button>
+    <div>
+        <div style="height: 90%; width: 100vw">
+            <p><%=formatedDate%>
+            </p>
+            <p class=" " style="padding-top: 20px; font-size: x-large; font-weight: bold">입고추가</p>
+            <table class='table' style='width: 80%'> <thead><tr><th>제품코드</th><th>제품명</th><th>입고가</th><th>수량</th><th>삭제</th></tr></thead>
 
-	</div>
-
-	<script>
-		// JavaScript를 사용하여 모달창 열고 닫기
-		function openSearchModal() {
-			document.getElementById("searchModal").style.display = "flex";
-			$("#result").html("");
-		}
-
-		function closeSearchModal() {
-			document.getElementById("searchModal").style.display = "none";
-		}
-
-		function performSearch() {
-			let searchType = $("#searchType").val();
-			let keyword = $("#keyword").val();
-
-			let productId = 0;
-			let itemName = null;
-
-			if (searchType === "id") {
-				if(isNaN(keyword)){
-					alert("제품코드는 숫자만 입력 가능합니다.");
-					return;
-				}else{
-					productId = keyword;
-				}
-			} else if (searchType === "itemName") {
-				itemName = keyword;
-			}
-					$.ajax({
-						url : "./select-specific-pharma-products.do",
-						type : "get",
-						data : {
-							productId : productId,
-							itemName : itemName
-						},
-						success : function(data) {
-							if (data != null) {
-								$("#result").html("");
-								let table = $(`<table class="table"></table>`);
-
-								$("#result").append(table);
-								let rowHeader = $(`<thead><tr><th>제품코드</th><th>제품명</th><th>비고</th></tr></thead>`);
-
-								$("#result > table").append(rowHeader);
-								for (let i = 0; i < data.length; i++) {
-
-									let jsonStr = JSON.stringify(data[i]);
-									let newTr = $("<tr>");
-									let newProductIdTd = $("<td>"
-											+ data[i].productId + "</td>");
-									let newItemNameTd = $("<td>"
-											+ data[i].itemName + "</td>");
-									let newBtnTd = $("<td>");
-									let newBtn = $("<button type='selectionProduct(this)'>선택</button>");
-									$(newBtn).attr("data-object", jsonStr);
-									$(newBtn).attr("onclick",
-											"selectionProduct(this)");
-									newBtnTd.append(newBtn);
-
-									newTr.append(newProductIdTd);
-									newTr.append(newItemNameTd);
-									newTr.append(newBtnTd);
-
-									$("#result>table").append(newTr);
-								}
-							}
-						},
-						error : function() {
-							alert("error");
-						},
-					});
-		}
-
-		function selectionProduct(selectionProduct) {
-			let jsonStr = $(selectionProduct).attr("data-object");
-			let json = JSON.parse(jsonStr);
-
-			let elements = document
-					.getElementsByClassName("add-pharma-product");
-
-			if (elements.length > 0) {
-				let isduplicate = false;
-				for (let i = 0; i < elements.length; i++) {
-					let element = elements[i];
-					let productId = $(element).find(".productId").text();
-
-					if (json.productId == productId) {
-						alert("이미 추가된 제품입니다.");
-						return;
-					}
-				}
-			}
-
-			addPharmaProduct(jsonStr, $("#pharmaProductAddList"));
-			closeSearchModal();
-		}
-
-		function addPharmaProduct(jsonStr, container) {
-			let json = JSON.parse(jsonStr);
-			let addIndex = $(".add-pharma-product").length;
-			let productDiv = $("<div style='width: 20rem; height: auto; '>");
+            <!-- 검색 모달창 START-->
+            <div id="searchModal">
+                <!-- 실제창 -->
+                <div class="modal-contents">
+                    <span class="close" onclick="closeSearchModal()">&times;</span>
+                    <h2>검색</h2>
+                    <input type="text" id="keyword" placeholder="검색어를 입력하세요"/>
+                    <select id="searchType" class="form-control" style="width: auto">
+                        <option value="id">제품코드</option>
+                        <option value="itemName">제품명</option>
+                    </select>
+                    <button onclick="performSearch()">검색</button>
+                    <div id="result"></div>
+                </div>
+                <!-- 실제창 END -->
+            </div>
+            <!-- 검색 모달창 -->
+            <!-- 약국제품 추가창 START -->
+                <tbody id="pharmaProductAddList" class="pharma-tbody"></tbody>
+            </table>
+<%--            <div id="pharmaProductAddList" style="display: grid; "></div>--%>
+            <!-- 약국제품 추가창 END -->
+        </div>
 
 
-			productDiv.attr("id", addIndex + "addPharmaProductContainer");
-			productDiv.attr("class", "add-pharma-product");
-			productDiv.attr("data-object", jsonStr);
+        <button type="button" class="button is-light" onclick="openSearchModal()">검색</button>
+        	<button class="button is-light" type="button" style="align-self: end" onclick="submitPharmaProductIn()" >등록</button>
 
-			let productId = $("<span class='productId' style='font-size: small; color: darkgrey'>");
-			productId.text(json.productId);
-			productId.append($("<br>"));
-			productId.append($("</span>"))
+    </div>
 
-			let itemName = $("<span style='font-size: x-large' '>");
+    <script>
+        // JavaScript를 사용하여 모달창 열고 닫기
+        function openSearchModal() {
+            document.getElementById("searchModal").style.display = "flex";
+            $("#result").html("");
+        }
 
-			itemName.text(json.itemName);
-			itemName.append($("<br>"));
+        function closeSearchModal() {
+            document.getElementById("searchModal").style.display = "none";
+        }
 
-			let closeIcon = $(`<span onclick="doCloseIcon(this)"><i class="fas fa-times-circle is-pulled-right"></i></span>`);
+        function performSearch() {
+            let searchType = $("#searchType").val();
+            let keyword = $("#keyword").val();
 
-			let hr = $("<hr>")
-			let br = $("<br>");
-			let openDiv = $("<div style='display: flex; '>");
-			let plusIcon = $(`<span onclick="doPlus(this)" > + </span>`);
-			let count = $("<span class='count'>1</span>");
-			let minusIcon = $(`<span onclick="doMinus(this)""> - </span>`);
+            let productId = 0;
+            let itemName = null;
 
-			let inputPrice = $(`<span class="input-price" style="align-items: end">`+ json.inputPrice + `</span>`)
+            if (searchType === "id") {
+                if (isNaN(keyword)) {
+                    alert("제품코드는 숫자만 입력 가능합니다.");
+                    return;
+                } else {
+                    productId = keyword;
+                }
+            } else if (searchType === "itemName") {
+                itemName = keyword;
+            }
+            $.ajax({
+                url: "./select-specific-pharma-products.do",
+                type: "get",
+                data: {
+                    productId: productId,
+                    itemName: itemName
+                },
+                success: function (data) {
+                    if (data != null) {
+                        $("#result").html("");
+                        let table = $(`<table class="table"></table>`);
 
-			productDiv.append(closeIcon);
-			productDiv.append(br);
-			productDiv.append(productId);
-			productDiv.append(itemName);
-			productDiv.append(inputPrice);
-			productDiv.append($("<span>원</span>"));
-			productDiv.append(hr);
+                        $("#result").append(table);
+                        let rowHeader = $(`<thead><tr><th>제품코드</th><th>제품명</th><th>비고</th></tr></thead>`);
 
-			productDiv.append(plusIcon);
-			productDiv.append(count);
-			productDiv.append(minusIcon);
+                        $("#result > table").append(rowHeader);
+                        for (let i = 0; i < data.length; i++) {
 
-			container.append(productDiv);
-		}
+                            let jsonStr = JSON.stringify(data[i]);
+                            let newTr = $("<tr>");
+                            let newProductIdTd = $("<td>"
+                                + data[i].productId + "</td>");
+                            let newItemNameTd = $("<td>"
+                                + data[i].itemName + "</td>");
+                            let newBtnTd = $("<td>");
+                            let newBtn = $("<button type='selectionProduct(this)'>선택</button>");
+                            $(newBtn).attr("data-object", jsonStr);
+                            $(newBtn).attr("onclick",
+                                "selectionProduct(this)");
+                            newBtnTd.append(newBtn);
 
-		function doCloseIcon(icon) {
-			$(icon).parent().remove();
-		}
+                            newTr.append(newProductIdTd);
+                            newTr.append(newItemNameTd);
+                            newTr.append(newBtnTd);
 
-		function doPlus(iconAnchor) {
-			let countSpan = $(iconAnchor).parent().find(".count");
-			let countNum = Number($(countSpan).text());
-			countNum++;
+                            $("#result>table").append(newTr);
+                        }
+                    }
+                },
+                error: function () {
+                    alert("error");
+                },
+            });
+        }
 
-			countSpan.text(countNum);
-		}
+        function selectionProduct(selectionProduct) {
+            let jsonStr = $(selectionProduct).attr("data-object");
+            let json = JSON.parse(jsonStr);
 
-		function doMinus(iconAnchor) {
-			let countSpan = $(iconAnchor).parent().find(".count");
-			let countNum = Number($(countSpan).text());
+            let elements = document
+                .getElementsByClassName("add-pharma-product");
 
-			if (countNum > 1) {
-				countNum--;
-				countSpan.text(countNum);
-			}
-		}
+            if (elements.length > 0) {
+                let isduplicate = false;
+                for (let i = 0; i < elements.length; i++) {
+                    let element = elements[i];
+                    let productId = $(element).find(".productId").text();
 
-		function submitPharmaProductIn(){
-			let elements = document.getElementsByClassName("add-pharma-product");
+                    if (json.productId == productId) {
+                        alert("이미 추가된 제품입니다.");
+                        return;
+                    }
+                }
+            }
 
-			let pharmaInDto = {
-				id:-1,
-				storeId:-1,
-				currentInputDate:"<%= formatedDate%>",
-				products:[]
-			}
+            addPharmaProduct(jsonStr, $("#pharmaProductAddList"));
+            closeSearchModal();
+        }
 
-			for (let i = 0; i < elements.length; i++) {
-				let element = elements[i];
-				let count = $(element).find(".count").text();
-				let pharmaProductJson = JSON.parse($(element).attr("data-object"));
-				let dailyInputProduct = {
-					id:-1,
-					dailyInputId:-1,
-					storeProductId:pharmaProductJson.id,
-					inputCnt:count
-				}
+        function addPharmaProduct(jsonStr, container) {
+            let json = JSON.parse(jsonStr);
+            let addIndex = $(".add-pharma-product").length;
 
-				pharmaInDto.products[i] = dailyInputProduct;
-			}
+            // let table = $("<table class='table' style='width: 100%'> <thead><tr><th>제품코드</th><th>제품명</th><th>입고가</th><th>수량</th><th>삭제</th></tr></thead>");
 
-			// 500에러 방지를 위한 url 변환
-			pharmaInDto = serializeTwoLevelsNestedJson(pharmaInDto);
+            let tbody = $(".pharma-tbody");
 
-			$.ajax({
-				url:"pharma-in-writeAf.do",
-				type:"get",
-				data: pharmaInDto,
-				success:function(data){
-					if(data.msg === "SUCCESS"){
-						alert("등록 성공")
+            let productId = $("<td>");
+            productId.text(json.productId);
+            productId.append($("<br>"));
+            productId.append($("</td>"))
 
-						location.href = "/pharma-inout-calendar.do";
-					}else{
-						alert("실패");
-					}
-				},
-				error:function(){
-					alert("error");
-				}
-			})
-		}
+            let itemName = $("<td>");
+            itemName.text(json.itemName);
+            itemName.append($("<br>"));
 
-		// List를 가진 중첩 Dto에러 방지
-		function serializeTwoLevelsNestedJson(json) {
-		    return Object.keys(json).map(function(key) {
-		        if (typeof json[key] === "object") {
-		            if (Array.isArray(json[key])) {
-		                return json[key].map((arrayItem, index) => {
-		                    return Object.keys(arrayItem).map(function(arrayItemKey) {
-		                        return encodeURIComponent(key) +encodeURIComponent('[') + index + encodeURIComponent('].') + encodeURIComponent(arrayItemKey) + '=' + encodeURIComponent(arrayItem[arrayItemKey]);
-		                    }).join('&')
-		                }).join('&');
-		            } else {
-		                return Object.keys(json[key]).map(function(subJsonKey) {
-		                    return encodeURIComponent(key) +'.' + encodeURIComponent(subJsonKey)+ '=' + encodeURIComponent(json[key][subJsonKey]);
-		                }).join('&');
-		            }
-		        }
-		        else {
-		            return encodeURIComponent(key) +'=' + encodeURIComponent(json[key])
-		        }
-		    }).join('&');
-		}
-	</script>
+            let closeIcon = $(`<td onclick="doCloseIcon(this)"><i class="fas fa-times-circle is-pulled-right"></i></td>`);
+
+            let hr = $("<hr>")
+            let br = $("<br>");
+            let openDiv = $("<div style='display: flex; '>");
+
+            let plusIcon = $(`<td><div><i class="fas fa-plus-circle" onclick="doPlus(this)"></i>`);
+            let count = $("<p class='count'>1</p>");
+            let minusIcon = $(`<i class="fas fa-minus-circle" onclick="doMinus(this)"></i></div></td>`);
+
+
+            // let plusIcon = $(`<td onclick="doPlus(this)" > + </td>`);
+            // let count = $("<td class='count'>1</td>");
+            // let minusIcon = $(`<td onclick="doMinus(this)""> - </td>`);
+
+            let inputPrice = $(`<td class="input-price" style="align-items: end">` + json.inputPrice + `원</td>`)
+
+            tbody.append($("<tr>"));
+            tbody.append(productId);
+            tbody.append(itemName);
+            tbody.append(inputPrice);
+            tbody.append(plusIcon);
+            tbody.append(count);
+            tbody.append(minusIcon);
+            tbody.append(closeIcon);
+            tbody.append($("</tr>"));
+
+            container.append(tbody);
+
+        }
+
+        function doCloseIcon(icon) {
+            $(icon).parent().remove();
+        }
+
+        function doPlus(iconAnchor) {
+            let countSpan = $(iconAnchor).parent().find(".count");
+            let countNum = Number($(countSpan).text());
+            countNum++;
+
+            countSpan.text(countNum);
+        }
+
+        function doMinus(iconAnchor) {
+            let countSpan = $(iconAnchor).parent().find(".count");
+            let countNum = Number($(countSpan).text());
+
+            if (countNum > 1) {
+                countNum--;
+                countSpan.text(countNum);
+            }
+        }
+
+        function submitPharmaProductIn() {
+            let elements = document.getElementsByClassName("add-pharma-product");
+
+            let pharmaInDto = {
+                id: -1,
+                storeId: -1,
+                currentInputDate: "<%= formatedDate%>",
+                products: []
+            }
+
+            for (let i = 0; i < elements.length; i++) {
+                let element = elements[i];
+                let count = $(element).find(".count").text();
+                let pharmaProductJson = JSON.parse($(element).attr("data-object"));
+                let dailyInputProduct = {
+                    id: -1,
+                    dailyInputId: -1,
+                    storeProductId: pharmaProductJson.id,
+                    inputCnt: count
+                }
+
+                pharmaInDto.products[i] = dailyInputProduct;
+            }
+
+            // 500에러 방지를 위한 url 변환
+            pharmaInDto = serializeTwoLevelsNestedJson(pharmaInDto);
+
+            $.ajax({
+                url: "pharma-in-writeAf.do",
+                type: "get",
+                data: pharmaInDto,
+                success: function (data) {
+                    if (data.msg === "SUCCESS") {
+                        alert("등록 성공")
+
+                        location.href = "/pharma-inout-calendar.do";
+                    } else {
+                        alert("실패");
+                    }
+                },
+                error: function () {
+                    alert("error");
+                }
+            })
+        }
+
+        // List를 가진 중첩 Dto에러 방지
+        function serializeTwoLevelsNestedJson(json) {
+            return Object.keys(json).map(function (key) {
+                if (typeof json[key] === "object") {
+                    if (Array.isArray(json[key])) {
+                        return json[key].map((arrayItem, index) => {
+                            return Object.keys(arrayItem).map(function (arrayItemKey) {
+                                return encodeURIComponent(key) + encodeURIComponent('[') + index + encodeURIComponent('].') + encodeURIComponent(arrayItemKey) + '=' + encodeURIComponent(arrayItem[arrayItemKey]);
+                            }).join('&')
+                        }).join('&');
+                    } else {
+                        return Object.keys(json[key]).map(function (subJsonKey) {
+                            return encodeURIComponent(key) + '.' + encodeURIComponent(subJsonKey) + '=' + encodeURIComponent(json[key][subJsonKey]);
+                        }).join('&');
+                    }
+                } else {
+                    return encodeURIComponent(key) + '=' + encodeURIComponent(json[key])
+                }
+            }).join('&');
+        }
+
+
+
+    </script>
 </div>
-
