@@ -10,6 +10,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- 주소 API 스크립트 추가 -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3771a8dd6cc1b648191095305a583773&libraries=services"></script> 
+<!-- Kakao 지도 API를 사용하려면, 여기서 'Your-App-Key'를 실제 앱 키로 교체해야 합니다. -->
+    
 
 <style type="text/css">
 /* General styling */
@@ -34,6 +37,14 @@ body {
 	border-radius: 10px;
 	background-color: #fff;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* PharmaFinder Register */
+.title {
+    font-weight: 800;
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -75,7 +86,8 @@ input[type="submit"]:hover {
 
 <div class="center">
 	<div class="container">
-		<h2 style="text-align: center; margin-bottom: 20px;">회원가입(약국)</h2>
+		<h1 class="title">PharmaFinder</h1>
+		<p align="center">회원가입</p>
 		<form action="pharmacyRegiAf.do" method="post" id="regiForm">
 			<div class="form-group">
 				<label for="username"></label>
@@ -114,6 +126,15 @@ input[type="submit"]:hover {
             <div class="form-group">
                 <label for="sample4_dutyAddr"></label>
                 <input type="text" id="sample4_dutyAddr" name="dutyAddr" placeholder="도로명주소" required>
+            </div>
+            <!-- 위도 및 경도 입력 필드 추가 -->
+            <div class="form-group">
+                <label for="wgs84Lat"></label>
+                <input type="text" id="wgs84Lat" name="wgs84Lat" placeholder="위도" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="wgs84Lon"></label>
+                <input type="text" id="wgs84Lon" name="wgs84Lon" placeholder="경도" required readonly>
             </div>
             <div class="form-group">
 		    <label for="dutyTime1s">월요일:</label>
@@ -274,6 +295,17 @@ function sample4_execDaumPostcode() {
             // 도로명 주소나 지번 주소 등을 필요한 input field에 값으로 설정
             document.getElementById('sample4_postcode').value = data.zonecode;
             document.getElementById('sample4_dutyAddr').value = data.roadAddress;
+        	
+         // Kakao 지도 API를 사용하여 위도와 경도를 조회
+            var geocoder = new kakao.maps.services.Geocoder();
+            geocoder.addressSearch(data.roadAddress, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var lat = result[0].y; // 위도
+                    var lon = result[0].x; // 경도
+                    document.getElementById('wgs84Lat').value = lat;
+                    document.getElementById('wgs84Lon').value = lon;
+                }
+            });
         }
     }).open();
 }
