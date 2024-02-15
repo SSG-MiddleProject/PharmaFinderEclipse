@@ -66,9 +66,8 @@ public class BookmarkController {
     }
     
     @GetMapping("/list.do")
-    public String showStoreBookmarkList(HttpServletRequest request, Model model) {
+    public String showStoreBookmarkList(HttpSession session, Model model) {
         System.out.println("showBookmarkList : " + new Date()); // 맵핑접속 확인용
-    	HttpSession session = request.getSession();
         MemberDto member = (MemberDto) session.getAttribute("member");
         if(member==null) return "error";
         else {
@@ -78,12 +77,12 @@ public class BookmarkController {
         }
 
     }
-    @GetMapping("bookmark.do")
-    public String getBookmarks(Model model, HttpSession session) {
+    @GetMapping("/bookmark.do")
+    public String getBookmarks(HttpSession session) {
         // 세션에서 사용자 정보 가져오기
-        String username = (String) session.getAttribute("username");
-        if (username == null) {
-            // 로그인되어 있지 않으면 로그인 페이지로 리다이렉트
+        MemberDto member = (MemberDto) session.getAttribute("member");
+        if (member == null) {
+            // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
             return "redirect:/login.do";
         }
 
