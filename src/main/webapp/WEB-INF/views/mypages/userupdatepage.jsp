@@ -109,13 +109,10 @@
         <div class="field">
             <label class="label">Password</label>
             <div class="control has-icons-left has-icons-right">
-                <input id="checkPassword" class="input" type="password" placeholder="New Password"/>
+                <input id="checkPassword" name="password" class="input" type="password" placeholder="New Password"/>
                 <span class="icon is-small is-left">
           <i class="fas fa-lock"></i>
-        </span>
-                <span class="icon is-small is-right">
-          <i id="checkPW" style="display: none" class="fas fa-check"></i>
-        </span>
+                </span>
             </div>
 
             <p id="successPW" style="display: none" class="help is-success">
