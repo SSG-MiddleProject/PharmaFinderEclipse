@@ -93,8 +93,8 @@
                     입출고<br>내역
                 </a>
             </li>
-            <li class="has-text-centered" data-path="/pharma-inout-calendar.do">
-                <a class="nav-item" href="${pageContext.request.contextPath}/pharma-inout-calendar.do">
+            <li class="has-text-centered" data-path="/pharma-product-management.do">
+                <a class="nav-item" href="${pageContext.request.contextPath}/pharma-product-management.do">
                     <span class="icon pb-1"><i class="fas fa-cubes"></i></span>
                     <br>제품 관리
                 </a>
@@ -103,9 +103,6 @@
 
         <li id="nav-bottom" class="has-text-centered py-4">
             <c:if test="${not empty sessionScope.member.id}">
-                <a href="${pageContext.request.contextPath}/bookmark/list.do">
-                    즐겨찾기
-                </a>
                 <a href="${pageContext.request.contextPath}/mypage.do">
                     마이페이지
                 </a>
