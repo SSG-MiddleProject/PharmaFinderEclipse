@@ -7,35 +7,105 @@
 <html>
 <head>
     <title>회원정보 수정</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #checkEmailBtn {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #checkEmailBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>회원정보 수정 페이지</h1>
-    <form action="userUpdateAf.do" method="post">
-        <% 
-        MemberDto loginedMember = (MemberDto) session.getAttribute("member");
-        %>
-            <table>
-                <tr>
-                    <th>아이디</th>
-                    <td><input type="text" name="username" value="<%=loginedMember.getUsername()%>" readonly></td>
-                </tr>
-                <tr>
-                    <th>이메일</th>
-                    <td>
-                    	<input type="email" id="email" name="email" required>
-        				<button type="button" id="checkEmailBtn">이메일 중복 확인</button>
-        				<div id="emailMessage"></div> <!-- 중복 검사 결과 메시지를 표시할 요소 -->
-                    </td>
-                </tr>
-                <tr>
-                    <th>비밀번호</th>
-                    <td><input type="password" name="password" required></td>
-                </tr>
-            </table>
-            <br>
-            <input type="submit" value="수정 완료">
-       
-    </form>
+    <div class="container">
+        <h1>회원정보 수정 페이지</h1>
+        <form action="userUpdateAf.do" method="post">
+            <% 
+            MemberDto loginedMember = (MemberDto) session.getAttribute("member");
+            %>
+                <table>
+                    <tr>
+                        <th>아이디</th>
+                        <td><input type="text" name="username" value="<%=loginedMember.getUsername()%>" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td>
+                            <input type="email" id="email" name="email" required>
+                            <button type="button" id="checkEmailBtn">이메일 중복 확인</button>
+                            <div id="emailMessage"></div> <!-- 중복 검사 결과 메시지를 표시할 요소 -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호</th>
+                        <td><input type="password" name="password" required></td>
+                    </tr>
+                </table>
+                <br>
+                <input type="submit" value="수정 완료">
+        </form>
+    </div>
 </body>
 </html>
 
@@ -57,12 +127,4 @@ $(document).ready(function() {
                     }
                 },
                 error: function() {
-                    alert("이메일 중복 체크 중 오류가 발생했습니다.");
-                }
-            });
-        } else {
-            alert("이메일을 입력해주세요.");
-        }
-    });
-});
-</script>
+                   
