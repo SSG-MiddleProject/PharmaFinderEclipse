@@ -10,13 +10,14 @@ public class PharmaInDetailDto implements Serializable{
 	private int inputCnt;
 	private String itemName;
 	private int inputPrice;
+	private int productId;
 
 	public PharmaInDetailDto() {
 
 	}
 
 	public PharmaInDetailDto(int id, int dailyInputId, int storeProductId, int inputCnt, String itemName,
-			int inputPrice) {
+			int inputPrice, int productId) {
 		super();
 		this.id = id;
 		this.dailyInputId = dailyInputId;
@@ -24,6 +25,7 @@ public class PharmaInDetailDto implements Serializable{
 		this.inputCnt = inputCnt;
 		this.itemName = itemName;
 		this.inputPrice = inputPrice;
+		this.productId = productId;
 	}
 
 	public int getId() {
@@ -74,10 +76,18 @@ public class PharmaInDetailDto implements Serializable{
 		this.inputPrice = inputPrice;
 	}
 
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
 	@Override
 	public String toString() {
 		return "PharmaInDetailDto [id=" + id + ", dailyInputId=" + dailyInputId + ", storeProductId=" + storeProductId
-				+ ", inputCnt=" + inputCnt + ", itemName=" + itemName + ", inputPrice=" + inputPrice + "]";
+				+ ", inputCnt=" + inputCnt + ", itemName=" + itemName + ", inputPrice=" + inputPrice +", productId="+productId +"]";
 	}
 
 }

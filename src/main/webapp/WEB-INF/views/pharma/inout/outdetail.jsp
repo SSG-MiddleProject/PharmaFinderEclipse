@@ -30,7 +30,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<th>제품코드</th><th>제품명</th><th>수량</th><th>입고단가</th>
+		<th>출고 id</th><th>제품코드</th><th>제품명</th><th>수량</th><th>입고단가</th>
 	</tr>
 </thead>
 <tbody>
@@ -40,6 +40,7 @@
 %>
 		<tr>
 			<td><%=dto.getId() %></td>
+			<td><%=dto.getProductId()%></td>
 			<td><%=dto.getItemName() %></td>
 			<td><%=dto.getOutputCnt() %></td>
 			<td><%=dto.getOutputPrice() %></td>

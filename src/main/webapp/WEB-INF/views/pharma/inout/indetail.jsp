@@ -41,6 +41,7 @@
 %>
 		<tr>
 			<td><%=dto.getId() %></td>
+			<td><%=dto.getProductId()%></td>
 			<td><%=dto.getItemName() %></td>
 			<td><%=dto.getInputCnt() %></td>
 			<td><%=dto.getInputPrice() %></td>
