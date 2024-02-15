@@ -5,7 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%
-    request.getSession().setAttribute("userId", 9999);
+//    request.getSession().setAttribute("userId", 9999);
 %>
 <style>
 
@@ -18,6 +18,7 @@
         justify-content: center;
         align-items: center;
         width: calc(100vw - 4rem);
+        height: 100vh;
     }
 
     th {
@@ -66,7 +67,7 @@
 
 <div id="full">
 
-    <div style=" align-items: center; justify-content: center">
+    <div style="align-items: center; justify-content: center; height: inherit">
 
         <div class="titleDiv has-text-centered">
             <%--	<h1 class="title " >입출고 내역</h1>--%>
