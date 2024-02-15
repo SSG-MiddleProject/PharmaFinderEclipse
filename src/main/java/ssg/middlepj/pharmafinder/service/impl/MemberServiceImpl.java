@@ -177,10 +177,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public boolean updateMember(MemberDto member) throws NoSuchAlgorithmException {
 		// 필요한 경우, 비밀번호 암호화 등의 추가 처리를 여기에 구현
-//	    if (member.getPassword() != null && !member.getPassword().isEmpty()) {
-//	        String encryptedPassword = encryptStringBySHA256(member.getPassword());
-//	        member.setPassword(encryptedPassword);
-//	    }
+	    if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+	        String encryptedPassword = encryptStringBySHA256(member.getPassword());
+	        member.setPassword(encryptedPassword);
+	    }
+		System.out.println(member);
 	    
 	    // DAO를 사용하여 데이터베이스 업데이트 시도
 	    int updateCount = dao.updateMember(member);

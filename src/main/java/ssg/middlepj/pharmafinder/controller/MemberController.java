@@ -342,8 +342,10 @@ public class MemberController {
     public String updateUser(@ModelAttribute MemberDto member, HttpSession session, RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException {
         MemberDto loginedMember = (MemberDto) session.getAttribute("member");
         if (!service.emailcheck(member.getEmail()) || member.getEmail().equals(loginedMember.getEmail())) {
+			member.setUsername(loginedMember.getUsername());
             // 이메일 중복 체크: 새 이메일이 기존 이메일과 같거나 중복되지 않는 경우 업데이트 진행
             if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+
                 // 비밀번호 암호화
                 String encryptedPassword = encryptStringBySHA256(member.getPassword());
                 member.setPassword(encryptedPassword);
