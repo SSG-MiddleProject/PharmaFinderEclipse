@@ -62,7 +62,7 @@ input[type="submit"]:hover {
 	background-color: #0056b3;
 }
 
-#usernamecheck, #emailcheck {
+#usernamecheck, #emailcheck, #passwordcheck {
 	font-size: 12px;
 }
 </style>
