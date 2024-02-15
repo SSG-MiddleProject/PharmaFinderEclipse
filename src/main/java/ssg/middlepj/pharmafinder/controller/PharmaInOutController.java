@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import message.ResultMsg;
+import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmaDailyInOutSearchByPeriodParam;
 import ssg.middlepj.pharmafinder.dto.PharmaInDetailDto;
 import ssg.middlepj.pharmafinder.dto.PharmaInDto;
@@ -38,8 +39,9 @@ public class PharmaInOutController {
 	@GetMapping(value = "/pharma-inout-calendar.do")
 	public String pharmaInOutCalendar(String syear, String smonth, Model model, HttpServletRequest request) {
 		System.out.println("pharmaInOutCalendar list()");
-		request.getSession().setAttribute("storeId", 9999);
-		int storeId = (int)request.getSession().getAttribute("storeId");
+
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
+
 		// 달력에 표시해줄 데이터
 		Calendar cal = Calendar.getInstance();
 		//Calnedar가 1일로 맞춰짐
@@ -167,7 +169,7 @@ public class PharmaInOutController {
 	public ResultMsg pharmaInWriteAf(PharmaInDto dto, Model model, HttpServletRequest request) {
 		System.out.println("PharmaInOutController pharmaInWriteAf()");
 
-		dto.setStoreId((int)request.getSession().getAttribute("storeId"));
+		dto.setStoreId(((MemberDto)request.getSession().getAttribute("member")).getStoreId());
 
 		boolean isSuccess = inService.insertDailyInput(dto);
 
@@ -218,7 +220,7 @@ public class PharmaInOutController {
 	public ResultMsg pharmaOutWriteAf(PharmaOutDto dto, Model model, HttpServletRequest request) {
 		System.out.println("PharmaInOutController pharmaOutWriteAf()");
 
-		dto.setStoreId((int)request.getSession().getAttribute("storeId"));
+		dto.setStoreId(((MemberDto)request.getSession().getAttribute("member")).getStoreId());
 
 		boolean isSuccess = outService.insertDailyOutput(dto);
 
