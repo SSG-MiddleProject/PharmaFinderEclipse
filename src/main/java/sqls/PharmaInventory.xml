@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PharmaInventory">
+
+	<select id="select-input-cnt" parameterType="ssg.middlepj.pharmafinder.dto.InventoryStockParam" resultType="Integer">
+		select ifnull(sum(input_cnt),0)
+		from daily_input_product dip
+		inner join daily_input di
+		on di.id = dip.daily_input_id
+		where store_product_id = #{storeProductId}
+		and current_input_date = #{currentDate}
+	</select>
+
+	<select id="select-output-cnt" parameterType="ssg.middlepj.pharmafinder.dto.InventoryStockParam" resultType="Integer">
+		select ifnull(sum(output_cnt),0)
+		from daily_output_product dop
+		inner join daily_output do
+		on do.id = dop.daily_output_id
+		where store_product_id = #{storeProductId}
+		and current_output_date = #{currentDate}
+	</select>
+
+	<select id="select-current-stock-cnt" parameterType="ssg.middlepj.pharmafinder.dto.InventoryStockParam" resultType="Integer">
+	select (
+	select ifnull(sum(dop.input_cnt),0) as plus
+	from daily_input do
+	inner join daily_input_product dop
+	on do.id = dop.daily_input_id
+	where dop.store_product_id = #{storeProductId}
+	and (do.current_input_date <![CDATA[>=]]>
+	(select min(do1.current_input_date)
+	from daily_input do1
+	inner join daily_input_product dop1
+	on do1.id = dop1.daily_input_id
+	where dop1.store_product_id = #{storeProductId}
+	)
+	and do.current_input_date <![CDATA[<=]]> #{currentDate})
+	)
+	-
+	(
+	select ifnull(sum(dop.output_cnt),0) as minus
+	from daily_output do
+	inner join daily_output_product dop
+	on do.id = dop.daily_output_id
+	where dop.store_product_id = #{storeProductId}
+	and (do.current_output_date <![CDATA[>=]]>
+	(select min(do1.current_output_date)
+	from daily_output do1
+	inner join daily_output_product dop1
+	on do1.id = dop1.daily_output_id
+	where dop1.store_product_id = #{storeProductId}
+	)
+	and do.current_output_date <![CDATA[<=]]> #{currentDate})
+	) as result
+	from dual;
+	</select>
+</mapper>
