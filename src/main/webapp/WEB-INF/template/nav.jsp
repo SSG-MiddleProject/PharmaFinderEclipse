@@ -96,8 +96,8 @@
 
         <li id="nav-bottom" class="has-text-centered py-4">
             <c:if test="${not empty sessionScope.member.id}">
-                <a href="${pageContext.request.contextPath}/mypage.do">
-                    마이페이지
+                <a href="${pageContext.request.contextPath}/setting.do">
+                    설정
                 </a>
                 <a href="${pageContext.request.contextPath}/logout.do">
                     로그아웃
