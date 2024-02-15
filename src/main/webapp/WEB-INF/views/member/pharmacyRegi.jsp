@@ -106,19 +106,11 @@ input[type="submit"]:hover {
             <div class="form-group">
                 <label for="sample4_postcode"></label>
                 <button type="button" onclick="sample4_execDaumPostcode()">우편번호 찾기</button>
-                <input type="text" id="sample4_postcode" name="postcode" placeholder="우편번호">                
+                <input type="text" id="sample4_postcode" name="postcode" placeholder="우편번호" required>                
             </div>
             <div class="form-group">
                 <label for="sample4_dutyAddr"></label>
                 <input type="text" id="sample4_dutyAddr" name="dutyAddr" placeholder="도로명주소" required>
-            </div>
-            <div class="form-group">
-                <label for="sample4_jibunAddress"></label>
-                <input type="text" id="sample4_jibunAddress" name="jibunAddress" placeholder="지번주소">
-            </div>
-            <div class="form-group">
-                <label for="sample4_detailAddress"></label>
-                <input type="text" id="sample4_detailAddress" name="detailAddress" placeholder="상세주소">
             </div>
             <div class="form-group">
 		    <label for="dutyTime1s">월요일:</label>
@@ -173,6 +165,7 @@ input[type="submit"]:hover {
 	</div>
 </div>
 
+<!-- 
 	<script type="text/javascript">
 	// 아이디 중복체크
 	$(document).ready(function() {
@@ -255,6 +248,7 @@ input[type="submit"]:hover {
 	});
 });
 </script>
+ -->
 
 <!-- 도로명 주소 검색 기능 -->
 <script>
@@ -264,11 +258,7 @@ function sample4_execDaumPostcode() {
             // 팝업에서 검색결과 항목을 클릭했을 때 실행할 코드를 작성하는 부분.
             // 도로명 주소나 지번 주소 등을 필요한 input field에 값으로 설정
             document.getElementById('sample4_postcode').value = data.zonecode;
-            document.getElementById('sample4_dutyAddr').value = data.dutyAddr;
-            document.getElementById('sample4_jibunAddress').value = data.jibunAddress;
-            
-            // 상세주소에 초점 맞추기
-            document.getElementById('sample4_detailAddress').focus();
+            document.getElementById('sample4_dutyAddr').value = data.roadAddress;
         }
     }).open();
 }
