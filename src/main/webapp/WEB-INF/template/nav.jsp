@@ -103,9 +103,6 @@
 
         <li id="nav-bottom" class="has-text-centered py-4">
             <c:if test="${not empty sessionScope.member.id}">
-                <a>
-                    즐겨찾기
-                </a>
                 <a href="${pageContext.request.contextPath}/mypage.do">
                     마이페이지
                 </a>
