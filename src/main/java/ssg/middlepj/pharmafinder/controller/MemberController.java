@@ -154,13 +154,13 @@ public class MemberController {
 		    // 회원 정보와 약국 정보를 동시에 저장
 	        boolean registrationResult = service.registerPharmacy(mem, pharmacy);
 
-	        if (registrationResult) {
+//	        if (registrationResult) {
 	        	redirectAttributes.addFlashAttribute("successMessage", "회원가입되었습니다.");
 	            return "redirect:/login.do";
-	        } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패하였습니다.");
-	            return "redirect:/pharmacyRegi.do";
-	        }
+//	        } else {
+//                redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패하였습니다.");
+//	            return "redirect:/pharmacyRegi.do";
+//	        }
 	    } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "회원가입 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
 	        return "redirect:/pharmacyRegi.do";
