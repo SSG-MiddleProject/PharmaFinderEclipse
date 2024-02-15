@@ -211,6 +211,8 @@
             document.getElementById("table-text").style.display = "none";
             let tbody = $(".pharma-tbody");
 
+            const tr = $("<tr class='add-pharma-product' data-object='" + jsonStr + "'>");
+
             let productId = $("<td>");
             productId.text(json.productId);
             productId.append($("</td>"))
@@ -235,16 +237,15 @@
             // let minusIcon = $(`<td onclick="doMinus(this)""> - </td>`);
 
 
-            tbody.append($("<tr>"));
-            tbody.append(productId);
-            tbody.append(itemName);
-            tbody.append(inputPrice);
-            tbody.append(plusIcon);
-            tbody.append(count);
-            tbody.append(minusIcon);
-            tbody.append(closeIcon);
-            tbody.append($("</tr>"));
+            tr.append(productId);
+            tr.append(itemName);
+            tr.append(inputPrice);
+            tr.append(plusIcon);
+            tr.append(count);
+            tr.append(minusIcon);
+            tr.append(closeIcon);
 
+            tbody.append(tr);
             container.append(tbody);
 
         }
@@ -274,6 +275,7 @@
         function submitPharmaProductIn() {
             let elements = document.getElementsByClassName("add-pharma-product");
 
+            console.log(elements)
             let pharmaInDto = {
                 id: -1,
                 storeId: -1,
@@ -292,9 +294,11 @@
                     inputCnt: count
                 }
 
+                console.log(dailyInputProduct)
                 pharmaInDto.products[i] = dailyInputProduct;
             }
 
+            console.log(pharmaInDto)
             // 500에러 방지를 위한 url 변환
             pharmaInDto = serializeTwoLevelsNestedJson(pharmaInDto);
 
