@@ -1,173 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>User Registration</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style type="text/css">
-/* General styling */
-body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Inter', sans-serif;
-	background-color: #f9f9f9;
-}
-
-.center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-}
-
-.container {
-	max-width: 400px;
-	padding: 20px;
-	border: 1px solid #ccc;
-	border-radius: 10px;
-	background-color: #fff;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* PharmaFinder Register */
-.title {
-    font-weight: 800;
-    font-size: 48px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.form-group {
-	margin-bottom: 15px;
-}
-
-label {
-	display: block;
-	margin-bottom: 5px;
-}
-
-input[type="text"], input[type="email"], input[type="password"], input[type="submit"]
-	{
-	width: 100%;
-	padding: 10px;
-	margin-bottom: 10px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	box-sizing: border-box;
-}
-
-input[type="submit"] {
-	background-color: #007bff;
-	color: white;
-	cursor: pointer;
-	border: none;
-}
-
-input[type="submit"]:hover {
-	background-color: #0056b3;
-}
-
-#usernamecheck, #emailcheck, #passwordcheck {
-	font-size: 12px;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-	<div class="center">
-		<div class="container">
-			<h1 class="title">PharmaFinder</h1>
-			<p align="center">회원가입</p>
-			<form action="userRegiAf.do" method="post">
-				<div class="form-group">
-					<label for="username"></label> 
-					<input type="text" name="username" id="username" placeholder="아이디 입력" required>
-					<button type="button" id="checkUsername">중복 확인</button>
-					<p id="usernamecheck"></p>
-				</div>
-				<div class="form-group">
-					<label for="email"></label> 
-					<input type="email" name="email" id="email" placeholder="이메일 입력" required>
-					<button type="button" id="checkEmail">중복 확인</button>
-					<p id="emailcheck"></p>
-				</div>
-				<div class="form-group">
-					<label for="password"></label>
-					<input type="password" name="password" id="password" placeholder="비밀번호 입력" required>
-					<p id="passwordcheck"></p>
-				</div>
-				<input type="submit" value="회원가입">
-			</form>
-		</div>
-	</div>
-	
+
+<div class="columns is-centered">
+    <div class="column is-half">
+        <section class="section">
+            <div class="container">
+                <h1 class="title has-text-centered">PharmaFinder</h1>
+                <h2 class="subtitle has-text-centered">회원가입</h2>
+                <form action="userRegiAf.do" method="post">
+                    <div class="field">
+                        <label class="label" for="username">아이디</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="text" name="username" id="username" placeholder="아이디 입력"
+                                   required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        <p id="usernamecheck"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="email">이메일</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="email" name="email" id="email" placeholder="이메일 입력" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <p id="emailcheck"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="password">비밀번호</label>
+                        <div class="control has-icons-left">
+                            <input class="input" type="password" name="password" id="password" placeholder="비밀번호 입력"
+                                   required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        <p id="passwordcheck"></p>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-primary is-fullwidth" type="submit">회원가입</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
 <script type="text/javascript">
-$(document).ready(function() {
-    // ID Validation & Duplication Check
-    $('#username').keyup(function() {
-        var username = $(this).val().trim();
-        var idPattern = /^[a-z0-9]{5,15}$/;
-        if(!idPattern.test(username)) {
-            $("#usernamecheck").text("Invalid format (5-15 characters, a-z, 0-9)").css("color", "#ff0000");
-        } else {
-            $("#usernamecheck").empty();
-        }
-    });
-
-    $('#checkUsername').click(function() {
-        var username = $('#username').val().trim();
-        if(username !== "") {
-            $.ajax({
-                url: "usernamecheck.do",
-                type: "POST",
-                data: { "username": username },
-                success: function(response) {
-                    $("#usernamecheck").text(response.trim() === "YES" ? "Available" : "Already in use").css("color", "#0000ff");
+    $(document).ready(function () {
+        // 아이디 유효성 검사 및 중복 확인
+        $('#username').keyup(function () {
+            var username = $(this).val().trim();
+            var idPattern = /^[a-z0-9]{5,15}$/;
+            if (username === "") {
+                $("#usernamecheck").empty();
+            } else {
+                if (!idPattern.test(username)) {
+                    $("#usernamecheck").text("유효하지 않은 형식입니다 (5-15 글자, 영문 소문자 및 숫자만 가능)").css("color", "#ff0000");
+                } else {
+                    $.ajax({
+                        url: "usernamecheck.do",
+                        type: "POST",
+                        data: {"username": username},
+                        success: function (response) {
+                            if (response.trim() === "YES") {
+                                $("#usernamecheck").text("사용 가능합니다").css("color", "#00ff00");
+                            } else {
+                                $("#usernamecheck").text("이미 사용 중인 아이디입니다").css("color", "#ff0000");
+                            }
+                        }
+                    });
                 }
-            });
-        }
-    });
+            }
+        });
 
-    // Email Validation & Duplication Check
-    $('#email').keyup(function() {
-        var email = $(this).val().trim();
-        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if(!emailPattern.test(email)) {
-            $("#emailcheck").text("Invalid email format").css("color", "#ff0000");
-        } else {
-            $("#emailcheck").empty();
-        }
-    });
 
-    $('#checkEmail').click(function() {
-        var email = $('#email').val().trim();
-        if(email !== "") {
-            $.ajax({
-                url: "emailcheck.do",
-                type: "POST",
-                data: { "email": email },
-                success: function(response) {
-                    $("#emailcheck").text(response.trim() === "YES" ? "Available" : "Already in use").css("color", "#0000ff");
+        // 이메일 유효성 검사 및 중복 확인
+        $('#email').keyup(function () {
+            var email = $(this).val().trim();
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === "") {
+                $("#emailcheck").empty();
+            } else {
+                if (!emailPattern.test(email)) {
+                    $("#emailcheck").text("유효하지 않은 이메일 형식입니다").css("color", "#ff0000");
+                } else {
+                    $.ajax({
+                        url: "emailcheck.do",
+                        type: "POST",
+                        data: {"email": email},
+                        success: function (response) {
+                            if (response.trim() === "YES") {
+                                $("#emailcheck").text("사용 가능합니다").css("color", "#00ff00");
+                            } else {
+                                $("#emailcheck").text("이미 사용 중인 이메일입니다").css("color", "#ff0000");
+                            }
+                        }
+                    });
                 }
-            });
-        }
-    });
+            }
+        });
 
-    // Password Validation
-    $('#password').keyup(function() {
-        var password = $(this).val();
-        var passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{5,15}$/;
-        if(!passwordPattern.test(password)) {
-            $("#passwordcheck").text("Password must be 5-15 characters and include at least one letter, one number, and one special character.").css("color", "#ff0000");
-        } else {
-            $("#passwordcheck").empty();
-        }
+        // 비밀번호 유효성 검사
+        $('#password').keyup(function () {
+            var password = $(this).val();
+            var passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{5,15}$/;
+            if (!passwordPattern.test(password)) {
+                $("#passwordcheck").text("비밀번호는 5-15 글자이며, 영문, 숫자, 특수문자를 최소한 하나씩 포함해야 합니다").css("color", "#ff0000");
+            } else {
+                $("#passwordcheck").text("사용 가능합니다").css("color", "#00ff00");
+            }
+        });
     });
-});
 </script>
+
 
 </body>
 </html>
