@@ -68,7 +68,7 @@ input[type="submit"]:hover {
 </style>
 </head>
 <body>
-
+    
 	<div class="center">
 		<div class="container">
 			<h2 style="text-align: center; margin-bottom: 20px;">회원가입</h2>

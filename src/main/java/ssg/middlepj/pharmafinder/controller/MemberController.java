@@ -2,6 +2,7 @@ package ssg.middlepj.pharmafinder.controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -130,7 +131,7 @@ public class MemberController {
 	// 회원가입(약국) 페이지 이동 메서드
 	@GetMapping("/pharmacyRegi.do")
 	public String registerPharmacy() {
-		// System.out.println("MemberController pharmacyRegi " + new Date());
+		System.out.println("MemberController pharmacyRegi " + new Date());
 		return "member/pharmacyRegi";
 	}
 
@@ -139,6 +140,14 @@ public class MemberController {
 			@ModelAttribute MemberDto mem, 
 			@ModelAttribute PharmacyDto pharmacy) throws NoSuchAlgorithmException {
 
+		System.out.println("MemberController pharmacyRegiAf " + new Date());
+		
+		// 입력 값 검증
+	    if (!isInputValid(mem, pharmacy)) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "입력 형식이 올바르지 않습니다.");
+	        return "redirect:/pharmacyRegi.do";
+	    }
+	    
 		try {
 			mem.setState(1); // 활성화 상태로 설정
 			mem.setRoll(1); // 약국 유저로 설정
@@ -146,24 +155,32 @@ public class MemberController {
 			String rawPassword = mem.getPassword();
 		    String encryptedPassword = encryptStringBySHA256(rawPassword);
 		    mem.setPassword(encryptedPassword);
-		    
+
 		    // 회원 정보와 약국 정보를 동시에 저장
 	        boolean registrationResult = service.registerPharmacy(mem, pharmacy);
 	        
-		    if (registrationResult) {
-	            redirectAttributes.addFlashAttribute("successMessage", "회원가입되었습니다.");
+	        if (registrationResult) {
+	        	redirectAttributes.addFlashAttribute("successMessage", "회원가입되었습니다.");
 	            return "redirect:/login.do";
 	        } else {
-	            redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다.");
+                redirectAttributes.addFlashAttribute("errorMessage", "회원가입에 실패하였습니다.");
 	            return "redirect:/pharmacyRegi.do";
 	        }
-	    } catch (DuplicateKeyException e) {
-	        redirectAttributes.addFlashAttribute("error", "이미 사용 중인 이메일입니다.");
-	        return "redirect:/pharmacyRegi.do";
 	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("error", "회원가입에 실패하였습니다. 다시 시도해주세요.");
+            redirectAttributes.addFlashAttribute("errorMessage", "회원가입 과정에서 오류가 발생했습니다. 다시 시도해주세요.");
 	        return "redirect:/pharmacyRegi.do";
 	    }
+	}
+	
+	private boolean isInputValid(MemberDto mem, PharmacyDto pharmacy) {
+	    if (mem.getUsername() == null || mem.getUsername().isEmpty() ||
+	        !mem.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$") ||
+	        mem.getPassword().length() < 15) {
+	        return false;
+	    }
+	    // PharmacyDto에 대한 추가적인 검증 로직을 여기에 구현할 수 있습니다.
+	    // 예: pharmacy.getDutyName()이 null이거나 비어있지 않은지 검사
+	    return true;
 	}
 
 		/*
@@ -190,7 +207,7 @@ public class MemberController {
 	// 로그인 페이지 이동 메서드
 	@GetMapping(value = "login.do")
 	public String login() {
-		 System.out.println("MemberController login");
+		System.out.println("MemberController login");
 		return "member/login";
 	}
 

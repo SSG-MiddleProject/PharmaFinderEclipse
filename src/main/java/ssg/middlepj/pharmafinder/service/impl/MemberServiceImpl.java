@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,33 +46,38 @@ public class MemberServiceImpl implements MemberService {
 		// MyBatis 설정에 의해, addpharmacy 실행 후 pharmacy 객체의 id 필드가 자동으로 업데이트됩니다.
 		return isAdded;
 	}
-
-	@Transactional
+	
 	@Override
+	@Transactional
 	// 회원 정보와 약국 정보를 동시에 저장하는 메소드
 	public boolean registerPharmacy(MemberDto member, PharmacyDto pharmacy) throws NoSuchAlgorithmException {
-		// Member 정보 저장
-		boolean memberAdded = addmember(member);
-		if (!memberAdded) {
-			return false;
-		}
+		try {
+	        // Member 정보 저장
+	        if (!addmember(member)) {
+	            return false;
+	        }
 
-		// Pharmacy 정보 저장
-		boolean pharmacyAdded = addpharmacy(pharmacy);
-		if (!pharmacyAdded) {
-			return false;
-		}
+	        // Pharmacy 정보 저장
+	        if (!addpharmacy(pharmacy)) {
+	            return false;
+	        }
 
-		// Pharmacy 정보 저장 후 자동으로 업데이트된 pharmacy 객체의 id를 MemberDto의 storeId에 설정
-		// 아래는 수정된 부분입니다.
-		// 여기서 pharmacy 객체의 id가 MyBatis나 JPA 등을 통해 자동으로 설정되었다고 가정합니다.
-		// 이 부분은 실제로 pharmacy 정보가 데이터베이스에 저장된 후에 실행되어야 합니다.
-		if (pharmacy.getId() != 0) {
-			updateMemberStoreId(member.getId(), pharmacy.getId());
-			return true;
-		} else {
-			return false;
-		}
+	        // Pharmacy 정보 저장 후 pharmacy 객체의 id가 정상적으로 설정되었는지 확인
+	        if (pharmacy.getId() != 0) {
+	            updateMemberStoreId(member.getId(), pharmacy.getId());
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } catch (DataAccessException e) {
+	        // 데이터베이스 액세스 중 발생한 예외 처리
+	        // 로깅 등의 예외 처리 로직 구현
+	        return false;
+	    } catch (Exception e) {
+	        // 기타 예외 처리
+	        // 로깅 등의 예외 처리 로직 구현
+	        return false;
+	    }
 	}
 
 	// PharmacyDto의 id를 MemberDto의 storeId에 설정

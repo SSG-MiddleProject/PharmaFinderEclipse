@@ -113,5 +113,7 @@ $(document).ready(function() {
 	<input type="submit" value="비밀번호 변경">
 </form>
 
+</div>
+</div>
 </body>
 </html>
