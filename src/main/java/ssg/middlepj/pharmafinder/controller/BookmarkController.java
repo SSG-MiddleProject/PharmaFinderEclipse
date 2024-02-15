@@ -30,29 +30,29 @@ public class BookmarkController {
 
     @ResponseBody
     @PostMapping("/product.do")
-    public Boolean insertProductBookmark(HttpServletRequest request, Integer targetId) {
+    public Boolean insertProductBookmark(HttpServletRequest request, Integer targetId, String pharmacyName, String productName) {
         MemberDto member = (MemberDto) request.getSession().getAttribute("member");
 
         if (member == null || targetId == null) return false;
-        return bookmarkService.insertProductBookmark(new BookmarkDto(member.getId(), targetId));
+        return bookmarkService.insertProductBookmark(new BookmarkDto(member.getId(), targetId, pharmacyName, productName));
     }
 
     @ResponseBody
     @DeleteMapping("/product.do")
-    public Boolean deleteProductBookmark(HttpServletRequest request, Integer targetId) {
+    public Boolean deleteProductBookmark(HttpServletRequest request, Integer targetId, String pharmacyName, String productName) {
         MemberDto member = (MemberDto) request.getSession().getAttribute("member");
 
         if (member == null || targetId == null) return false;
-        return bookmarkService.deleteProductBookmark(new BookmarkDto(member.getId(), targetId));
+        return bookmarkService.deleteProductBookmark(new BookmarkDto(member.getId(), targetId, pharmacyName, productName));
     }
 
     @ResponseBody
     @PostMapping("/pharmacy.do")
-    public Boolean insertPharmacyBookmark(HttpServletRequest request, Integer targetId) {
+    public Boolean insertPharmacyBookmark(HttpServletRequest request, Integer targetId, String pharmacyName, String productName) {
         MemberDto member = (MemberDto) request.getSession().getAttribute("member");
 
         if (member == null || targetId == null) return false;
-        return bookmarkService.insertPharmacyBookmark(new BookmarkDto(member.getId(), targetId));
+        return bookmarkService.insertPharmacyBookmark(new BookmarkDto(member.getId(), targetId, pharmacyName, productName));
     }
 
     @ResponseBody
@@ -61,7 +61,7 @@ public class BookmarkController {
         MemberDto member = (MemberDto) request.getSession().getAttribute("member");
 
         if (member == null || targetId == null) return false;
-        return bookmarkService.deletePharmacyBookmark(new BookmarkDto(member.getId(), targetId));
+        return bookmarkService.deletePharmacyBookmark(new BookmarkDto(member.getId(), targetId, null, null));
     }
     
     @GetMapping("/list.do")
