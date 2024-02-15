@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmacyDto;
+import ssg.middlepj.pharmafinder.service.EmailService;
 import ssg.middlepj.pharmafinder.service.MemberService;
 
 @Controller // 컨트롤러 사용
@@ -31,6 +32,9 @@ public class MemberController {
 
 	@Autowired
 	MemberService service;
+	
+    @Autowired
+    private EmailService emailService;
 
 	// 아이디 중복 확인 메서드
 	@ResponseBody
@@ -270,8 +274,8 @@ public class MemberController {
 	    String temporaryPassword = service.findPassword(username.trim(), email.trim());
 	    if (temporaryPassword != null) {
 	        // 임시 비밀번호 발급 및 이메일 전송 성공
-	        model.addAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다: " + temporaryPassword);
-	        System.out.println("temporaryPassword: " + temporaryPassword);
+	    	emailService.sendSimpleMessage(email, "임시 비밀번호 발급", "귀하의 임시 비밀번호는 " + temporaryPassword + " 입니다");
+            model.addAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다");
 	        return "member/updateOriginPassword";
 	    } else {
 	        // 아이디 또는 이메일 주소가 일치하지 않음
@@ -295,8 +299,8 @@ public class MemberController {
 	    }
 
 	    // 임시 비밀번호와 새로운 비밀번호를 처리하는 서비스 메서드 호출
-	    boolean updateResult = service.updatePasswordWithTemporary(username, temporaryPassword, newPassword);
-	    
+        boolean updateResult = service.updatePasswordWithTemporary(username, temporaryPassword, newPassword);
+        
 	    if (updateResult) {
 	        // 비밀번호 변경 성공
 	        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
