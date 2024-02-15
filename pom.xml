@@ -290,5 +290,15 @@
             <version>RELEASE</version>
             <scope>provided</scope>
         </dependency>
+        
+    <!-- 메일 api -->
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-email</artifactId>
+		<version>1.2</version>
+	</dependency>
+        
     </dependencies>
+    
+    
 </project>

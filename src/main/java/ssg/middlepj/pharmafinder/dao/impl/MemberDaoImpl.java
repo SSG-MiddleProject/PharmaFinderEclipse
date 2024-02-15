@@ -19,8 +19,8 @@ public class MemberDaoImpl implements MemberDao {
 
     String ns = "Member.";
 
-    public int idcheck(String username) {
-        return session.selectOne(ns + "idcheck", username);
+    public int usernamecheck(String username) {
+        return session.selectOne(ns + "usernamecheck", username);
     }
     
     public int emailcheck(String email) {
@@ -89,5 +89,10 @@ public class MemberDaoImpl implements MemberDao {
     public MemberDto findMemberByUsername(String username) {
         return session.selectOne(ns + ".findMemberByUsername", username);
     }
+
+	@Override
+	public int updateMember(MemberDto member) {
+		 return session.update("Member.updateMember", member);
+	}
 
 }

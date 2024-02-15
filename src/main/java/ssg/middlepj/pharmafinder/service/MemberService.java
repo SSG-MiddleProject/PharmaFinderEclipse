@@ -7,13 +7,13 @@ import ssg.middlepj.pharmafinder.dto.PharmacyDto;
 
 public interface MemberService {
 
-    boolean addmember(MemberDto mem);
+    boolean addmember(MemberDto mem);	// 회원추가
 
-	boolean addpharmacy(PharmacyDto pharmacy);
+	boolean addpharmacy(PharmacyDto pharmacy);	// 약추가
 
-    boolean idcheck(String username);
+    boolean usernamecheck(String username);
     
-    boolean emailcheck(String email);
+    boolean emailcheck(String email);	// 이메일 중복체크
 
     MemberDto login(String username, String password);    // 로그인하기
 
@@ -27,4 +27,5 @@ public interface MemberService {
 
 	boolean registerPharmacy(MemberDto member, PharmacyDto pharmacy) throws NoSuchAlgorithmException;
 
+	boolean updateMember(MemberDto member) throws NoSuchAlgorithmException;	// 회원 정보 업데이트 메서드
 }
