@@ -127,4 +127,12 @@ $(document).ready(function() {
                     }
                 },
                 error: function() {
-                   
+                    alert("이메일 중복 체크 중 오류가 발생했습니다.");
+                }
+            });
+        } else {
+            alert("이메일을 입력해주세요.");
+        }
+    });
+});
+</script>
