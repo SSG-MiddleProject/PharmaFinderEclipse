@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import ssg.middlepj.pharmafinder.dto.InventoryDto;
+import ssg.middlepj.pharmafinder.dto.MemberDto;
 import ssg.middlepj.pharmafinder.dto.PharmaInventoryParam;
 import ssg.middlepj.pharmafinder.service.PharmaInventoryService;
 import util.PharmaInOutCalendarUtil;
@@ -45,7 +46,7 @@ public class PharmaInventoryController {
 			currentDate = param.getCurrentDate();
 		}
 
-		int storeId = (int) request.getSession().getAttribute("storeId");
+		int storeId = ((MemberDto)request.getSession().getAttribute("member")).getStoreId();
 
 		param.setCurrentDate(currentDate);
 		param.setStoreId(storeId);
