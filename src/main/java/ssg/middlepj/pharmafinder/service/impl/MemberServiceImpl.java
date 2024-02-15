@@ -174,4 +174,19 @@ public class MemberServiceImpl implements MemberService {
 		return dao.updatePasswordWithTemporary(username, encryptedTempPassword, encryptedNewPassword);
 	}
 
+	@Override
+	public boolean updateMember(MemberDto member) throws NoSuchAlgorithmException {
+		// 필요한 경우, 비밀번호 암호화 등의 추가 처리를 여기에 구현
+	    if (member.getPassword() != null && !member.getPassword().isEmpty()) {
+	        String encryptedPassword = encryptStringBySHA256(member.getPassword());
+	        member.setPassword(encryptedPassword);
+	    }
+	    
+	    // DAO를 사용하여 데이터베이스 업데이트 시도
+	    int updateCount = dao.updateMember(member);
+	    
+	    // 업데이트된 레코드 수를 통해 성공 여부 반환
+	    return updateCount > 0;
+	}
+
 }

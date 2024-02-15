@@ -28,7 +28,7 @@ public interface MemberDao {
     boolean updatePasswordWithTemporary(String username, String encryptedTempPassword, String encryptedNewPassword);
 	
     MemberDto findMemberByUsername(String username);
-	
-    
 
+    //회원정보 수정
+    int updateMember(MemberDto member);
 }
