@@ -15,31 +15,28 @@
 
 	List<PharmaOutDetailDto> list = (List<PharmaOutDetailDto>)request.getAttribute("list");
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h1>입고 정보</h1>
-<input type="date" id="date" value="<%=formatedDate %>" readonly />
 
-<form action="./pharma-out-delete.do">
+<div style="padding: 10px">
+
+<p><%=formatedDate%></p>
+<p style="padding-top: 20px; padding-bottom: 10px; font-size: x-large; font-weight: bold">출고 정보</p>
+
+<form action="./pharma-out-delete.do" style="width: 100%">
 <input type="hidden" name="id" value="${id}">
-<table class="table">
+	<table class="table has-text-centered" style="width: inherit">
 <thead>
 	<tr>
-		<th>제품코드</th><th>제품명</th><th>수량</th><th>입고단가</th>
+		<th class="has-text-centered">입고 id</th><th class="has-text-centered">제품코드</th><th class="has-text-centered">제품명</th><th class="has-text-centered">수량</th><th class="has-text-centered">출고단가</th>
 	</tr>
 </thead>
-<tbody>
+<tbody style="height: 28rem">
 <%
 	for(int i = 0; i < list.size(); i++){
 		PharmaOutDetailDto dto = list.get(i);
 %>
 		<tr>
 			<td><%=dto.getId() %></td>
+			<td><%=dto.getProductId()%></td>
 			<td><%=dto.getItemName() %></td>
 			<td><%=dto.getOutputCnt() %></td>
 			<td><%=dto.getOutputPrice() %></td>
@@ -49,7 +46,6 @@
 %>
 </tbody>
 </table>
-<button type="submit">삭제</button>
+<button class="button" type="submit">삭제</button>
 </form>
-</body>
-</html>
+</div>

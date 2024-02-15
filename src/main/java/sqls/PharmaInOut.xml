@@ -37,17 +37,18 @@
 
 	<select id="select-daily-input-products" resultType="ssg.middlepj.pharmafinder.dto.PharmaInDetailDto">
 		select dip.id as id, dip.daily_input_id as dailyInputId, dip.store_product_id as storeProductId, dip.input_cnt as inputCnt,
-		p.item_name as itemName, sp.input_price as inputPrice
+		p.item_name as itemName, sp.input_price as inputPrice, p.id as productId
 		from daily_input_product dip
 			inner join store_product sp on dip.store_product_id = sp.id
 			inner join product p on sp.product_id = p.id
 		where dip.daily_input_id = #{id}
+		order by dip.id
 	</select>
 
 	<select id="select-daily-input-with-products" parameterType="ssg.middlepj.pharmafinder.dto.PharmaInDto" resultMap="dailyInputWithProductsDtoMap">
 		select di.id as id, di.store_id as storeId, di.current_input_date as currentInputDate,
 	           dip.id as inputProductId, dip.daily_input_id as dailyInputId, dip.store_product_id as storeProductId
-	           dip.input_cnt as inputCnt
+	           , dip.input_cnt as inputCnt
 		from daily_input di
 			join daily_input_product dip
 			on di.id = dip.daily_input_id
@@ -111,17 +112,18 @@
 
 	<select id="select-daily-output-products" resultType="ssg.middlepj.pharmafinder.dto.PharmaOutDetailDto">
 		select dip.id as id, dip.daily_output_id as dailyOutputId, dip.store_product_id as storeProductId, dip.output_cnt as outputCnt,
-		p.item_name as itemName, sp.output_price as outputPrice
+		p.item_name as itemName, sp.output_price as outputPrice, p.id as productId
 		from daily_output_product dip
 			inner join store_product sp on dip.store_product_id = sp.id
 			inner join product p on sp.product_id = p.id
 		where dip.daily_output_id = #{id}
+		order by dip.id
 	</select>
 
 	<select id="select-daily-output-with-products" parameterType="ssg.middlepj.pharmafinder.dto.PharmaOutDto" resultMap="dailyOutputWithProductsDtoMap">
 		select di.id as id, di.store_id as storeId, di.current_output_date as currentOutputDate,
 	           dip.id as outputProductId, dip.daily_output_id as dailyOutputId, dip.store_product_id as storeProductId
-	           dip.output_cnt as outputCnt
+	           , dip.output_cnt as outputCnt
 		from daily_output di
 			join daily_output_product dip
 			on di.id = dip.daily_output_id

@@ -10,13 +10,14 @@ public class PharmaOutDetailDto implements Serializable{
 	private int outputCnt;
 	private String itemName;
 	private int outputPrice;
+	private int productId;
 
 	public PharmaOutDetailDto() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public PharmaOutDetailDto(int id, int dailyOutputId, int storeProductId, int outputCnt, String itemName,
-			int outputPrice) {
+			int outputPrice, int productId) {
 		super();
 		this.id = id;
 		this.dailyOutputId = dailyOutputId;
@@ -24,6 +25,7 @@ public class PharmaOutDetailDto implements Serializable{
 		this.outputCnt = outputCnt;
 		this.itemName = itemName;
 		this.outputPrice = outputPrice;
+		this.productId = productId;
 	}
 
 	public int getId() {
@@ -74,11 +76,20 @@ public class PharmaOutDetailDto implements Serializable{
 		this.outputPrice = outputPrice;
 	}
 
+
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
 	@Override
 	public String toString() {
 		return "PharmaOutDetailDto [id=" + id + ", dailyOutputId=" + dailyOutputId + ", storeProductId="
 				+ storeProductId + ", outputCnt=" + outputCnt + ", itemName=" + itemName + ", outputPrice="
-				+ outputPrice + "]";
+				+ outputPrice + ", productId =" + productId + "]";
 	}
 
 
