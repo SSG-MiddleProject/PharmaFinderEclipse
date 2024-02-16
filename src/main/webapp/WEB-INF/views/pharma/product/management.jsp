@@ -1,8 +1,11 @@
+<%@page import="ssg.middlepj.pharmafinder.dto.MemberDto"%>
 <%@page import="ssg.middlepj.pharmafinder.dto.PharmaProductWithProductDto" %>
 <%@page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
 	List<PharmaProductWithProductDto> list = (List<PharmaProductWithProductDto>)request.getAttribute("list");
+	MemberDto mem = (MemberDto)request.getSession().getAttribute("member");
+	int storeId = mem.getStoreId();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -296,7 +299,7 @@
                 url: "./pharma-product-register.do",
                 type: "get",
                 data: {
-                    "storeId": <%=request.getSession().getAttribute("storeId") %>,
+                    "storeId": <%=storeId %>,
                     "productId": $("#insertId").val(),
                     "inputPrice": $("#insertInputPrice").val(),
                     "outputPrice": $("#insertOutputPrice").val(),
